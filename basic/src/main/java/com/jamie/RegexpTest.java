@@ -135,4 +135,10 @@ public class RegexpTest {
         }
     }
 
+    @Test
+    public void replaceHtml() {
+        String str = "<p>去除所有html标签,<img/><My-Tag class=\\\"abc\\\" value=\\\"test\\\">自定     义标签\n也\r可以\t去除哦</My-Tag></p>";
+        str = str.replaceAll("<[^>]+>","").replaceAll("[\r\t\n]", "").replaceAll(" ", "");
+        System.out.println(str);
+    }
 }

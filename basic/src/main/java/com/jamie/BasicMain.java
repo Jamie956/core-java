@@ -13,8 +13,11 @@ import java.lang.reflect.Field;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -522,6 +525,16 @@ public class BasicMain {
         int f = Math.floorDiv(1001, 500);//2
     }
 
+    @Test
+    public void getDateString() {
+        String date = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                .withZone(ZoneId.systemDefault()).format(Instant.now().minus(1, ChronoUnit.DAYS));
+
+        // 获取当前日期
+        LocalDate today = LocalDate.now();
+        // 获取当前日期的前一天
+        String yesterday = today.plusDays(-1).toString();
+    }
 }
 
 

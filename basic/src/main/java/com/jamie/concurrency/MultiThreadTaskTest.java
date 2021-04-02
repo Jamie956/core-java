@@ -1,4 +1,4 @@
-package com.jamie;
+package com.jamie.concurrency;
 
 import org.junit.Test;
 import java.util.Arrays;
@@ -31,13 +31,12 @@ public class MultiThreadTaskTest {
                 end = total;
             }
             List<String> subList = ids.subList(start, end);
-            System.out.println("第 " + i + " 个线程处理 " + start + " - " + end + " 数据" + subList);
+            MyTask task = new MyTask(subList, start, end);
+            ThreadUtil.execute(task);
+        }
 
-            ThreadUtil.execute(() -> {
-                for (int j = 0; j < subList.size(); j++) {
-                    System.out.println("线程 " + Thread.currentThread().getName() + "处理 " + subList.get(j) + ", 处理进度 " + j + "/" + (subList.size() - 1));
-                }
-            });
+        while (true){
+            //等待全部执行完
         }
     }
 }

@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MKTask implements Runnable {
     private final List<String> items;
-    private int cur;
+    private int cur = 0;
 
     public MKTask(List<String> items) {
         this.items = items;

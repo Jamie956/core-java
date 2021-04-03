@@ -32,6 +32,9 @@ public class ListFactory {
         return this.data.size();
     }
 
+    public int getCurPage() {
+        return this.curPage;
+    }
     public static void main(String[] args) {
         ListFactory listFactory = new ListFactory();
         for (int i = 0; i < 10; i++) {

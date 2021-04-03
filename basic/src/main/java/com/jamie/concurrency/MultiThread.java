@@ -9,47 +9,29 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MultiThread {
+    List<MKTask> taskList = new ArrayList<>();
 
     /**
      * 将任务切分，由多线程处理，并打印处理进度
      */
     @Test
-    public void gogo() throws InterruptedException {
-
+    public void handleAll() throws InterruptedException {
         ListFactory listFactory = new ListFactory();
         int total = listFactory.getSize();
-        List<MKTask> taskList = new ArrayList<>();
-
 
         while (true) {
-            //翻页获取数据
+            //获取翻页数据
             List<String> data = listFactory.getNext();
-
             //模拟取数据耗时
             TimeUnit.SECONDS.sleep(1);
-
             if (data == null) {
                 break;
             }
-            int size = data.size();
 
             //每个线程处理 5 条
             int threadCount = 5;
-            //分成 segment 份，需要 segment 个线程处理
-            int segment = (int) Math.ceil((double) size / threadCount);
-
-            System.out.println("当前页数据 " + data + " 一共有 " + size + " 条, 每个线程处理 " + threadCount + " 条数据, 需要 " + segment + " 个线程处理");
-
-            for (int i = 0; i < segment; i++) {
-                int start = i * threadCount;
-                int end = (i == segment - 1) ? size : (start + threadCount);
-
-                List<String> subList = data.subList(start, end);
-                MKTask mkTask = new MKTask(subList);
-                taskList.add(mkTask);
-                System.out.println(start + " - " + end + " 范围数据 " + subList + " 交给一条线程处理");
-                ThreadUtil.execute(mkTask);
-            }
+            System.out.println("当前页" + listFactory.getCurPage());
+            handlePageDate(data, threadCount);
         }
 
         //计算任务进度
@@ -69,6 +51,26 @@ public class MultiThread {
                 break;
             }
             System.out.println("任务处理进度 " + dF.format(f * 100) + "%");
+        }
+    }
+
+    public void handlePageDate(List<String> data, int threadCount) {
+        int pageSize = data.size();
+
+        //分成 segment 份，需要 segment 个线程处理
+        int segment = (int) Math.ceil((double) pageSize / threadCount);
+
+        System.out.println("当前页数据 " + data + " 一共有 " + pageSize + " 条, 每个线程处理 " + threadCount + " 条数据, 需要 " + segment + " 个线程处理");
+
+        for (int i = 0; i < segment; i++) {
+            int start = i * threadCount;
+            int end = (i == segment - 1) ? pageSize : (start + threadCount);
+
+            List<String> subList = data.subList(start, end);
+            MKTask mkTask = new MKTask(subList);
+            taskList.add(mkTask);
+            System.out.println(start + " - " + end + " 范围数据 " + subList + " 交给一条线程处理");
+            ThreadUtil.execute(mkTask);
         }
     }
 }

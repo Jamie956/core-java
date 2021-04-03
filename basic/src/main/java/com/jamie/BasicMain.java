@@ -535,6 +535,14 @@ public class BasicMain {
         // 获取当前日期的前一天
         String yesterday = today.plusDays(-1).toString();
     }
+
+    @Test
+    public void random(){
+        for (int i = 0; i < 100; i++) {
+            int a = 1+ (int)(Math.random()*9);
+            System.out.println(a);
+        }
+    }
 }
 
 

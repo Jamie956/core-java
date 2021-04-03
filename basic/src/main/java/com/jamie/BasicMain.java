@@ -1,7 +1,6 @@
 package com.jamie;
 
 import com.alibaba.fastjson.JSONArray;
-import com.jamie.concurrency.SyncObject;
 import com.jamie.entity.*;
 import com.alibaba.fastjson.JSONObject;
 
@@ -292,85 +291,6 @@ public class BasicMain {
         }
     }
 
-    /**
-     * 多线程执行同一实例的带同一把锁的方法，顺序执行
-     */
-    @Test
-    public void synctest1() throws InterruptedException {
-        SyncObject obj = new SyncObject();
-        new Thread(() -> obj.syncMethod()).start();
-        new Thread(() -> obj.syncMethod()).start();
-
-        //当前线程等待线程t1和t2执行完成
-        Thread.sleep(3000);
-    }
-
-    /**
-     * 多线程执行不同实例的带不同锁的方法，不按顺序执行
-     */
-    @Test
-    public void synctest2() throws InterruptedException {
-        SyncObject x = new SyncObject();
-        SyncObject y = new SyncObject();
-
-        new Thread(() -> x.syncMethod()).start();
-        new Thread(() -> y.syncMethod()).start();
-
-        //当前线程等待线程t1和t2执行完成
-        Thread.sleep(3000);
-    }
-
-    /**
-     * 多线程执行同一个实例的带锁方法和不带锁方法，不按顺序执行
-     */
-    @Test
-    public void synctest3() throws InterruptedException {
-        SyncObject obj = new SyncObject();
-        new Thread(() -> obj.syncMethod()).start();
-        new Thread(() -> obj.notSyncMethod()).start();
-
-        //当前线程等待线程t1和t2执行完成
-        Thread.sleep(3000);
-    }
-
-    /**
-     * 多线程执行同一实例的带同一把锁的方法，顺序执行
-     */
-    @Test
-    public void synctest4() throws InterruptedException {
-        SyncObject obj = new SyncObject();
-        new Thread(() -> obj.syncMethod()).start();
-        new Thread(() -> obj.syncMethod2()).start();
-
-        //当前线程等待线程t1和t2执行完成
-        Thread.sleep(3000);
-    }
-
-    /**
-     * 多线程执行带锁的静态方法，顺序执行
-     * 类锁/全局锁
-     */
-    @Test
-    public void synctest5() throws InterruptedException {
-        new Thread(() -> SyncObject.staticSyncMethod()).start();
-        new Thread(() -> SyncObject.staticSyncMethod2()).start();
-
-        //当前线程等待线程t1和t2执行完成
-        Thread.sleep(3000);
-    }
-
-    /**
-     * 多线程执行实例的带锁方法和静态带锁方法，不按顺序执行
-     */
-    @Test
-    public void synctest6() throws InterruptedException {
-        SyncObject x = new SyncObject();
-        new Thread(() -> x.syncMethod2()).start();
-        new Thread(() -> SyncObject.staticSyncMethod()).start();
-
-        //当前线程等待线程t1和t2执行完成
-        Thread.sleep(3000);
-    }
 
     /**
      * TimeUnit的 sleep方法

@@ -18,7 +18,7 @@ public class SyncObject {
     }
 
     /**
-     * 同一实例的 不带锁的同一个方法，乱序执行
+     * 多线程执行 同一实例的 同一个不带锁方法，乱序执行
      */
     @Test
     public void noSyncTest() throws InterruptedException {
@@ -27,7 +27,7 @@ public class SyncObject {
         new Thread(() -> obj.noSync()).start();
 
         //当前线程等待测试线程执行完成
-        TimeUnit.SECONDS.sleep(10);
+        TimeUnit.SECONDS.sleep(3);
     }
 
     public void thisSync() {
@@ -44,8 +44,7 @@ public class SyncObject {
     }
 
     /**
-     * 多线程执行
-     * 同一实例的 带同一把锁的方法，顺序执行
+     * 多线程执行 同一实例的 同一个带this锁方法，顺序执行
      */
     @Test
     public void thisSyncTest() throws InterruptedException {
@@ -58,8 +57,7 @@ public class SyncObject {
     }
 
     /**
-     * 多线程执行
-     * 不同实例的 带不同锁的方法，乱序执行
+     * 多线程执行 不同实例的 同一个带锁的方法，乱序执行
      */
     @Test
     public void thisSync2Test() throws InterruptedException {
@@ -74,7 +72,7 @@ public class SyncObject {
     }
 
     /**
-     * 多线程执行同一个实例的带锁方法和不带锁方法，乱序执行
+     * 多线程执行 同一个实例的 带锁方法和不带锁方法，乱序执行
      */
     @Test
     public void thisSyncNoSync() throws InterruptedException {
@@ -100,7 +98,7 @@ public class SyncObject {
     }
 
     /**
-     * 多线程执行同一实例的带同一把锁的不同方法，顺序执行
+     * 多线程执行 同一实例的 带锁的不同方法，顺序执行
      */
     @Test
     public void twoThisSync() throws InterruptedException {
@@ -135,7 +133,7 @@ public class SyncObject {
     }
 
     /**
-     * 多线程执行带锁的静态方法，顺序执行
+     * 多线程执行 带锁的静态方法，顺序执行
      * 类锁/全局锁
      */
     @Test
@@ -148,7 +146,7 @@ public class SyncObject {
     }
 
     /**
-     * 多线程执行实例的带锁方法和静态带锁方法，乱序执行
+     * 多线程执行 实例的带锁方法 和静态带锁方法，乱序执行
      */
     @Test
     public void thisSyncStaticSyncTest() throws InterruptedException {

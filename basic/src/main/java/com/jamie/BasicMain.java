@@ -22,14 +22,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BasicMain {
-    /**
-     * 获取注解的值
-     */
-    @Test
-    public void annotationTest() {
-        MyAnnotation anno = TestAnno.class.getAnnotation(MyAnnotation.class);
-        String a = anno.value();
-    }
+
 
     /**
      * 执行顺序

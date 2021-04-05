@@ -1,4 +1,4 @@
-package com.jamie;
+package com.jamie.concurrency;
 
 import io.netty.util.concurrent.DefaultThreadFactory;
 

@@ -1,6 +1,5 @@
 package com.jamie.concurrency;
 
-import com.jamie.ThreadUtil;
 import org.junit.Test;
 
 import java.text.DecimalFormat;

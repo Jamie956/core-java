@@ -12,3 +12,7 @@ public class TestAn {
         System.out.println(anno.value());
     }
 }
+
+@MyAnnotation(value = "this is value")
+class TestAnno {
+}

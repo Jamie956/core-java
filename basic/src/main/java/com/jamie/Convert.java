@@ -1,5 +1,7 @@
 package com.jamie;
 
+import com.google.common.base.CaseFormat;
+import com.google.common.base.Converter;
 import org.apache.commons.text.StringEscapeUtils;
 import org.junit.Test;
 
@@ -37,6 +39,31 @@ public class Convert {
         System.out.println(escapeHtml3);
     }
 
+    /**
+     * 驼峰、下划线字符串转换 by guava
+     */
+    @Test
+    public void guavaConvert() {
+        // 驼峰转下划线, userName -> user_name
+        Converter<String, String> converter = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_UNDERSCORE);
+        // 输出: user_name
+        System.out.println(converter.convert("userName"));
+        System.out.println(converter.convert("user_name"));
 
+        // 驼峰转连接符, userName -> user-name
+        converter = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_HYPHEN);
+        // 输出: user-name
+        System.out.println(converter.convert("userName"));
+
+        // 驼峰转首字符大写驼峰, userName -> UserName
+        converter = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.UPPER_CAMEL);
+        // 输出: UserName
+        System.out.println(converter.convert("userName"));
+
+        // 驼峰转大写下划线, userName -> USER_NAME
+        converter = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.UPPER_UNDERSCORE);
+        // 输出: USER_NAME
+        System.out.println(converter.convert("userName"));
+    }
 
 }

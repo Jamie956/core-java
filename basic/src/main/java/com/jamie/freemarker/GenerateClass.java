@@ -1,4 +1,4 @@
-package com.jamie.project;
+package com.jamie.freemarker;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

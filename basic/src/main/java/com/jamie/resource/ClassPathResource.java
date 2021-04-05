@@ -1,4 +1,4 @@
-package com.jamie.project;
+package com.jamie.resource;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

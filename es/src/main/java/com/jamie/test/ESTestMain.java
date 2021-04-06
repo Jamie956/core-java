@@ -29,6 +29,8 @@ import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.range.Range;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
 import org.elasticsearch.search.aggregations.metrics.stats.extended.ExtendedStats;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -458,5 +460,39 @@ public class ESTestMain {
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
         Cardinality birthdayAgg = response.getAggregations().get("group_birthday");
         System.out.println(birthdayAgg.getValue());
+    }
+
+    /**
+     * 获取 term 聚合结果
+     */
+    @Test
+    public void aggTest(){
+        try {
+            BoolQueryBuilder query = QueryBuilders.boolQuery().should(QueryBuilders.matchPhraseQuery("firstCateName", "bala"));
+
+            TermsAggregationBuilder aggBuilder = AggregationBuilders.terms("myAgg").field("cat").size(1000);
+
+            SearchSourceBuilder builder = new SearchSourceBuilder();
+            builder.query(query);
+            builder.aggregation(aggBuilder);
+            builder.size(0);
+
+            SearchRequest request = new SearchRequest();
+            request.indices("inspection");
+            request.types("index");
+            request.source(builder);
+            SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+
+            Terms agg = response.getAggregations().get("myAgg");
+
+            if (agg != null) {
+                for (Terms.Bucket entry : agg.getBuckets()) {
+                    String key = entry.getKeyAsString();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

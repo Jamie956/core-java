@@ -1,5 +1,9 @@
 package com.jamie;
 
+import com.jamie.entity.HelloImpl;
+import com.jamie.entity.IHello;
+import org.junit.Test;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -34,5 +38,17 @@ public class DynamicProxy implements InvocationHandler {
     @SuppressWarnings("unchecked")
     public <T> T getProxy() {
         return (T) Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), this);
+    }
+
+
+    /**
+     * JDK代理
+     */
+    @Test
+    public void jdkproxytest() {
+        DynamicProxy dp = new DynamicProxy(new HelloImpl());
+        IHello helloProxy = dp.getProxy();
+
+        helloProxy.greeting();
     }
 }

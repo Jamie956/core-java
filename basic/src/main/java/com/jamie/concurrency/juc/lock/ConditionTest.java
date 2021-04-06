@@ -5,16 +5,16 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ConditionTest {
+
     public static void work(ReentrantLock lock, Condition condition) {
         lock.lock();
         try {
-            try {
-                System.out.println("Begin");
-                condition.await();
-                System.out.println("End");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            System.out.println("lock condition await 之前");
+            TimeUnit.SECONDS.sleep(1);
+            condition.await();
+            System.out.println("lock condition await 之后");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
             lock.unlock();
         }
@@ -23,8 +23,7 @@ public class ConditionTest {
     public static void continueWork(ReentrantLock lock, Condition condition) {
         lock.lock();
         try {
-            System.out.println("Signal All");
-//            condition.signalAll();
+            System.out.println("Signal");
             condition.signal();
         } finally {
             lock.unlock();
@@ -37,7 +36,9 @@ public class ConditionTest {
 
         new Thread(() -> work(lock, condition)).start();
 
+        System.out.println("3 秒之后 signal lock condition");
         TimeUnit.SECONDS.sleep(3);
         continueWork(lock, condition);
     }
+
 }

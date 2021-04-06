@@ -1,4 +1,4 @@
-package com.jamie.entity;
+package com.jamie.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

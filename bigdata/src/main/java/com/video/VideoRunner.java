@@ -17,7 +17,7 @@ public class VideoRunner implements Tool {
     private Configuration conf = null;
 
     public static void main(String[] args) {
-        args = new String[]{"/Users/jamie/project/java-core/bigdata/src/main/resources/vedio",
+        args = new String[]{"/Users/jamie/project/java-core/bigdata/src/main/resources/video",
                 "/Users/jamie/project/java-core/bigdata/src/main/resources/output"};
 
         try {

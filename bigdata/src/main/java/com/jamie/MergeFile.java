@@ -21,22 +21,30 @@ public class MergeFile {
     @Test
     public void mergeFiles() throws Exception {
         FileSystem fs = HDFSUtilsNew.FILE_SYSTEM;
+        FileStatus[] inputFiles = fs.listStatus(new Path("/origin_data/ccr_qc/2021-04-06/CompanyNotice"));
+
         FileSystem localFs = FileSystem.getLocal(HDFSUtilsNew.CONF);
         FSDataOutputStream out = localFs.create(new Path("src/main/resources/CompanyNotice.txt"));
-        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
 
-        FileStatus[] inputFiles = fs.listStatus(new Path("/origin_data/ccr_qc/2021-04-06/CompanyNotice"));
+        FSDataInputStream in = null;
+        BufferedReader reader = null;
         for (FileStatus fileStatus : inputFiles) {
-            FSDataInputStream in = fs.open(fileStatus.getPath());
+            in = fs.open(fileStatus.getPath());
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+            reader = new BufferedReader(new InputStreamReader(in));
 
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                System.out.println("读取一行数据： " + line);
-                bufferedWriter.write(line);
+            char[] buf = new char[1024];
+            int len = -1;
+            while ((len = reader.read(buf)) != -1) {
+                writer.write(buf, 0, len);
             }
+            writer.flush();
         }
-        fs.close();
+//        fs.close();
+        in.close();
+        reader.close();
+        out.close();
+        writer.close();
     }
 }

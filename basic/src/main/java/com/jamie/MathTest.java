@@ -37,6 +37,15 @@ public class MathTest {
             System.out.println(a);
         }
     }
+
+    @Test
+    public void plus() {
+        int i = 1;
+        //true 先比较，在加
+        System.out.println(i++ == 1);
+        //false 先加，再比较
+        System.out.println(++i == 1);
+    }
 }
 
 

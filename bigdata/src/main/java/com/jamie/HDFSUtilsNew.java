@@ -1,8 +1,7 @@
 package com.jamie;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.*;
 import org.junit.Test;
 
 import java.io.*;
@@ -39,6 +38,55 @@ public class HDFSUtilsNew {
         FILE_SYSTEM.copyToLocalFile(false, src, dst, true);
     }
 
+    /**
+     * 将hdfs 文件夹CompanyNotice下的全部文件合并，合并成一个文件CompanyNotice.txt输出到本地
+     * mergeFiles("/origin_data/ccr_qc/2021-04-06/CompanyNotice", "src/main/resources/CompanyNotice.txt");
+     */
+    public void mergeFiles(String inPath, String outPath) throws Exception {
+        FileSystem localFs = FileSystem.getLocal(CONF);
+        FSDataOutputStream fsDataOutputStream = null;
+        BufferedWriter bufferedWriter = null;
+
+        FSDataInputStream fsDataInputStream = null;
+        BufferedReader bufferedReader = null;
+
+        try {
+            FileStatus[] inputFiles = FILE_SYSTEM.listStatus(new Path(inPath));
+            fsDataOutputStream = localFs.create(new Path(outPath));
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(fsDataOutputStream));
+
+            for (FileStatus file : inputFiles) {
+                fsDataInputStream = FILE_SYSTEM.open(file.getPath());
+
+                bufferedReader = new BufferedReader(new InputStreamReader(fsDataInputStream));
+
+                char[] buf = new char[1024];
+                int len = -1;
+                while ((len = bufferedReader.read(buf)) != -1) {
+                    bufferedWriter.write(buf, 0, len);
+                }
+                bufferedWriter.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fsDataInputStream != null) {
+                fsDataInputStream.close();
+            }
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+            if (fsDataOutputStream != null) {
+                fsDataOutputStream.close();
+            }
+            if (bufferedWriter != null) {
+                bufferedWriter.close();
+            }
+            if (FILE_SYSTEM != null) {
+                FILE_SYSTEM.close();
+            }
+        }
+    }
 //
 //    /**
 //     * 创建目录,支持递归创建

@@ -66,4 +66,10 @@ public class Convert {
         System.out.println(converter.convert("userName"));
     }
 
+    @Test
+    public void rmExtend() {
+        String fileName = "asasasa.txt.exe";
+        fileName = fileName.substring(0, fileName.lastIndexOf("."));
+        System.out.println(fileName);
+    }
 }

@@ -141,4 +141,11 @@ public class RegexpTest {
         str = str.replaceAll("<[^>]+>","").replaceAll("[\r\t\n]", "").replaceAll(" ", "");
         System.out.println(str);
     }
+
+    @Test
+    public void replaceDate() {
+        String str = "CompanyNotice_2021-03-05.txt";
+        str = str.replaceAll("_\\d{4}-\\d{2}-\\d{2}", "");
+        System.out.println(str);
+    }
 }

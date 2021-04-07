@@ -2,6 +2,8 @@ package com.jamie;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.junit.Test;
 
 import java.io.*;
 import java.net.URI;
@@ -22,6 +24,20 @@ public class HDFSUtilsNew {
         }
     }
 
+
+    /**
+     * 从HDFS上下载文件
+     */
+    @Test
+    public void copyToLocalFile() throws Exception {
+        Path src = new Path("/origin_data/ccr_qc/2021-04-06/CompanyNotice");
+        Path dst = new Path("src/main/resources/CompanyNotice");
+        /*
+         * delSrc 下载完成后是否删除源文件,默认是true,即删除;
+         * RawLocalFileSystem 是否用作本地文件系统,如果你在执行时候抛出NullPointerException异常,则代表你的文件系统与程序可能存在不兼容的情况(window下常见),此时可以将RawLocalFileSystem设置为true
+         */
+        FILE_SYSTEM.copyToLocalFile(false, src, dst, true);
+    }
 
 //
 //    /**
@@ -130,23 +146,8 @@ public class HDFSUtilsNew {
 //        IOUtils.copyBytes(in, out, 4096);
 //    }
 //
-//    /**
-//     * 从HDFS上下载文件
-//     */
-//    @Test
-//    public void copyToLocalFile() throws Exception {
-//        Path src = new Path("/hi.txt");
-//        Path dst = new Path("src/main/resources/download-hi.txt");
-//        /*
-//         * 第一个参数控制下载完成后是否删除源文件,默认是true,即删除;
-//         * 最后一个参数表示是否将RawLocalFileSystem用作本地文件系统;
-//         * RawLocalFileSystem默认为false,通常情况下可以不设置,
-//         * 但如果你在执行时候抛出NullPointerException异常,则代表你的文件系统与程序可能存在不兼容的情况(window下常见),
-//         * 此时可以将RawLocalFileSystem设置为true
-//         */
-//        fileSystem.copyToLocalFile(false, src, dst, true);
-//    }
-//
+
+
 
 //
 //    /**

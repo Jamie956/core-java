@@ -3,6 +3,11 @@ package com.jamie;
 import org.apache.hadoop.fs.*;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 /**
  * @Author: Zjm
  * @Date: 2021/4/7 10:29
@@ -18,18 +23,18 @@ public class MergeFile {
         FileSystem fs = HDFSUtilsNew.FILE_SYSTEM;
         FileSystem localFs = FileSystem.getLocal(HDFSUtilsNew.CONF);
         FSDataOutputStream out = localFs.create(new Path("src/main/resources/CompanyNotice.txt"));
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out));
 
         FileStatus[] inputFiles = fs.listStatus(new Path("/origin_data/ccr_qc/2021-04-06/CompanyNotice"));
         for (FileStatus fileStatus : inputFiles) {
             FSDataInputStream in = fs.open(fileStatus.getPath());
 
-            byte[] buffer = new byte[256];
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
-            int bytesRead = -1;
-
-            while ((bytesRead = in.read(buffer)) > 0) {
-                //合并文件
-                out.write(buffer, 0, bytesRead);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println("读取一行数据： " + line);
+                bufferedWriter.write(line);
             }
         }
         fs.close();

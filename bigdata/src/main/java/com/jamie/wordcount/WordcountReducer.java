@@ -19,4 +19,3 @@ public class WordcountReducer extends Reducer<Text, IntWritable, Text, IntWritab
         context.write(key, v);
     }
 }
-		

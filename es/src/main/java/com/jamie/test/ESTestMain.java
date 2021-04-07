@@ -20,12 +20,12 @@ import org.elasticsearch.client.RestHighLevelClient;
 
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.BoostingQueryBuilder;
-import org.elasticsearch.index.query.Operator;
-import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
+import org.elasticsearch.index.reindex.UpdateByQueryRequest;
+import org.elasticsearch.script.Script;
+import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.range.Range;
@@ -40,6 +40,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ESTestMain {
     private RestHighLevelClient client = ESClient.getClient();
@@ -494,5 +495,38 @@ public class ESTestMain {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * 更新 articles 索引 ，update content where content_id=?
+     */
+    public void updateEsArticleByContentId(String contentId, String content){
+        try {
+            //根据es articles content_id 更新 content 字段
+            UpdateByQueryRequest request = new UpdateByQueryRequest("articles");
+            request.setConflicts("proceed");
+            // 设置查询条件，第一个参数是字段名，第二个参数是字段的值
+            request.setQuery(new TermQueryBuilder("content_id", contentId));
+            // 更新最大文档数
+            request.setSize(10);
+            // 批次大小
+            request.setBatchSize(1000);
+            Map<String, Object> paramMaps = new HashMap<>(1);
+            paramMaps.put("content", content);
+            request.setScript(new Script(ScriptType.INLINE, "painless", "ctx._source.content = params.content;", paramMaps));
+            // 并行
+            request.setSlices(2);
+            // 使用滚动参数来控制“搜索上下文”存活的时间
+            request.setScroll(TimeValue.timeValueMinutes(10));
+            // 超时
+            request.setTimeout(TimeValue.timeValueMinutes(2));
+            // 刷新索引
+            request.setRefresh(true);
+
+            BulkByScrollResponse response = client.updateByQuery(request, RequestOptions.DEFAULT);
+
+        } catch (IOException e) {
+
+        }
     }
 }

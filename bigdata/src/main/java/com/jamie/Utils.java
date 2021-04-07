@@ -31,36 +31,6 @@ public class Utils {
     }
 
     /**
-     * 替换换行符
-     */
-//    public static Object replaceCrlf(Object value) {
-//        if (value == null) {
-//            return null;
-//        }
-//        String newValue = "";
-//        if (StringUtils.isNoneBlank(value.toString())) {
-//            newValue = value.toString().replaceAll("(\\r\\n|\\n|\\n\\r|\\r)", "<br/>");
-//        }
-//        if (value instanceof JSONObject) {
-//            return JSONObject.parseObject(newValue);
-//        } else if (value instanceof JSONArray) {
-//            return JSONObject.parseArray(newValue);
-//        }
-//        return newValue;
-//    }
-
-    /**
-     * 根据资源文件转换 json 的key
-     */
-//    public static String convertKey(String prefix, String key) {
-//        String propertyValue = p.getProperty(prefix + "." + key);
-//        if (propertyValue != null) {
-//            return propertyValue;
-//        }
-//        return key;
-//    }
-
-    /**
      * json 递归生成树结构
      */
     public static void jsonLoop(Object object, long parentId) {

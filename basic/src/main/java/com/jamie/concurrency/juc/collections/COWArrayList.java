@@ -1,5 +1,8 @@
 package com.jamie.concurrency.juc.collections;
 
+import com.jamie.concurrency.ThreadUtil;
+
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -9,34 +12,23 @@ public class COWArrayList {
 
     public static void task(List<String> list) {
         for (int i = 1; i < 6; i++) {
-            list.add(Thread.currentThread().getName() + "  " + i);
-
-            System.out.println("");
-            Iterator iter = list.iterator();
-            while (iter.hasNext()) {
-                System.out.println((String) iter.next());
-            }
+            String name = Thread.currentThread().getName() + "  " + i;
+//            复制数组
+//            Object[] newElements = Arrays.copyOf(elements, len + 1);
+//            添加元素
+//            newElements[len] = e;
+//            设置数组
+//            setArray(newElements);
+            list.add(name);
         }
     }
 
     public static void main(String[] args) {
+        //new Object[0] 创建空数组
+        List<String> list = new CopyOnWriteArrayList<>();
 
-        List<String> list = new CopyOnWriteArrayList<String>();
-
-        new Thread(() -> task(list)).start();
-        new Thread(() -> task(list)).start();
-
-        try {
-            TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("*********Done*********");
-        Iterator iter = list.iterator();
-        while (iter.hasNext()) {
-            System.out.println((String) iter.next());
-        }
+        ThreadUtil.execute(() -> task(list));
+        ThreadUtil.execute(() -> task(list));
     }
 
 }

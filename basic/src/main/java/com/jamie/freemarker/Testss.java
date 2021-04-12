@@ -12,9 +12,13 @@ import java.util.*;
 
 public class Testss {
 
+    public static void main(String[] args) {
+
+    }
+
     //字符串所为模板
     @Test
-    public void test2() {
+    public void stringTemplate() {
         try {
             StringTemplateLoader stringLoader = new StringTemplateLoader();
             stringLoader.putTemplate("myTemplate", "欢迎：${name}");

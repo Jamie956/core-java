@@ -1,5 +1,6 @@
 package com.jamie;
 
+import cn.hutool.http.HtmlUtil;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Converter;
 import org.apache.commons.text.StringEscapeUtils;
@@ -71,5 +72,13 @@ public class Convert {
         String fileName = "asasasa.txt.exe";
         fileName = fileName.substring(0, fileName.lastIndexOf("."));
         System.out.println(fileName);
+    }
+
+    @Test
+    public void rmHtmlStyle() {
+        String content = "<div style=\"padding:10px 0;text-align:center;\"><img src=./W020201019582462534023.jpg style></div><div class=TRS_Editor><style type=text/css>\n" + "\n" + ".TRS_Editor P{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor DIV{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor TD{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor TH{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor SPAN{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor FONT{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor UL{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor LI{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor A{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}</style><div class=TRS_Editor><style type=text/css>\n" + "\n" + ".TRS_Editor P{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor DIV{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor TD{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor TH{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor SPAN{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor FONT{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor UL{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor LI{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor A{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}</style><p align=justify>";
+        content = HtmlUtil.removeHtmlTag(content, "img", "style");
+
+        System.out.println(content);
     }
 }

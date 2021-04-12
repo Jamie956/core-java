@@ -6,8 +6,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -89,6 +88,23 @@ public class FMUtils {
         System.out.println(ret);
     }
 
+    /**
+     * 创建java 类
+     */
+    @Test
+    public void temp2FileTest() {
+        String dir = "src/main/java/com/jamie/freemarker";
+        String file = "model.ftl";
+
+        Map<String, Object> dataMap = new HashMap<>(2);
+        dataMap.put("entity", "User");
+        dataMap.put("class_path", "com.ccr.qc");
+
+        String out = "./User.java";
+        temp2File(dir, file, dataMap, out);
+
+    }
+
     public static String strTemp(String content, Map<String, String> dataMap) {
         try {
             StringTemplateLoader stringLoader = new StringTemplateLoader();
@@ -119,5 +135,17 @@ public class FMUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void temp2File(String dir, String file, Map<String, Object> dataMap, String out) {
+        try {
+            Configuration configuration = new Configuration();
+            configuration.setDirectoryForTemplateLoading(new File(dir));
+            Template template = configuration.getTemplate(file);
+            Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(out))));
+            template.process(dataMap, writer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

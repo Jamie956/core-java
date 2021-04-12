@@ -1,38 +1,25 @@
 package com.jamie.concurrency.juc.collections;
 
 
+import com.jamie.concurrency.ThreadUtil;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-//?
 public class ConcurrentHashMapTest {
-    public static void work(Map map) {
-        for (int i = 0; i < 1000; i++) {
-            String name = Thread.currentThread().getName();
-            map.put(i,  name + "-" + i);
-        }
+    public static void work(ConcurrentHashMap<String, String> map) {
+        map.put("k1",  "k1");
+
     }
 
     public static void main(String[] args) {
-//        ConcurrentHashMap<Integer, String> map = new ConcurrentHashMap<>();
-        HashMap<Integer, String> map = new HashMap<>();
+        //ConcurrentHashMap()
+        ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
 
-        new Thread(() -> work(map)).start();
-        new Thread(() -> work(map)).start();
-
-        try {
-            TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        Iterator it = map.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry entry = (Map.Entry) it.next();
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
+        ThreadUtil.execute(() -> work(map));
+        ThreadUtil.execute(() -> work(map));
     }
 }

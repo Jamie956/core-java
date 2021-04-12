@@ -1,5 +1,7 @@
 package com.jamie.concurrency.juc.collections;
 
+import com.jamie.concurrency.ThreadUtil;
+
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -13,21 +15,10 @@ public class COWArraySet {
     }
 
     public static void main(String[] args) {
-        Set<String> set = new CopyOnWriteArraySet<String>();
+        Set<String> set = new CopyOnWriteArraySet<>();
 
-        new Thread(() -> work(set)).start();
-        new Thread(() -> work(set)).start();
-
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        Iterator iter = set.iterator();
-        while (iter.hasNext()) {
-            System.out.println((String) iter.next());
-        }
+        ThreadUtil.execute(() -> work(set));
+        ThreadUtil.execute(() -> work(set));
     }
 
 }

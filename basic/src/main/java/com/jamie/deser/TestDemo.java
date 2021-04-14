@@ -1,5 +1,7 @@
 package com.jamie.deser;
 
+import com.jamie.entity.Person;
+
 import java.io.*;
 
 public class TestDemo {
@@ -20,7 +22,7 @@ public class TestDemo {
      * @param path   写出路径
      */
     public static void serializable(Object object, String path) {
-        try (final FileOutputStream fos = new FileOutputStream(new File(path));
+        try (FileOutputStream fos = new FileOutputStream(new File(path));
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(object);
         } catch (IOException e) {
@@ -43,5 +45,40 @@ public class TestDemo {
         }
         return null;
     }
+
+    /**
+     * 对象 序列化
+     *
+     * @param object
+     * @return
+     */
+    public ByteArrayOutputStream serBAO(Object object) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(baos)
+        ) {
+            oos.writeObject(object);
+            return baos;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 反序列化
+     *
+     * @param baos
+     * @return
+     */
+    public Object deBAO(ByteArrayOutputStream baos) {
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+             ObjectInputStream ois = new ObjectInputStream(bais);) {
+            return ois.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

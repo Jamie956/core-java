@@ -1,6 +1,5 @@
 package com.jamie.io;
 
-import com.jamie.entity.Person;
 import org.junit.Test;
 
 import java.io.*;
@@ -9,134 +8,98 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class IOTest {
-    @Test
-    public void objectIO() {
-        try {
-            //字节输出流
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            //构建对象输出流
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(new Person("tom"));
 
-            //字节输出流
-            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-            //读取对象输出流
-            ObjectInputStream ois = new ObjectInputStream(bais);
-            Person person = (Person) ois.readObject();
-
-            System.out.println(person);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) {
+        writerIO("./myf.txt", "hi world");
+        cpFile("./myf.txt", "./cpmyf.txt");
     }
 
-    @Test
-    public void charO() {
-        Writer out = null;
-        try {
-            out = new FileWriter("a");
-            out.write("hi");
+    /**
+     * 字符流写出到文件
+     *
+     * @param fileName
+     * @param content
+     */
+    public static void writerIO(String fileName, String content) {
+        try (Writer out = new FileWriter(fileName)) {
+            out.write(content);
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (null != out) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
-    @Test
-    public void charIO2() {
-        Reader in = null;
-        Writer out = null;
-        try {
-            in = new FileReader("a");
-            out = new FileWriter("b");
-            char[] cbuf = new char[10];
-            int len = -1;
+    /**
+     * 字符流 复制文件
+     *
+     * @param srcFile
+     * @param destFile
+     */
+    public static void cpFile(String srcFile, String destFile) {
+        try (Reader in = new FileReader(srcFile);
+             Writer out = new FileWriter(destFile)) {
 
-            while ((len = in.read(cbuf)) != -1) {
-                out.write(cbuf, 0, len);
+            char[] buf = new char[1024];
+            while (true) {
+                int len = in.read(buf);
+                if (len != -1) {
+                    out.write(buf, 0, len);
+                } else {
+                    break;
+                }
             }
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (null != in) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
-    //file output
+    /**
+     * 把字节写到文件
+     * new byte[]{65, 66, 67}
+     */
     @Test
-    public void fileOut() {
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream("a");
-            out.write(new byte[]{65, 66, 67});
+    public void fileOut(String fileName, byte[] bs) {
+        try (OutputStream out = new FileOutputStream(fileName)) {
+            out.write(bs);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (null != out) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
-    //file input and output
+    /**
+     * 字节流
+     *
+     * @param srcFile
+     * @param destFile
+     */
     @Test
-    public void fileIO() {
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            in = new FileInputStream("a");
-            out = new FileOutputStream("b");
-            /**
-             * way1, read byte by byte
-             */
-            int b = 0;
-            while ((b = in.read()) != -1) {
-                out.write(b);
+    public void fileIO(String srcFile, String destFile) {
+        try (InputStream in = new FileInputStream(srcFile);
+             OutputStream out = new FileOutputStream(destFile)) {
+
+            //逐个字节写出
+            while (true) {
+                int b = in.read();
+                if (b != -1) {
+                    out.write(b);
+                } else {
+                    break;
+                }
             }
-            /**
-             * way2, read by bytes[]
-             */
-//            byte[] b = new byte[20];
-//            int len = -1;
-//            while ((len = in.read(b)) != -1) {
-//                out.write(b, 0, len);
-//            }
+
+            //buf 写出
+            byte[] b = new byte[20];
+            while (true) {
+                int len = in.read(b);
+                if (len != -1) {
+                    out.write(b, 0, len);
+                } else {
+                    break;
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (null != out) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (null != in) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 

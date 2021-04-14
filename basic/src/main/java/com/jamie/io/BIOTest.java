@@ -22,7 +22,7 @@ public class BIOTest {
         //accept 阻塞监听 客户端连接
         while (true) {
             System.out.println("等待下一个客户端连接...");
-            final Socket socket = serverSocket.accept();
+            Socket socket = serverSocket.accept();
             System.out.println("连接成功!");
 
             ThreadUtil.execute(() -> {
@@ -31,7 +31,6 @@ public class BIOTest {
                 //获取socket 输入流
                 try (InputStream in = socket.getInputStream()) {
                     byte[] bytes = new byte[1024];
-
                     while (true) {
                         int length = in.read(bytes);
                         if (length != -1) {

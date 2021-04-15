@@ -12,13 +12,11 @@ import org.junit.Test;
 public class Algo {
 
     /**
-     * 递归遍历json 全部节点，并在每个节点新增一个节点
+     * 递归遍历json 全部节点
      */
     public static void jsonRecursion(Object object) {
         if (object instanceof JSONObject) {
             JSONObject json = (JSONObject) object;
-            //每个 json 节点增加新节点
-            json.put("newNode", "val");
             for (String key : json.keySet()) {
                 Object value = json.get(key);
                 jsonRecursion(value);

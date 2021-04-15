@@ -34,7 +34,6 @@ public class CloneTest {
      * @throws ClassNotFoundException
      */
     public static Object deepClone(Object object) throws IOException, ClassNotFoundException {
-        //字节输出流
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(object);

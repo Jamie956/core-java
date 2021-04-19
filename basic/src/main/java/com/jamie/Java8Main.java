@@ -173,4 +173,10 @@ public class Java8Main {
         Map<String, Integer> d = wordCounts.entrySet().stream().sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
+    @Test
+    public void asd() {
+        //从对象列表中提取一列(以name为例)
+//        List<String> nameList = studentList.stream().map(StudentInfo::getName).collect(Collectors.toList());
+    }
+
 }

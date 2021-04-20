@@ -5,6 +5,9 @@ import org.apache.hadoop.fs.*;
 import org.apache.hadoop.fs.permission.FsAction;
 import org.apache.hadoop.fs.permission.FsPermission;
 import org.apache.hadoop.io.IOUtils;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Progressable;
 import org.junit.Test;
 
@@ -29,6 +32,27 @@ public class HDFSUtils {
         }
     }
 
+
+    public static void initJobInputPath(Job job) throws IOException {
+        Configuration conf = job.getConfiguration();
+        FileSystem fs = FileSystem.get(conf);
+        Path inputPath = new Path(conf.get("inputPath"));
+        if (fs.exists(inputPath)) {
+            FileInputFormat.setInputPaths(job, inputPath);
+        } else {
+            throw new RuntimeException("HDFS 目录不存在" + conf.get("inputPath"));
+        }
+    }
+
+    public static void initJobOutputPath(Job job) throws IOException {
+        Configuration conf = job.getConfiguration();
+        FileSystem fs = FileSystem.get(conf);
+        Path outputPath = new Path(conf.get("outputPath"));
+        if (fs.exists(outputPath)) {
+            fs.delete(outputPath, true);
+        }
+        FileOutputFormat.setOutputPath(job, outputPath);
+    }
 
     /**
      * 从HDFS上下载文件

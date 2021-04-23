@@ -1,9 +1,7 @@
-package com.jamie.wordcount;
+package com.jamie.flowsum;
 
 import com.jamie.HDFSUtils;
-import com.video.VideoRunner;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -14,31 +12,32 @@ import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
 
-/**
- * @Author: Zjm
- * @Date: 2021/4/7 18:51
- */
-public class WordCountDriver implements Tool {
+public class ObjectAsValueRunner implements Tool {
     private Configuration conf = null;
 
     /*
-    词频统计
-    a b c
-    v b
-    a d a
+计算同一个手机号码的总流量
 
-    预期
-    a	3
-    b	2
-    c	1
-    d	1
-    v	1
-     */
+136	1
+136	1
+137	2
+137	3
+138	2
+139	1
+140	2
+
+预期
+136	2...
+137	5...
+138	2...
+139	1...
+140	2...
+ */
     public static void main(String[] args) {
-        args = new String[]{"bigdata/src/main/resources/words", "bigdata/src/main/resources/out"};
+        args = new String[]{"bigdata/src/main/resources/phone", "bigdata/src/main/resources/out"};
 
         try {
-            int code = ToolRunner.run(new WordCountDriver(), args);
+            int code = ToolRunner.run(new ObjectAsValueRunner(), args);
             if (code == 0) {
                 System.out.println("success");
             } else {
@@ -50,6 +49,7 @@ public class WordCountDriver implements Tool {
         }
     }
 
+
     @Override
     public int run(String[] args) throws Exception {
         conf = this.getConf();
@@ -58,15 +58,15 @@ public class WordCountDriver implements Tool {
 
         Job job = Job.getInstance(conf);
 
-        job.setJarByClass(VideoRunner.class);
-        job.setMapperClass(WordCountMapper.class);
-        job.setReducerClass(WordCountReducer.class);
+        job.setJarByClass(ObjectAsValueRunner.class);
+        job.setMapperClass(FlowCountMapper.class);
+        job.setReducerClass(FlowCountReducer.class);
 
         job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(IntWritable.class);
+        job.setMapOutputValueClass(Counter.class);
 
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+        job.setOutputValueClass(Counter.class);
 
         HDFSUtils.initJobInputPath(job);
         HDFSUtils.initJobOutputPath(job);
@@ -85,34 +85,40 @@ public class WordCountDriver implements Tool {
         return this.conf;
     }
 
-
-    static class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+    static class FlowCountMapper extends Mapper<LongWritable, Text, Text, Counter> {
         Text k = new Text();
-        IntWritable v = new IntWritable(1);
+        Counter v = new Counter();
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
-            String[] words = line.split(" ");
-            for (String word : words) {
-                k.set(word);
-                context.write(k, v);
-            }
+            String[] fields = line.split("\t");
+
+            String phone = fields[0];
+            int count = Integer.parseInt(fields[1]);
+
+            k.set(phone);
+            v.setCount(count);
+            //写出 key 电话号码，value 对象，将电话号码一样的对象聚集在一起
+            context.write(k, v);
         }
     }
 
-    static class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
-        IntWritable v = new IntWritable();
+    static class FlowCountReducer extends Reducer<Text, Counter, Text, Counter> {
+        Counter v = new Counter();
 
         @Override
-        protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+        protected void reduce(Text key, Iterable<Counter> values, Context context) throws IOException, InterruptedException {
             int sum = 0;
-            for (IntWritable value : values) {
-                sum += value.get();
+            for (Counter value : values) {
+                sum += value.getCount();
             }
-            v.set(sum);
+            v.setCount(sum);
+
+            //写出 key 电话号码，value 对象
             context.write(key, v);
         }
-    }
-}
 
+    }
+
+}

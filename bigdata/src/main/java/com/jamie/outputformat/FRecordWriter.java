@@ -17,8 +17,8 @@ public class FRecordWriter extends RecordWriter<Text, NullWritable> {
 
     //构建输出流
     public FRecordWriter(TaskAttemptContext job) {
-        String atLog = "src/main/resources/out/atguigu.log";
-        String otLog = "src/main/resources/out/other.log";
+        String atLog = "bigdata/src/main/resources/out/atguigu.log";
+        String otLog = "bigdata/src/main/resources/out/other.log";
         try {
             FileSystem fs = FileSystem.get(job.getConfiguration());
             //创建文件输出流

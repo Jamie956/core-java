@@ -1,6 +1,5 @@
-package com.video;
+package com.jamie;
 
-import com.jamie.HDFSUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.LongWritable;

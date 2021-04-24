@@ -1,13 +1,13 @@
 package com.video;
 
+import com.jamie.HDFSUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -17,8 +17,8 @@ public class VideoRunner implements Tool {
     private Configuration conf = null;
 
     public static void main(String[] args) {
-        args = new String[]{"/Users/jamie/project/java-core/bigdata/src/main/resources/video",
-                "/Users/jamie/project/java-core/bigdata/src/main/resources/output"};
+        args = new String[]{"bigdata/src/main/resources/video",
+                "bigdata/src/main/resources/out"};
 
         try {
             int code = ToolRunner.run(new VideoRunner(), args);
@@ -47,31 +47,10 @@ public class VideoRunner implements Tool {
         job.setOutputValueClass(Text.class);
         job.setNumReduceTasks(0);
 
-        initJobInputPath(job);
-        initJobOutputPath(job);
+        HDFSUtils.initJobInputPath(job);
+        HDFSUtils.initJobOutputPath(job);
 
         return job.waitForCompletion(true) ? 0 : 1;
-    }
-
-    private void initJobInputPath(Job job) throws IOException {
-        Configuration conf = job.getConfiguration();
-        FileSystem fs = FileSystem.get(conf);
-        Path inputPath = new Path(conf.get("inputPath"));
-        if (fs.exists(inputPath)) {
-            FileInputFormat.setInputPaths(job, inputPath);
-        } else {
-            throw new RuntimeException("HDFS 目录不存在" + conf.get("inputPath"));
-        }
-    }
-
-    private void initJobOutputPath(Job job) throws IOException {
-        Configuration conf = job.getConfiguration();
-        FileSystem fs = FileSystem.get(conf);
-        Path outputPath = new Path(conf.get("outputPath"));
-        if (fs.exists(outputPath)) {
-            fs.delete(outputPath, true);
-        }
-        FileOutputFormat.setOutputPath(job, outputPath);
     }
 
     @Override
@@ -82,5 +61,50 @@ public class VideoRunner implements Tool {
     @Override
     public Configuration getConf() {
         return this.conf;
+    }
+
+    static class VideoMapper extends Mapper<LongWritable, Text, NullWritable, Text> {
+        Text v = new Text();
+
+        @Override
+        protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+            String line = value.toString();
+            String lineEtl = lineETL(line);
+
+            if (StringUtils.isBlank(lineEtl)) {
+                return;
+            }
+            v.set(lineEtl);
+            context.write(NullWritable.get(), v);
+        }
+    }
+
+    public static String lineETL(String org) {
+        String[] items = org.split("\t");
+        if (items.length < 9) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        //去除空格 a & b -> a&b
+        items[3] = items[3].replace(" ", "");
+        for (int i = 0; i < items.length; i++) {
+            if (i < 9) {
+                //前面9个以\t分隔
+                if (i == items.length - 1) {
+                    sb.append(items[i]);
+                } else {
+                    sb.append(items[i]).append("\t");
+                }
+            } else {
+                //处理相关id，以&连接
+                if (i == items.length - 1) {
+                    sb.append(items[i]);
+                } else {
+                    sb.append(items[i]).append("&");
+                }
+            }
+        }
+
+        return sb.toString();
     }
 }

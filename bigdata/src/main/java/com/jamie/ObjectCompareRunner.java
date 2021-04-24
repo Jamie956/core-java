@@ -1,6 +1,5 @@
-package com.jamie.order;
+package com.jamie;
 
-import com.jamie.HDFSUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
@@ -12,13 +11,11 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import java.io.IOException;
 
-public class GroupCompartorRunner implements Tool {
+public class ObjectCompareRunner implements Tool {
     private Configuration conf = null;
 
     /*
-计算每一个订单中最贵的商品
-
-执行全部map -> 执行order 对象 compareTo -> 执行分组的 compare
+    WritableComparable 对象重写排序方法
 
 1 222
 2 722
@@ -28,16 +25,20 @@ public class GroupCompartorRunner implements Tool {
 2 522
 2 122
 
-输出
-1	222
-2	722
-3	232
- */
+    输出
+1,222
+1,33
+2,722
+2,522
+2,122
+3,232
+3,33
+     */
     public static void main(String[] args) {
         args = new String[]{"bigdata/src/main/resources/orderinfo", "bigdata/src/main/resources/out"};
 
         try {
-            int code = ToolRunner.run(new GroupCompartorRunner(), args);
+            int code = ToolRunner.run(new ObjectCompareRunner(), args);
             if (code == 0) {
                 System.out.println("success");
             } else {
@@ -57,7 +58,7 @@ public class GroupCompartorRunner implements Tool {
 
         Job job = Job.getInstance(conf);
 
-        job.setJarByClass(GroupCompartorRunner.class);
+        job.setJarByClass(ObjectCompareRunner.class);
         job.setMapperClass(OrderMapper.class);
         job.setReducerClass(OrderReducer.class);
 
@@ -66,8 +67,6 @@ public class GroupCompartorRunner implements Tool {
 
         job.setOutputKeyClass(Order.class);
         job.setOutputValueClass(NullWritable.class);
-
-        job.setGroupingComparatorClass(MyGroupingComparator.class);
 
         HDFSUtils.initJobInputPath(job);
         HDFSUtils.initJobOutputPath(job);
@@ -85,7 +84,6 @@ public class GroupCompartorRunner implements Tool {
     public Configuration getConf() {
         return this.conf;
     }
-
 
     static class OrderMapper extends Mapper<LongWritable, Text, Order, NullWritable> {
         Order k = new Order();
@@ -107,6 +105,5 @@ public class GroupCompartorRunner implements Tool {
             context.write(key, NullWritable.get());
         }
     }
-
 
 }

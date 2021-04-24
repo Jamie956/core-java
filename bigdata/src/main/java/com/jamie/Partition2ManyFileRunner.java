@@ -1,15 +1,21 @@
-package com.jamie.flowsum;
+package com.jamie;
 
-import com.jamie.HDFSUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 
 public class Partition2ManyFileRunner implements Tool {
@@ -121,4 +127,59 @@ public class Partition2ManyFileRunner implements Tool {
     }
 
 
+    static class MyPartitioner extends Partitioner<Text, Counter> {
+
+        @Override
+        public int getPartition(Text key, Counter value, int numPartitions) {
+            String phone = key.toString();
+
+            if ("136".equals(phone)) {
+                return 0;
+            } else if ("137".equals(phone)) {
+                return 1;
+            } else if ("138".equals(phone)) {
+                return 2;
+            } else if ("139".equals(phone)) {
+                return 3;
+            } else {
+                return 4;
+            }
+        }
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class Counter implements WritableComparable<Counter> {
+        private int count;
+
+        // 序列化方法
+        @Override
+        public void write(DataOutput out) throws IOException {
+            out.writeInt(count);
+        }
+
+        // 反序列化方法
+        @Override
+        public void readFields(DataInput in) throws IOException {
+            // 必须要求和序列化方法顺序一致
+            count = in.readInt();
+        }
+
+        @Override
+        public int compareTo(Counter bean) {
+            if (this.count > bean.getCount()) {
+                return -1;
+            } else if (this.count < bean.getCount()) {
+                return 1;
+            }
+            return 0;
+        }
+
+        @Override
+        public String toString() {
+            return count + "...";
+        }
+    }
 }

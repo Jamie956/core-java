@@ -1,4 +1,4 @@
-package com.jamie.table;
+package com.jamie;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

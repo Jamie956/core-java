@@ -1,15 +1,20 @@
-package com.jamie.topn;
+package com.jamie;
 
-import com.jamie.HDFSUtils;
-import com.jamie.flowsum.Counter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.util.TreeMap;
 
@@ -143,6 +148,41 @@ ruby	3...
                 k.set(flowMap.get(bean));
                 context.write(k, bean);
             }
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class Counter implements WritableComparable<Counter> {
+        private int count;
+
+        // 序列化方法
+        @Override
+        public void write(DataOutput out) throws IOException {
+            out.writeInt(count);
+        }
+
+        // 反序列化方法
+        @Override
+        public void readFields(DataInput in) throws IOException {
+            // 必须要求和序列化方法顺序一致
+            count = in.readInt();
+        }
+
+        @Override
+        public int compareTo(Counter bean) {
+            if (this.count > bean.getCount()) {
+                return -1;
+            } else if (this.count < bean.getCount()) {
+                return 1;
+            }
+            return 0;
+        }
+
+        @Override
+        public String toString() {
+            return count + "...";
         }
     }
 }

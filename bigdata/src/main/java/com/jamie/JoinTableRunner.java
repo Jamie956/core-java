@@ -1,6 +1,5 @@
-package com.jamie.table;
+package com.jamie;
 
-import com.jamie.HDFSUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;

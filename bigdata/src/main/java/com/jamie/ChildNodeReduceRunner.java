@@ -1,7 +1,5 @@
-package com.jamie.wordcount;
+package com.jamie;
 
-import com.jamie.HDFSUtils;
-import com.video.VideoRunner;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -14,31 +12,32 @@ import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
 
-/**
- * @Author: Zjm
- * @Date: 2021/4/7 18:51
- */
-public class WordCountRunner implements Tool {
+public class ChildNodeReduceRunner implements Tool {
     private Configuration conf = null;
 
     /*
-    词频统计
-    a b c
-    v b
-    a d a
+各节点自身进行reduce，减少reduce 阶段的处理数据量，减少网络IO
+map -> combine -> reduce
 
-    预期
-    a	3
-    b	2
-    c	1
-    d	1
-    v	1
-     */
+Combine input records=36
+Combine output records=5
+
+a b c
+v b
+a d a
+
+预期
+a	3
+b	2
+c	1
+d	1
+v	1
+  */
     public static void main(String[] args) {
         args = new String[]{"bigdata/src/main/resources/words", "bigdata/src/main/resources/out"};
 
         try {
-            int code = ToolRunner.run(new WordCountRunner(), args);
+            int code = ToolRunner.run(new ChildNodeReduceRunner(), args);
             if (code == 0) {
                 System.out.println("success");
             } else {
@@ -58,15 +57,18 @@ public class WordCountRunner implements Tool {
 
         Job job = Job.getInstance(conf);
 
-        job.setJarByClass(WordCountRunner.class);
-        job.setMapperClass(WordCountMapper.class);
-        job.setReducerClass(WordCountReducer.class);
+        job.setJarByClass(ChildNodeReduceRunner.class);
+        job.setMapperClass(WordcountMapper.class);
+        job.setReducerClass(WordcountReducer.class);
 
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(IntWritable.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
+
+        //设置 combine
+        job.setCombinerClass(WordcountCombiner.class);
 
         HDFSUtils.initJobInputPath(job);
         HDFSUtils.initJobOutputPath(job);
@@ -85,8 +87,7 @@ public class WordCountRunner implements Tool {
         return this.conf;
     }
 
-
-    static class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+    static class WordcountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
         Text k = new Text();
         IntWritable v = new IntWritable(1);
 
@@ -101,7 +102,7 @@ public class WordCountRunner implements Tool {
         }
     }
 
-    static class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+    static class WordcountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
         IntWritable v = new IntWritable();
 
         @Override
@@ -114,5 +115,20 @@ public class WordCountRunner implements Tool {
             context.write(key, v);
         }
     }
-}
 
+    static class WordcountCombiner extends Reducer<Text, IntWritable, Text, IntWritable> {
+        IntWritable v = new IntWritable();
+
+        //各节点自身进行reduce
+        @Override
+        protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+            int sum = 0;
+            for (IntWritable value : values) {
+                sum += value.get();
+            }
+            v.set(sum);
+            context.write(key, v);
+        }
+    }
+
+}

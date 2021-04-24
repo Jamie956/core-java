@@ -5,43 +5,31 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.compress.BZip2Codec;
-import org.apache.hadoop.io.compress.CompressionCodec;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.NLineInputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+
 import java.io.IOException;
 
-public class MapCompressRunner implements Tool {
-
+public class SplitNumlineRunner implements Tool {
     private Configuration conf = null;
 
+    /*
+    指定切片数量
+    number of splits:3
 
-    /**
-     * map端压缩????
+    输入文件一共9行
+    每个切片分3行
+    需要3个切片
      */
-//    @Test
-//    public void mapCompress() throws IOException, ClassNotFoundException, InterruptedException {
-//        FileUtils.deleteDirectory(new File(OUTPUT_PATH));
-//
-//        Configuration configuration = new Configuration();
-//        // 开启map端输出压缩
-//        configuration.setBoolean("mapreduce.map.output.compress", true);
-//        // 设置map端输出压缩方式
-//        configuration.setClass("mapreduce.map.output.compress.codec", BZip2Codec.class, CompressionCodec.class);
-//
-//        Job job = initJob(configuration, Driver.class, WordcountMapper.class, WordcountReducer.class, Text.class, IntWritable.class, Text.class, IntWritable.class, "/words");
-//
-//        job.waitForCompletion(true);
-//    }
-
     public static void main(String[] args) {
         args = new String[]{"bigdata/src/main/resources/words", "bigdata/src/main/resources/out"};
 
         try {
-            int code = ToolRunner.run(new MapCompressRunner(), args);
+            int code = ToolRunner.run(new SplitNumlineRunner(), args);
             if (code == 0) {
                 System.out.println("success");
             } else {
@@ -61,13 +49,7 @@ public class MapCompressRunner implements Tool {
 
         Job job = Job.getInstance(conf);
 
-        // 开启map端输出压缩
-        conf.setBoolean("mapreduce.map.output.compress", true);
-        // 设置map端输出压缩方式
-        conf.setClass("mapreduce.map.output.compress.codec", BZip2Codec.class, CompressionCodec.class);
-
-
-        job.setJarByClass(MapCompressRunner.class);
+        job.setJarByClass(SplitNumlineRunner.class);
         job.setMapperClass(WordcountMapper.class);
         job.setReducerClass(WordcountReducer.class);
 
@@ -76,6 +58,11 @@ public class MapCompressRunner implements Tool {
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
+
+        // 设置每个切片InputSplit中划分三条记录
+        NLineInputFormat.setNumLinesPerSplit(job, 3);
+        // 使用NLineInputFormat处理记录数
+        job.setInputFormatClass(NLineInputFormat.class);
 
         HDFSUtils.initJobInputPath(job);
         HDFSUtils.initJobOutputPath(job);

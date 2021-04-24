@@ -1,11 +1,7 @@
 package com.jamie.order;
 
-import com.jamie.Driver;
 import com.jamie.HDFSUtils;
-import com.jamie.wordcount.WordCountRunner;
-import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
@@ -14,13 +10,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.junit.Test;
-import sun.util.resources.cldr.uk.CurrencyNames_uk;
-
-import java.io.File;
 import java.io.IOException;
-
-import static com.jamie.Utils.initJob;
 
 public class GroupCompartorRunner implements Tool {
     private Configuration conf = null;

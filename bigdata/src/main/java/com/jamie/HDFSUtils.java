@@ -17,22 +17,34 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 public class HDFSUtils {
-    //    private static final String HDFS_PATH = "hdfs://hadoop212:8020";
+//    private static final String HDFS_PATH = "hdfs://hadoop212:8020";
 //    private static final String HDFS_USER = "hdfs";
+
     public static FileSystem FS;
     public static Configuration CONF;
 
     static {
         try {
             CONF = new Configuration();
-//            FILE_SYSTEM = FileSystem.get(new URI(HDFS_PATH), CONF, HDFS_USER);
+            //本地
             FS = FileSystem.getLocal(CONF);
+            //连服务器
+//            FS = FileSystem.get(new URI(HDFS_PATH), CONF, HDFS_USER);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
+    public static void main(String[] args) {
+        listFiles("D:\\ccr_qc_data\\del\\");
+    }
+
+    /**
+     * 设置MR 输入路径，路径不存在就抛异常
+     * @param job
+     * @throws IOException
+     */
     public static void initJobInputPath(Job job) throws IOException {
         Configuration conf = job.getConfiguration();
         FileSystem fs = FileSystem.get(conf);
@@ -44,6 +56,11 @@ public class HDFSUtils {
         }
     }
 
+    /**
+     * 设置MR 输出路径，路径存在就删除路径
+     * @param job
+     * @throws IOException
+     */
     public static void initJobOutputPath(Job job) throws IOException {
         Configuration conf = job.getConfiguration();
         FileSystem fs = FileSystem.get(conf);
@@ -55,68 +72,60 @@ public class HDFSUtils {
     }
 
     /**
-     * 从HDFS上下载文件
+     * 从HDFS 下载文件
+     * @param srcPath /origin_data/ccr_qc/2021-04-06/CompanyNotice
+     * @param destPath src/main/resources/CompanyNotice
+     * @throws Exception
      */
-    @Test
-    public void copyToLocalFile() throws Exception {
-        Path src = new Path("/origin_data/ccr_qc/2021-04-06/CompanyNotice");
-        Path dst = new Path("src/main/resources/CompanyNotice");
+    public static void download(String srcPath, String destPath) throws Exception {
         /*
          * delSrc 下载完成后是否删除源文件,默认是true,即删除;
          * RawLocalFileSystem 是否用作本地文件系统,如果你在执行时候抛出NullPointerException异常,则代表你的文件系统与程序可能存在不兼容的情况(window下常见),此时可以将RawLocalFileSystem设置为true
          */
-        FS.copyToLocalFile(false, src, dst, true);
+        FS.copyToLocalFile(false, new Path(srcPath), new Path(destPath), true);
     }
 
     /**
-     * 将hdfs 文件夹CompanyNotice下的全部文件合并，合并成一个文件CompanyNotice.txt输出到本地
-     * mergeFiles("/origin_data/ccr_qc/2021-04-06/CompanyNotice", "src/main/resources/CompanyNotice.txt");
+     * 将文件夹下的全部文件合并成一个文件输出
+     * @param inPath 输入路径
+     * @param outPath 输出路径
+     * @throws Exception .
      */
-    @Test
-    public void mergeFiles() throws Exception {
-        String inPath = "/origin_data/ccr_qc/2021-04-06/CompanyNotice";
-        String outPath = "src/main/resources/CompanyNotice.txt";
-
+    public static void mergeFiles(String inPath, String outPath) throws Exception {
         FileSystem localFs = FileSystem.getLocal(CONF);
-        FSDataOutputStream fsDataOutputStream = null;
-        BufferedWriter bufferedWriter = null;
 
-        FSDataInputStream fsDataInputStream = null;
-        BufferedReader bufferedReader = null;
-
-        try {
+        try (FSDataOutputStream fsDataOutputStream = localFs.create(new Path(outPath));
+             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fsDataOutputStream))
+        ) {
             FileStatus[] inputFiles = FS.listStatus(new Path(inPath));
-            fsDataOutputStream = localFs.create(new Path(outPath));
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(fsDataOutputStream));
-
             for (FileStatus file : inputFiles) {
-                fsDataInputStream = FS.open(file.getPath());
-
-                bufferedReader = new BufferedReader(new InputStreamReader(fsDataInputStream));
+                FSDataInputStream fsDataInputStream = FS.open(file.getPath());
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fsDataInputStream));
 
                 char[] buf = new char[1024];
-                int len = -1;
-                while ((len = bufferedReader.read(buf)) != -1) {
-                    bufferedWriter.write(buf, 0, len);
+                while (true) {
+                    int len = bufferedReader.read(buf);
+                    if (len != -1) {
+                        bufferedWriter.write(buf, 0, len);
+                    } else {
+                        break;
+                    }
                 }
                 bufferedWriter.flush();
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            IOUtils.closeStream(bufferedReader);
-            IOUtils.closeStream(fsDataInputStream);
-            IOUtils.closeStream(bufferedWriter);
-            IOUtils.closeStream(fsDataOutputStream);
-
-            FS.close();
+            if (FS != null) {
+                FS.close();
+            }
         }
     }
 
     /**
      * 创建目录,支持递归创建
      */
-    @Test
+//    @Test
     public void mkDir() throws Exception {
         FS.mkdirs(new Path("/1215"));
     }
@@ -124,7 +133,7 @@ public class HDFSUtils {
     /**
      * 创建具有指定权限的目录
      */
-    @Test
+//    @Test
     public void mkDirWithPermission() throws Exception {
         FS.mkdirs(new Path("/1216"), new FsPermission(FsAction.READ_WRITE, FsAction.READ, FsAction.READ));
     }
@@ -132,7 +141,7 @@ public class HDFSUtils {
     /**
      * 创建文件,并写入内容
      */
-    @Test
+//    @Test
     public void create() throws Exception {
         FSDataOutputStream out = FS.create(new Path("/a.txt"), true, 1024);
         out.write("hello hadoop!".getBytes());
@@ -146,7 +155,7 @@ public class HDFSUtils {
     /**
      * 判断文件是否存在
      */
-    @Test
+//    @Test
     public void exist() throws Exception {
         boolean exists = FS.exists(new Path("/a.txt"));
         System.out.println(exists);
@@ -155,7 +164,7 @@ public class HDFSUtils {
     /**
      * 查看文件内容
      */
-    @Test
+//    @Test
     public void readToString() throws Exception {
         FSDataInputStream fsDataInputStream = null;
         InputStreamReader inputStreamReader = null;
@@ -187,7 +196,7 @@ public class HDFSUtils {
     /**
      * 文件重命名
      */
-    @Test
+//    @Test
     public void rename() throws Exception {
         Path oldPath = new Path("/a.txt");
         Path newPath = new Path("/b.txt");
@@ -198,7 +207,7 @@ public class HDFSUtils {
     /**
      * 删除文件
      */
-    @Test
+//    @Test
     public void delete() throws Exception {
         boolean result = FS.delete(new Path("/b.txt"), true);
         System.out.println(result);
@@ -207,7 +216,7 @@ public class HDFSUtils {
     /**
      * 上传文件到HDFS
      */
-    @Test
+//    @Test
     public void copyFromLocalFile() throws Exception {
         Path src = new Path("/b.txt");
         Path dst = new Path("/sub/b.txt");
@@ -217,7 +226,7 @@ public class HDFSUtils {
     /**
      * 上传文件到HDFS?
      */
-    @Test
+//    @Test
     public void copyFromLocalBigFile() throws Exception {
         File file = new File("/a.txt");
         final float fileSize = file.length();
@@ -239,18 +248,22 @@ public class HDFSUtils {
     /**
      * 递归查看指定目录下所有文件的信息
      */
-    @Test
-    public void listFilesRecursive() throws Exception {
-        RemoteIterator<LocatedFileStatus> files = FS.listFiles(new Path("/doc"), true);
-        while (files.hasNext()) {
-            System.out.println(files.next());
+//    @Test
+    public static void listFiles(String path) {
+        try {
+            RemoteIterator<LocatedFileStatus> files = FS.listFiles(new Path(path), true);
+            while (files.hasNext()) {
+                System.out.println(files.next());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     /**
      * 查看文件块信息
      */
-    @Test
+//    @Test
     public void getFileBlockLocations() throws Exception {
         FileStatus fileStatus = FS.getFileStatus(new Path("/a.txt"));
         BlockLocation[] blocks = FS.getFileBlockLocations(fileStatus, 0, fileStatus.getLen());
@@ -262,7 +275,7 @@ public class HDFSUtils {
     /**
      * 流上传
      */
-    @Test
+//    @Test
     public void putFileToHDFS() throws IOException {
         FileInputStream fileInputStream = new FileInputStream(new File("/a.txt"));
         FSDataOutputStream fsDataOutputStream = FS.create(new Path("/hi.txt"));
@@ -275,7 +288,7 @@ public class HDFSUtils {
     /**
      * 从HDFS下载到本地
      */
-    @Test
+//    @Test
     public void getFileFromHDFS() throws IOException, InterruptedException, URISyntaxException {
         FSDataInputStream fsDataInputStream = FS.open(new Path("/hi.txt"));
         FileOutputStream fileOutputStream = new FileOutputStream(new File("/hi2.txt"));
@@ -288,7 +301,7 @@ public class HDFSUtils {
     /**
      * 分块下载，下载第一块
      */
-    @Test
+//    @Test
     public void readFileSeek1() throws IOException, InterruptedException, URISyntaxException {
         FSDataInputStream fis = FS.open(new Path("/hadoop-2.7.2.tar.gz"));
         FileOutputStream fos = new FileOutputStream(new File("e:/hadoop-2.7.2.tar.gz.part1"));
@@ -306,7 +319,7 @@ public class HDFSUtils {
     /**
      * 分块下载，下载第二块
      */
-    @Test
+//    @Test
     public void readFileSeek2() throws IOException, InterruptedException, URISyntaxException {
         FSDataInputStream fis = FS.open(new Path("/hadoop-2.7.2.tar.gz"));
         // 设置指定读取的起点

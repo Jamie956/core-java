@@ -75,4 +75,25 @@ public class TextUtils {
     }
 
 
+    /**
+     * 统计非法数字
+     */
+    @Test
+    public void inValNum() throws IOException {
+        String text = FileUtils.readFileToString(new File("src/main/resources/source"), "UTF-8");
+        String[] lines = text.split("\r\n");
+
+        int count = 0;
+        for (String line : lines) {
+            try {
+                Float.parseFloat(line);
+            } catch (NumberFormatException e) {
+                count++;
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> "+line);
+                e.printStackTrace();
+            }
+        }
+        System.out.println("count="+count);
+    }
+
 }

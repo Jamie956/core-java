@@ -1,6 +1,5 @@
 package com.jamie.secrect;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
@@ -14,6 +13,7 @@ import java.nio.charset.Charset;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 /**
  * 加密解密
@@ -47,7 +47,7 @@ public class Secrect {
         SecretKeySpec sks = new SecretKeySpec(key.getBytes(), algorithm);
         cipher.init(Cipher.ENCRYPT_MODE, sks);
         byte[] bytes = cipher.doFinal(input.getBytes());
-        return Base64.encode(bytes);
+        return Base64.getEncoder().encodeToString(bytes);
     }
 
     /**
@@ -57,7 +57,7 @@ public class Secrect {
         Cipher cipher = Cipher.getInstance(transformation);
         SecretKeySpec sks = new SecretKeySpec(key.getBytes(), algorithm);
         cipher.init(Cipher.DECRYPT_MODE, sks);
-        byte[] bytes = cipher.doFinal(Base64.decode(input));
+        byte[] bytes = cipher.doFinal(Base64.getDecoder().decode(input));
         return new String(bytes);
     }
 
@@ -74,7 +74,7 @@ public class Secrect {
         MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
         // 获取消息数字摘要的字节数组
         byte[] digest = messageDigest.digest(input.getBytes());
-        System.out.println(Base64.encode(digest));
+        System.out.println(Base64.getEncoder().encodeToString(digest));
 
         //16进制
         StringBuilder sb = new StringBuilder();
@@ -112,8 +112,8 @@ public class Secrect {
         byte[] publicKeyEncoded = publicKey.getEncoded();
 
         // 对公私钥进行base64编码
-        String privateKeyString = Base64.encode(privateKeyEncoded);
-        String publicKeyString = Base64.encode(publicKeyEncoded);
+        String privateKeyString = Base64.getEncoder().encodeToString(privateKeyEncoded);
+        String publicKeyString = Base64.getEncoder().encodeToString(publicKeyEncoded);
 
         System.out.println("私钥：" + privateKeyString);
         System.out.println("公钥：" + publicKeyString);
@@ -122,7 +122,7 @@ public class Secrect {
         //私钥加密
         cipher.init(Cipher.ENCRYPT_MODE, privateKey);
         byte[] bytes = cipher.doFinal(input.getBytes());
-        System.out.println("私钥加密：" + Base64.encode(bytes));
+        System.out.println("私钥加密：" + Base64.getEncoder().encodeToString(bytes));
 
         // 公钥解密
         cipher.init(Cipher.DECRYPT_MODE, publicKey);
@@ -150,8 +150,8 @@ public class Secrect {
         PrivateKey privateKey = keyPair.getPrivate();
 
         // 进行Base64编码
-        String publicKeyString = Base64.encode(publicKey.getEncoded());
-        String privateKeyString = Base64.encode(privateKey.getEncoded());
+        String publicKeyString = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+        String privateKeyString = Base64.getEncoder().encodeToString(privateKey.getEncoded());
 
         // 保存文件
         FileUtils.writeStringToFile(new File(pubPath), publicKeyString, Charset.forName("UTF-8"));
@@ -165,7 +165,7 @@ public class Secrect {
         // 获取密钥工厂
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
         // 构建密钥规范 进行Base64解码
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.decode(privateKeyString));
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyString));
         // 生成私钥
         return keyFactory.generatePrivate(spec);
     }
@@ -177,7 +177,7 @@ public class Secrect {
         // 获取密钥工厂
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
         // 构建密钥规范 进行Base64解码
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.decode(publicKeyString));
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyString));
         // 生成公钥
         return keyFactory.generatePublic(spec);
     }

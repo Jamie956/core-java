@@ -3,8 +3,7 @@ package com.jamie;
 import java.io.*;
 
 /**
- * @Author: Zjm
- * @Date: 2021/5/27 17:50
+ * LibreOffice
  */
 public class Word2Pdf {
 

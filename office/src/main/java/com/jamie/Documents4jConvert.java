@@ -9,7 +9,7 @@ import java.io.*;
 /**
  * documents4j
  */
-public class Word2PdfTest {
+public class Documents4jConvert {
 
     public static void main(String[] args) {
         docxToPdf("D:\\aa.docx", "D:\\bb.pdf");

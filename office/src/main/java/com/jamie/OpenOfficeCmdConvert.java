@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * LibreOffice
  */
-public class Word2Pdf {
+public class OpenOfficeCmdConvert {
 
     //需要安装 LibreOffice
     private String sofficeDir = "D:\\software\\LibreOffice\\program";
@@ -37,6 +37,6 @@ public class Word2Pdf {
     }
 
     public static void main(String[] args) throws Exception {
-        new Word2Pdf().word2pdf("D:\\aa.docx", "D:\\temp");
+        new OpenOfficeCmdConvert().word2pdf("D:\\aa.docx", "D:\\temp");
     }
 }

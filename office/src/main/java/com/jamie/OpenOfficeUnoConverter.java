@@ -15,9 +15,8 @@ import ooo.connector.BootstrapSocketConnector;
 import java.io.*;
 import java.io.IOException;
 
-public class OpenOfficeConverter {
+public class OpenOfficeUnoConverter {
     private static String oooExecutableFolder = "D:\\software\\LibreOffice\\program";
-//    private static String oooExecutableFolder = "D:\\software\\OpenOffice_4.1.10_SDK\\sdk";
 
     static class OOoOutputStream extends ByteArrayOutputStream implements XOutputStream {
         public OOoOutputStream() {
@@ -117,7 +116,6 @@ public class OpenOfficeConverter {
         }
     }
 
-
     //word2pdf
     public void convert(OOoInputStream input, OOoOutputStream output, String filterName) throws Exception {
         XComponentContext xComponentContext = BootstrapSocketConnector.bootstrap(oooExecutableFolder);
@@ -148,7 +146,6 @@ public class OpenOfficeConverter {
         xclosable.close(true);
     }
 
-
     public static void convert(String inputFilename, String outputFilename){
         try {
             // Create OOoInputStream
@@ -166,7 +163,7 @@ public class OpenOfficeConverter {
             OOoOutputStream outputStream = new OOoOutputStream();
 
             // Convert document to PDF
-            OpenOfficeConverter converter = new OpenOfficeConverter();
+            OpenOfficeUnoConverter converter = new OpenOfficeUnoConverter();
             converter.convert(inputStream, outputStream, "writer_pdf_Export");
 
             // 输出流存成文件
@@ -186,11 +183,12 @@ public class OpenOfficeConverter {
         System.exit(0);
     }
 
-
     public static void main(String[] args) {
         String inputFilename = "D:\\aa.docx";
         String outputFilename = "D:\\bb.pdf";
 
+//        inputFilename = args[0];
+//        outputFilename = args[1];
         convert(inputFilename, outputFilename);
     }
 }

@@ -16,7 +16,8 @@ import java.io.*;
 import java.io.IOException;
 
 public class OpenOfficeConverter {
-    private XComponentContext xComponentContext;
+    private static String oooExecutableFolder = "D:\\software\\LibreOffice\\program";
+//    private static String oooExecutableFolder = "D:\\software\\OpenOffice_4.1.10_SDK\\sdk";
 
     static class OOoOutputStream extends ByteArrayOutputStream implements XOutputStream {
         public OOoOutputStream() {
@@ -116,12 +117,10 @@ public class OpenOfficeConverter {
         }
     }
 
-    public OpenOfficeConverter(XComponentContext xComponentContext) {
-        this.xComponentContext = xComponentContext;
-    }
 
     //word2pdf
     public void convert(OOoInputStream input, OOoOutputStream output, String filterName) throws Exception {
+        XComponentContext xComponentContext = BootstrapSocketConnector.bootstrap(oooExecutableFolder);
         XMultiComponentFactory xMultiComponentFactory = xComponentContext.getServiceManager();
         Object desktopService = xMultiComponentFactory.createInstanceWithContext("com.sun.star.frame.Desktop", xComponentContext);
         XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, desktopService);
@@ -149,16 +148,9 @@ public class OpenOfficeConverter {
         xclosable.close(true);
     }
 
-    public static void main(String[] args) {
-        String oooExecutableFolder = "D:\\software\\LibreOffice\\program";
-        String inputFilename = "D:\\aa.docx";
-        String outputFilename = "D:\\bb.pdf";
 
+    public static void convert(String inputFilename, String outputFilename){
         try {
-            // Connect to OOo server
-            XComponentContext xComponentContext = BootstrapSocketConnector.bootstrap(oooExecutableFolder);
-            OpenOfficeConverter converter = new OpenOfficeConverter(xComponentContext);
-
             // Create OOoInputStream
             InputStream inputFile = new BufferedInputStream(new FileInputStream(inputFilename));
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -174,9 +166,10 @@ public class OpenOfficeConverter {
             OOoOutputStream outputStream = new OOoOutputStream();
 
             // Convert document to PDF
+            OpenOfficeConverter converter = new OpenOfficeConverter();
             converter.convert(inputStream, outputStream, "writer_pdf_Export");
 
-            // Save OOoOutputStream
+            // 输出流存成文件
             FileOutputStream outputFile = new FileOutputStream(outputFilename);
             outputFile.write(outputStream.toByteArray());
             outputFile.close();
@@ -191,6 +184,14 @@ public class OpenOfficeConverter {
         }
 
         System.exit(0);
+    }
+
+
+    public static void main(String[] args) {
+        String inputFilename = "D:\\aa.docx";
+        String outputFilename = "D:\\bb.pdf";
+
+        convert(inputFilename, outputFilename);
     }
 }
 

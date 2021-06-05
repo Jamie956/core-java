@@ -3,6 +3,9 @@ package com.jamie.pattern;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 建造者模式
+ */
 public class BuilderTest {
     public static void main(String[] args) {
         MealBuilder mealBuilder = new MealBuilder();

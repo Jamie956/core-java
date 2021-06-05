@@ -1,5 +1,8 @@
 package com.jamie.pattern;
 
+/**
+ * 工厂模式
+ */
 public class FactoryTest {
     public static void main(String[] args) {
         ShapeFactory shapeFactory = new ShapeFactory();

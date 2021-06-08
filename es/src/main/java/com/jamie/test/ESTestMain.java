@@ -27,12 +27,15 @@ import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.range.Range;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
 import org.elasticsearch.search.aggregations.metrics.stats.extended.ExtendedStats;
+import org.elasticsearch.search.aggregations.metrics.tophits.ParsedTopHits;
+import org.elasticsearch.search.aggregations.metrics.tophits.TopHitsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -59,12 +62,12 @@ public class ESTestMain {
     @Test
     public void readyData4Test() throws IOException {
         //索引是否存在
-        GetIndexRequest getIndexRequest = new GetIndexRequest().indices("lib");
+        GetIndexRequest getIndexRequest = new GetIndexRequest().indices(INDEX);
         boolean exists = client.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
 
         if (exists) {
             //删除索引
-            DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest().indices("lib");
+            DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest().indices(INDEX);
             client.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
         }
 
@@ -256,7 +259,7 @@ public class ESTestMain {
 
     @Test
     public void findById() throws IOException {
-        GetRequest request = new GetRequest("lib", "user", "1");
+        GetRequest request = new GetRequest(INDEX, TYPE, "1");
         GetResponse response = client.get(request, RequestOptions.DEFAULT);
         System.out.println(response.getSourceAsMap());
     }
@@ -272,8 +275,8 @@ public class ESTestMain {
         builder.sort("age", SortOrder.DESC);
 
         SearchRequest request = new SearchRequest();
-        request.indices("lib");
-        request.types("user");
+        request.indices(INDEX);
+        request.types(TYPE);
         request.scroll(TimeValue.timeValueMinutes(2L));
         request.source(builder);
 
@@ -319,8 +322,8 @@ public class ESTestMain {
     @Test
     public void deleteByQuery() throws IOException {
         DeleteByQueryRequest request = new DeleteByQueryRequest();
-        request.indices("lib");
-        request.types("user");
+        request.indices(INDEX);
+        request.types(TYPE);
         request.setQuery(QueryBuilders.rangeQuery("age").lt(24));
 
         BulkByScrollResponse response = client.deleteByQuery(request, RequestOptions.DEFAULT);
@@ -394,8 +397,8 @@ public class ESTestMain {
         builder.aggregation(AggregationBuilders.extendedStats("myagg").field("age"));
 
         SearchRequest request = new SearchRequest();
-        request.indices("lib");
-        request.types("user");
+        request.indices(INDEX);
+        request.types(TYPE);
         request.source(builder);
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
 
@@ -410,8 +413,8 @@ public class ESTestMain {
         builder.aggregation(AggregationBuilders.range("myagg").field("age").addUnboundedTo(21).addRange(21, 28).addUnboundedFrom(28));
 
         SearchRequest request = new SearchRequest();
-        request.indices("lib");
-        request.types("user");
+        request.indices(INDEX);
+        request.types(TYPE);
         request.source(builder);
 
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
@@ -436,8 +439,8 @@ public class ESTestMain {
         builder.highlighter(hBuilder);
 
         SearchRequest request = new SearchRequest();
-        request.indices("lib");
-        request.types("user");
+        request.indices(INDEX);
+        request.types(TYPE);
         request.source(builder);
 
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
@@ -454,8 +457,8 @@ public class ESTestMain {
         builder.aggregation(AggregationBuilders.cardinality("group_birthday").field("birthday"));
 
         SearchRequest request = new SearchRequest();
-        request.indices("lib");
-        request.types("user");
+        request.indices(INDEX);
+        request.types(TYPE);
         request.source(builder);
 
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
@@ -467,7 +470,7 @@ public class ESTestMain {
      * 获取 term 聚合结果
      */
     @Test
-    public void aggTest(){
+    public void aggTerm(){
         try {
             BoolQueryBuilder query = QueryBuilders.boolQuery().should(QueryBuilders.matchPhraseQuery("firstCateName", "bala"));
 
@@ -495,6 +498,48 @@ public class ESTestMain {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * top hits
+     */
+    public void sad() {
+        try {
+            RangeQueryBuilder rQuery = QueryBuilders.rangeQuery("age").lt(25);
+
+            TermsAggregationBuilder termAggBuilder = AggregationBuilders.terms("agg_index").field("_index").size(2);
+            TopHitsAggregationBuilder topAggBuilder = AggregationBuilders.topHits("top_time_hits").sort("birthday", SortOrder.DESC).size(2);
+            termAggBuilder.subAggregation(topAggBuilder);
+
+            SearchSourceBuilder searchBuilder = new SearchSourceBuilder();
+            searchBuilder.query(rQuery);
+            searchBuilder.aggregation(termAggBuilder);
+            searchBuilder.size(0);
+            System.out.println("builder=" + searchBuilder);
+
+            SearchRequest request = new SearchRequest();
+            request.indices("test_multi_doc1", "test_multi_doc2");
+            request.types("index");
+            request.source(searchBuilder);
+
+            SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+            Terms termAggResult = response.getAggregations().get("agg_index");
+            if (termAggResult != null) {
+                for (Terms.Bucket termBucket : termAggResult.getBuckets()) {
+                    String key = termBucket.getKeyAsString();
+                    System.out.println("index="+key);
+
+                    SearchHits topHits = ((ParsedTopHits) termBucket.getAggregations().get("top_time_hits")).getHits();
+                    if (topHits != null) {
+                        for (SearchHit hit : topHits.getHits()) {
+                            System.out.println("hit="+hit);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -8,7 +8,7 @@ import java.io.*;
 public class OpenOfficeCmdConvert {
 
     //需要安装 LibreOffice
-    private String sofficeDir = "D:\\software\\LibreOffice\\program";
+    private String sofficeDir = "D:\\software\\OpenOffice4\\program";
 
     public void word2pdf(String inPath, String outPath) throws Exception {
         if (!new File(inPath).exists()) {

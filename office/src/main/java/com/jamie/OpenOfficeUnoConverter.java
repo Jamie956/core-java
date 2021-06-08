@@ -16,7 +16,8 @@ import java.io.*;
 import java.io.IOException;
 
 public class OpenOfficeUnoConverter {
-    private static String oooExecutableFolder = "D:\\software\\LibreOffice\\program";
+//    private static String oooExecutableFolder = "D:\\software\\LibreOffice\\program";
+    private static String oooExecutableFolder = "D:\\software\\OpenOffice4\\program";
 
     static class OOoOutputStream extends ByteArrayOutputStream implements XOutputStream {
         public OOoOutputStream() {

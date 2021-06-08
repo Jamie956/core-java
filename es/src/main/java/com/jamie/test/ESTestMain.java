@@ -2,7 +2,7 @@ package com.jamie.test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jamie.entity.User;
-import com.jamie.utils.ESClient;
+import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -16,6 +16,8 @@ import org.elasticsearch.action.search.*;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 
 import org.elasticsearch.common.unit.TimeValue;
@@ -46,21 +48,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ESTestMain {
-    private RestHighLevelClient client = ESClient.getClient();
+    private static RestHighLevelClient client;
+
+
+    static {
+        HttpHost http = new HttpHost("localhost", 9200);
+        RestClientBuilder builder = RestClient.builder(http);
+        client =  new RestHighLevelClient(builder);
+    }
+
     private static final String INDEX = "lib";
     private static final String TYPE = "user";
 
     /**
      * 准备测试数据
-     * GET /lib/user/_search
-     *
-     * indices().exists     索引操作，是否存在
-     * indices().delete     索引删除
-     * bulk                 批量操作
-     *
      */
     @Test
-    public void readyData4Test() throws IOException {
+    public void indexOperation() throws IOException {
         //索引是否存在
         GetIndexRequest getIndexRequest = new GetIndexRequest().indices(INDEX);
         boolean exists = client.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
@@ -85,7 +89,7 @@ public class ESTestMain {
      * 根据id 批量删除文档
      */
     @Test
-    public void bulkDeleteDoc() throws IOException {
+    public void bulkDelete() throws IOException {
         BulkRequest request = new BulkRequest();
         request.add(new DeleteRequest(INDEX, TYPE, "1"));
         request.add(new DeleteRequest(INDEX, TYPE, "2"));
@@ -95,19 +99,21 @@ public class ESTestMain {
 
     /**
      * 创建索引和文档
+     * client.index
      */
     @Test
-    public void createDoc() throws IOException {
+    public void create() throws IOException {
         IndexRequest request = new IndexRequest(INDEX, TYPE, "20").source(JSONObject.toJSONString(new User("tim", "take that", 50, "1970-12-12", "cd")), XContentType.JSON);
-        IndexResponse reponse = client.index(request, RequestOptions.DEFAULT);
-        System.out.println(reponse.getResult().toString());
+        IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+        System.out.println(response.getResult().toString());
     }
 
     /**
      * 更新文档
+     * client.update
      */
     @Test
-    public void updateDoc() throws IOException {
+    public void update() throws IOException {
         HashMap<String, String> map = new HashMap<>();
         map.put("name", "Jamie Zhou");
 
@@ -119,15 +125,16 @@ public class ESTestMain {
 
     /**
      * 删除文档
+     * client.delete
      */
     @Test
-    public void deleteDoc() throws IOException {
+    public void delete() throws IOException {
         DeleteRequest request = new DeleteRequest(INDEX, TYPE, "20");
         DeleteResponse respond = client.delete(request, RequestOptions.DEFAULT);
         System.out.println(respond.getResult().toString());
     }
 
-    private void printResult(SearchSourceBuilder builder) throws IOException {
+    private void searchResult(SearchSourceBuilder builder) throws IOException {
         SearchRequest request = new SearchRequest();
         request.indices(INDEX);
         request.types(TYPE);
@@ -140,17 +147,29 @@ public class ESTestMain {
         }
     }
 
+    private void search(QueryBuilder query) throws IOException {
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+        builder.query(query);
+
+        SearchRequest request = new SearchRequest();
+        request.indices(INDEX);
+        request.types(TYPE);
+        request.source(builder);
+
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+
+        for (SearchHit hit : response.getHits().getHits()) {
+            System.out.println(hit.getSourceAsMap());
+        }
+    }
     /**
      * termsQuery
      * birthday 字段匹配 1970-12-12 或 1970-10-12
      */
     @Test
-    public void termsQuery() throws IOException {
-        SearchSourceBuilder builder = new SearchSourceBuilder();
-        builder.from(0);
-        builder.size(5);
-        builder.query(QueryBuilders.termsQuery("birthday", "1970-12-12", "1998-10-12"));
-        printResult(builder);
+    public void terms() throws IOException {
+        QueryBuilder query = QueryBuilders.termsQuery("birthday", "1970-12-12", "1998-10-12");
+        search(query);
     }
 
     /**
@@ -158,10 +177,10 @@ public class ESTestMain {
      * "interests"  或 "address" 字段 匹配"步"
      */
     @Test
-    public void multiMatchQuery() throws IOException {
+    public void multiMatch() throws IOException {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(QueryBuilders.multiMatchQuery("步", "interests", "address"));
-        printResult(builder);
+        searchResult(builder);
     }
 
     /**
@@ -169,29 +188,20 @@ public class ESTestMain {
      * interests 字段 包含喝和跑字
      */
     @Test
-    public void matchQueryWithOpt() throws IOException {
+    public void matchQueryOp() throws IOException {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(QueryBuilders.matchQuery("interests", "喝 跑").operator(Operator.AND));
-        printResult(builder);
+        searchResult(builder);
     }
 
     /**
      * matchQuery 分词查询
-     *
-     * 分词分析
-     * GET /lib/_analyze
-     * {
-     *   "field": "interests",
-     *   "text": "喝酒睡觉"
-     * }
-     *
-     * "喝酒睡觉" 分成 "喝"、"酒"、"睡"、"觉"
      */
     @Test
-    public void matchQuery() throws IOException {
+    public void match() throws IOException {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(QueryBuilders.matchQuery("interests", "喝酒睡觉"));
-        printResult(builder);
+        searchResult(builder);
     }
 
     /**
@@ -200,30 +210,29 @@ public class ESTestMain {
      * 匹配全部
      */
     @Test
-    public void matchAllQuery() throws IOException {
+    public void matchAll() throws IOException {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(QueryBuilders.matchAllQuery());
-        printResult(builder);
+        searchResult(builder);
     }
 
     /**
      * regexpQuery 匹配表达式
      */
     @Test
-    public void findByRegexp() throws IOException {
+    public void regexp() throws IOException {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(QueryBuilders.regexpQuery("name", "zha[a-z]*"));
-        printResult(builder);
+        searchResult(builder);
     }
 
     /**
      * 范围查询
      */
     @Test
-    public void findByRange() throws IOException {
-        SearchSourceBuilder builder = new SearchSourceBuilder();
-        builder.query(QueryBuilders.rangeQuery("age").lte(28).gte(22));
-        printResult(builder);
+    public void range() throws IOException {
+        QueryBuilder query = QueryBuilders.rangeQuery("age").lte(28).gte(22);
+        search(query);
 
     }
 
@@ -231,20 +240,20 @@ public class ESTestMain {
      * 模糊查询
      */
     @Test
-    public void findByFuzzy() throws IOException {
+    public void fuzzy() throws IOException {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(QueryBuilders.fuzzyQuery("name", "zhangxan").prefixLength(5));
-        printResult(builder);
+        searchResult(builder);
     }
 
     /**
      * 前缀查询
      */
     @Test
-    public void findByPrefix() throws IOException {
+    public void prefix() throws IOException {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(QueryBuilders.prefixQuery("interests", "喝"));
-        printResult(builder);
+        searchResult(builder);
     }
 
     /**
@@ -254,7 +263,7 @@ public class ESTestMain {
     public void findByIds() throws IOException {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(QueryBuilders.idsQuery().addIds("1", "2"));
-        printResult(builder);
+        searchResult(builder);
     }
 
     @Test
@@ -268,7 +277,7 @@ public class ESTestMain {
      * 深分页查询
      */
     @Test
-    public void scrollQuery() throws IOException {
+    public void scroll() throws IOException {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(QueryBuilders.matchAllQuery());
         builder.size(2);
@@ -280,7 +289,6 @@ public class ESTestMain {
         request.scroll(TimeValue.timeValueMinutes(2L));
         request.source(builder);
 
-        //search
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
         String scrollId = response.getScrollId();
         System.out.println("===首页===");
@@ -292,10 +300,9 @@ public class ESTestMain {
             SearchScrollRequest searchScrollRequest = new SearchScrollRequest(scrollId);
             searchScrollRequest.scroll(TimeValue.timeValueMinutes(1L));
 
-            //scroll
-            SearchResponse searchScrollResponse = client.scroll(searchScrollRequest, RequestOptions.DEFAULT);
+            SearchResponse scrollResponse = client.scroll(searchScrollRequest, RequestOptions.DEFAULT);
 
-            SearchHit[] hits = searchScrollResponse.getHits().getHits();
+            SearchHit[] hits = scrollResponse.getHits().getHits();
             if (hits != null && hits.length > 0) {
                 System.out.println("===下一页===");
                 for (SearchHit hit : hits) {
@@ -307,11 +314,10 @@ public class ESTestMain {
             }
         }
 
+        //清除深分页 scroll id
         ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
         clearScrollRequest.addScrollId(scrollId);
-
         ClearScrollResponse clearScrollResponse = client.clearScroll(clearScrollRequest, RequestOptions.DEFAULT);
-
         System.out.println("删除scroll: " + clearScrollResponse.isSucceeded());
     }
 
@@ -344,7 +350,7 @@ public class ESTestMain {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(boostingQuery);
 
-        printResult(builder);
+        searchResult(builder);
     }
 
 
@@ -356,7 +362,6 @@ public class ESTestMain {
      */
     @Test
     public void boolQuery() throws IOException {
-
         /*
         # 名字 zhangsan或 lisi 或wangwu
         # 年龄不是26
@@ -374,7 +379,7 @@ public class ESTestMain {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(boolQuery);
 
-        printResult(builder);
+        searchResult(builder);
     }
 
     @Test
@@ -387,7 +392,7 @@ public class ESTestMain {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(boolQueryBuilder);
 
-        printResult(builder);
+        searchResult(builder);
     }
 
 
@@ -503,7 +508,7 @@ public class ESTestMain {
     /**
      * top hits
      */
-    public void sad() {
+    public void aggTopHits() {
         try {
             RangeQueryBuilder rQuery = QueryBuilders.rangeQuery("age").lt(25);
 
@@ -545,7 +550,7 @@ public class ESTestMain {
     /**
      * 更新 articles 索引 ，update content where content_id=?
      */
-    public void updateEsArticleByContentId(String contentId, String content){
+    public void updateByField(String contentId, String content){
         try {
             //根据es articles content_id 更新 content 字段
             UpdateByQueryRequest request = new UpdateByQueryRequest("articles");

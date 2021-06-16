@@ -103,7 +103,8 @@ public class ESTestMain {
      */
     @Test
     public void create() throws IOException {
-        IndexRequest request = new IndexRequest(INDEX, TYPE, "20").source(JSONObject.toJSONString(new User("tim", "take that", 50, "1970-12-12", "cd")), XContentType.JSON);
+        String jsonStr = JSONObject.toJSONString(new User("tim", "take that", 50, "1970-12-12", "cd"));
+        IndexRequest request = new IndexRequest(INDEX, TYPE, "20").source(jsonStr, XContentType.JSON);
         IndexResponse response = client.index(request, RequestOptions.DEFAULT);
         System.out.println(response.getResult().toString());
     }

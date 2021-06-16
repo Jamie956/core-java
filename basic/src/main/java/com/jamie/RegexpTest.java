@@ -148,4 +148,10 @@ public class RegexpTest {
         str = str.replaceAll("_\\d{4}-\\d{2}-\\d{2}", "");
         System.out.println(str);
     }
+
+    @Test
+    public void rm() {
+        String s = "recall20210616142329".replaceAll("\\d", "");
+        System.out.println(s);
+    }
 }

@@ -6,42 +6,26 @@ import com.google.common.base.Converter;
 import org.apache.commons.text.StringEscapeUtils;
 import org.junit.Test;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-
 public class Convert {
+
+
+
+    /**
+     * &nbsp;    &lt;    &gt;    &amp;   &quot;  &apos;
+     * 转义
+     */
     @Test
-    public void getDateString() {
-        String date = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                .withZone(ZoneId.systemDefault()).format(Instant.now().minus(1, ChronoUnit.DAYS));
-
-        // 获取当前日期
-        LocalDate today = LocalDate.now();
-        // 获取当前日期的前一天
-        String yesterday = today.plusDays(-1).toString();
-    }
-
-    //html 转义
-    @Test
-    public void htmlConvert(){
-        String str = "&nbsp;-&lt;-&gt;-&amp;-&quot;-&apos;";
-
-        String unescapeHtml4 = StringEscapeUtils.unescapeHtml4(str);
+    public void htmlConvert() {
+        //&lt; -> <
+        String unescapeHtml4 = StringEscapeUtils.unescapeHtml4("&lt;");
         System.out.println(unescapeHtml4);
-        String escapeHtml4 = StringEscapeUtils.escapeHtml4(unescapeHtml4);
+        //< -> &lt;
+        String escapeHtml4 = StringEscapeUtils.escapeHtml4("<");
         System.out.println(escapeHtml4);
-
-        String unescapeHtml3 = StringEscapeUtils.unescapeHtml3(str);
-        System.out.println(unescapeHtml3);
-        String escapeHtml3 = StringEscapeUtils.escapeHtml3(unescapeHtml3);
-        System.out.println(escapeHtml3);
     }
 
     /**
-     * 驼峰、下划线字符串转换 by guava
+     * 驼峰、下划线字符串转换
      */
     @Test
     public void guavaConvert() {
@@ -75,10 +59,16 @@ public class Convert {
     }
 
     @Test
-    public void rmHtmlStyle() {
+    public void htmlUtilTest() {
+        //清除指定HTML标签和被标签包围的内容
         String content = "<div style=\"padding:10px 0;text-align:center;\"><img src=./W020201019582462534023.jpg style></div><div class=TRS_Editor><style type=text/css>\n" + "\n" + ".TRS_Editor P{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor DIV{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor TD{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor TH{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor SPAN{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor FONT{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor UL{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor LI{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor A{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}</style><div class=TRS_Editor><style type=text/css>\n" + "\n" + ".TRS_Editor P{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor DIV{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor TD{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor TH{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor SPAN{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor FONT{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor UL{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor LI{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}.TRS_Editor A{margin-top:20px;margin-bottom:20px;line-height:1.5;font-family:宋体;font-size:10.5pt;}</style><p align=justify>";
         content = HtmlUtil.removeHtmlTag(content, "img", "style");
-
         System.out.println(content);
+
+        //清除指定HTML标签，不包括内容
+        String s = "<p></p><p></p><p></p><p><br></p><p>附件：1.<ahref=\"http://scjgj.shanxi.gov.cn/attached/file/2019/11/29/20191129184421_671.docx\"target=\"_blank\">本次检验项目</a></p><p>2.<ahref=\"http://scjgj.shanxi.gov.cn/attached/file/2019/11/29/20191129184455_438.xlsx\"target=\"_blank\">食品监督抽检产品合格信息</a></p><p>3.<ahref=\"http://scjgj.shanxi.gov.cn/attached/file/2019/11/29/20191129185247_713.xls\"target=\"_blank\">食品监督抽检不合格产品信息</a></p>";
+        s = HtmlUtil.unwrapHtmlTag(s, "p");
+        System.out.println(s);
     }
+
 }

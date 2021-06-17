@@ -47,10 +47,9 @@ public class RegexpTest {
      * \w+(\s\')?\d{0,3}\'?         同上
      * \w+(\s\'(\d*)\')?
      * .+(\\d)$        数字结尾
-     *
      */
     @Test
-    public void test01() {
+    public void isMatch() {
         String[] patterns = {"\\w", "\\w*", "\\w+", "abc\\w*", "\\w+\\s\\d+", "\\w+\\s*\\d+", "\\w+\\s+\\d+", "\\w+\\s?\\d+", "\\D+", "\\W", "[a-zA-Z0-9]", "\\w{1}", "\\w{1,2}", "\\w{1,3}", "\\w{1,7}", "\\w{0,7}", "[kj]ava", "[^kj]ava", ".[o][b].*", ".ob.*", ".*", "\\w+", "\\w+\\s\\'.+", "\\w+\\sa.+", "\\D+\\sa.+", "\\D+\\s.+", "\\w+\\s?\\'?\\d{0,3}\\'?", "\\w+(\\s\\')?\\d{0,3}\\'?", "\\w+(\\s\\'(\\d*)\\')?", "M.+", "^M.+", ".+(\\d)$", "\\d{4}-\\d{2}-\\d{2}"};
         String[] words = {"a", "1", "abc", "abcde987321", "abcdefg", "defghij", "", "abc", "abc 123", "abc123", "abc  123", "a", "rt", "C", "+", "RtS", "8", "abcdefg", "a+\\", "kava", "sava", "lava", "tava", "java", "Robert", "book", "cat", "job", "Todor", "+ob 123? @ p", "Boooob", "jjobss", "abc135gf", "string '123'", "int a = 5247;", "int A = 5247;", "int b = 5247;", "1int a = 5247;", "string '", "Marko is a good boy.", "Our Marko, is a good boy!", "Nobody is as good as our Marko is!", "2.345,56", "-52.678.110", "235", "128m", "2020-08-03"};
 
@@ -67,20 +66,32 @@ public class RegexpTest {
     }
 
     @Test
-    public void asdasd() {
+    public void matchTest() {
+        String word = "aa啊的";
+        String pattern = "\\w*[\\u4E00-\\u9FA5]+";
+        if (word.matches(pattern)) {
+            System.out.println("match");
+        } else {
+            System.out.println("not match");
+        }
+    }
+
+    @Test
+    public void replaceTest() {
         String content = "<p>asdasdas</p>\n" + "<p>sdfsd</p>\n" + "<p>bbb</p>\n" + "<p>cccc</p>";
 
         //删除第一个<p>
         String a = ReUtil.delFirst("<p>", content);
         //替换第一个<p>
-        String b = content.replaceFirst("<p>", "<p>1:  " );
+        String b = content.replaceFirst("<p>", "<p>1:  ");
         //删除全部<p></p>
         String c = content.replaceAll("\\&[a-zA-Z]{1,10};", "").replaceAll("<[^>]*>", "").replaceAll("[(/>)<]", "");
     }
 
     /**
-     * 从text中找出匹配正则表达式的字符
-     * 找出文本的全部中文                         [\\u4E00-\\u9FA5]+
+     * 返回正则匹配的结果
+     * <p>
+     * 找出文本的全部中文                         [\u4E00-\u9FA5]+
      * 找出文本的全部数字                        \d+
      * 找出指定开头x和结尾y的文本                 x.+.y
      * 取PIN=为开头的内容                          (?<=PIN=).\S*
@@ -88,13 +99,40 @@ public class RegexpTest {
      * 取"key" : "开头，",结尾的中间的内容            (?<="key" : ").*?(?=(",|$))
      * 取某个字符串|开头的内容                      (\|.*)
      */
+    private static final Pattern DIGITAL_PATTERN = Pattern.compile("\\d+");
+
     @Test
     public void findMatch() {
-        Pattern p = Pattern.compile("\\d+");
-        Matcher m = p.matcher("asa1jbjb3");
-        while (m.find()) {
-            System.out.println(m.group());
+        Matcher matcher = DIGITAL_PATTERN.matcher("asa9jbjb1");
+        while (matcher.find()) {
+            System.out.println(String.format("start=%s, end=%s, group=%s", matcher.start(), matcher.end(), matcher.group()));
         }
+    }
+
+    /**
+     * 截取字符串的开头到第n个中文
+     */
+    private static final Pattern CHINESE_PATTERN = Pattern.compile("[\\u4E00-\\u9FA5]+");
+
+    @Test
+    public void chineseMatch() {
+//        String str = "as!@#@a9阿松大jbjb的1123";
+//        String str = "阿松大asdasd啊实打实大苏打";
+//        String str = "阿松大啊实打实大苏打sadads";
+        String str = "asdasd阿松大啊实打实大苏打";
+        Matcher matcher = CHINESE_PATTERN.matcher(str);
+        int n = 2;
+        int len = 0;
+        int cur = -1;
+        while (matcher.find()) {
+            int curLen = matcher.end() - matcher.start();
+            if (len + curLen > n) {
+                cur = matcher.start() + n - len;
+                break;
+            }
+            len += curLen;
+        }
+        System.out.println(str.substring(0, cur));
     }
 
     /**
@@ -138,7 +176,7 @@ public class RegexpTest {
     @Test
     public void replaceHtml() {
         String str = "<p>去除所有html标签,<img/><My-Tag class=\\\"abc\\\" value=\\\"test\\\">自定     义标签\n也\r可以\t去除哦</My-Tag></p>";
-        str = str.replaceAll("<[^>]+>","").replaceAll("[\r\t\n]", "").replaceAll(" ", "");
+        str = str.replaceAll("<[^>]+>", "").replaceAll("[\r\t\n]", "").replaceAll(" ", "");
         System.out.println(str);
     }
 

@@ -1,15 +1,19 @@
 package com.jamie;
 
-import cn.hutool.core.util.ReUtil;
+import cn.hutool.http.HtmlUtil;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class RegexpTest {
+    private static final String[] words = {"a", "1", "abc", "abcde987321", "abcdefg", "defghij", "", "abc", "abc 123", "abc123", "abc  123", "a", "rt", "C", "+", "RtS", "8", "abcdefg", "a+\\", "kava", "sava", "lava", "tava", "java", "Robert", "book", "cat", "job", "Todor", "+ob 123? @ p", "Boooob", "jjobss", "abc135gf", "string '123'", "int a = 5247;", "int A = 5247;", "int b = 5247;", "1int a = 5247;", "string '", "Marko is a good boy.", "Our Marko, is a good boy!", "Nobody is as good as our Marko is!", "2.345,56", "-52.678.110", "235", "128m", "2020-08-03"};
+
     /**
      * \w               一个  数字或字母
      * \w*              0或以上个   数字或字母
@@ -51,7 +55,6 @@ public class RegexpTest {
     @Test
     public void isMatch() {
         String[] patterns = {"\\w", "\\w*", "\\w+", "abc\\w*", "\\w+\\s\\d+", "\\w+\\s*\\d+", "\\w+\\s+\\d+", "\\w+\\s?\\d+", "\\D+", "\\W", "[a-zA-Z0-9]", "\\w{1}", "\\w{1,2}", "\\w{1,3}", "\\w{1,7}", "\\w{0,7}", "[kj]ava", "[^kj]ava", ".[o][b].*", ".ob.*", ".*", "\\w+", "\\w+\\s\\'.+", "\\w+\\sa.+", "\\D+\\sa.+", "\\D+\\s.+", "\\w+\\s?\\'?\\d{0,3}\\'?", "\\w+(\\s\\')?\\d{0,3}\\'?", "\\w+(\\s\\'(\\d*)\\')?", "M.+", "^M.+", ".+(\\d)$", "\\d{4}-\\d{2}-\\d{2}"};
-        String[] words = {"a", "1", "abc", "abcde987321", "abcdefg", "defghij", "", "abc", "abc 123", "abc123", "abc  123", "a", "rt", "C", "+", "RtS", "8", "abcdefg", "a+\\", "kava", "sava", "lava", "tava", "java", "Robert", "book", "cat", "job", "Todor", "+ob 123? @ p", "Boooob", "jjobss", "abc135gf", "string '123'", "int a = 5247;", "int A = 5247;", "int b = 5247;", "1int a = 5247;", "string '", "Marko is a good boy.", "Our Marko, is a good boy!", "Nobody is as good as our Marko is!", "2.345,56", "-52.678.110", "235", "128m", "2020-08-03"};
 
         for (String pattern : patterns) {
             System.out.println(">>>>>>>>>>>>>> pattern: " + pattern + " <<<<<<<<<<<<<<");
@@ -65,6 +68,9 @@ public class RegexpTest {
         }
     }
 
+    /**
+     * 是否匹配正则
+     */
     @Test
     public void matchTest() {
         String word = "aa啊的";
@@ -76,20 +82,32 @@ public class RegexpTest {
         }
     }
 
+    /**
+     * 根据字符 或正则 替换
+     */
     @Test
     public void replaceTest() {
-        String content = "<p>asdasdas</p>\n" + "<p>sdfsd</p>\n" + "<p>bbb</p>\n" + "<p>cccc</p>";
+        String content = "<p>asdasdas</p><p>sdf45156321sd</p><p>bbb</p><p>cccc</p>";
 
-        //删除第一个<p>
-        String a = ReUtil.delFirst("<p>", content);
+        String a = content.replace("<p>", "");
+        System.out.println("a=" + a);
+
         //替换第一个<p>
-        String b = content.replaceFirst("<p>", "<p>1:  ");
-        //删除全部<p></p>
-        String c = content.replaceAll("\\&[a-zA-Z]{1,10};", "").replaceAll("<[^>]*>", "").replaceAll("[(/>)<]", "");
+        String b = content.replaceFirst("<p>", "");
+        System.out.println("b=" + b);
+
+        //正则替换html 标签
+        String c = content.replaceAll("<[^>]*>", "");
+        System.out.println("c=" + c);
+
+        //正则替换数组
+        String d = content.replaceAll("\\d", "");
+        System.out.println("d=" + d);
+
     }
 
     /**
-     * 返回正则匹配的结果
+     * 使用正则，获取匹配字符串和索引
      * <p>
      * 找出文本的全部中文                         [\u4E00-\u9FA5]+
      * 找出文本的全部数字                        \d+
@@ -103,11 +121,13 @@ public class RegexpTest {
 
     @Test
     public void findMatch() {
-        Matcher matcher = DIGITAL_PATTERN.matcher("asa9jbjb1");
+        String text = "asa9jbjb1";
+        Matcher matcher = DIGITAL_PATTERN.matcher(text);
         while (matcher.find()) {
             System.out.println(String.format("start=%s, end=%s, group=%s", matcher.start(), matcher.end(), matcher.group()));
         }
     }
+
 
     /**
      * 截取字符串的开头到第n个中文
@@ -173,10 +193,13 @@ public class RegexpTest {
         }
     }
 
+    /**
+     * 移除html 标签
+     */
     @Test
     public void replaceHtml() {
-        String str = "<p>去除所有html标签,<img/><My-Tag class=\\\"abc\\\" value=\\\"test\\\">自定     义标签\n也\r可以\t去除哦</My-Tag></p>";
-        str = str.replaceAll("<[^>]+>", "").replaceAll("[\r\t\n]", "").replaceAll(" ", "");
+        String str = "<p>去除所有html标签,<img/><My-Tag class=\"abc\" value=\"test\">自定     义标签\n也\r可以\t去除哦</My-Tag></p>";
+        str = str.replaceAll("<[^>]+>", "").replaceAll("\\s", "");
         System.out.println(str);
     }
 
@@ -188,8 +211,55 @@ public class RegexpTest {
     }
 
     @Test
-    public void rm() {
+    public void replaceDigital() {
         String s = "recall20210616142329".replaceAll("\\d", "");
         System.out.println(s);
     }
+
+    @Test
+    public void rmHtmlAttr() {
+        String content = "<p align=\"center\"  width=100 style=width:100px;height:152px;>";
+        content = HtmlUtil.removeHtmlAttr(content, "align", "style", "src", "class");
+        System.out.println(content);
+    }
+
+
+    /**
+     * 移除html标签的指定属性, 能够移除不带双引号的属性
+     * <[^>]+>
+     * (?i)<p[^>]*?>
+     */
+    private static final Pattern HTML_TAG_PATTERN = Pattern.compile("(?i)<[^>]*?>");
+    @Test
+    public void matchAppendReplace() {
+        String text = "sdfsdfsdf<p align=\"center\" width=100 style=width:100px;height:152px;>fdsfdsfsd<a class=\"center\" width=100 style=width:100px;height:152px; width=100>saaa</a>sdfasd";
+        Matcher matcher = HTML_TAG_PATTERN.matcher(text);
+
+        String[] rmAttrs = {"style", "class"};
+
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            String matchStr = matcher.group();
+            String[] attrs = StringUtils.split(matchStr, " ");
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (String attr : attrs) {
+                boolean noneMatch = Stream.of(rmAttrs).noneMatch(attr::startsWith);
+                if (noneMatch) {
+                    stringBuilder.append(attr).append(" ");
+                }
+            }
+
+            if (stringBuilder.indexOf(">") == -1) {
+                stringBuilder.append(">");
+            }
+            matcher.appendReplacement(sb, stringBuilder.toString());
+        }
+        matcher.appendTail(sb);
+
+        System.out.println(sb.toString());
+    }
+
+
 }

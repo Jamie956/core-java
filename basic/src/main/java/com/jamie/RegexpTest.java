@@ -232,7 +232,8 @@ public class RegexpTest {
     private static final Pattern HTML_TAG_PATTERN = Pattern.compile("(?i)<[^>]*?>");
     @Test
     public void matchAppendReplace() {
-        String text = "sdfsdfsdf<p align=\"center\" width=100 style=width:100px;height:152px;>fdsfdsfsd<a class=\"center\" width=100 style=width:100px;height:152px; width=100>saaa</a>sdfasd";
+//        String text = "sdfsdfsdf<p align=\"center\" width=100 style=width:100px;height:152px;>fdsfdsfsd<a class=\"center\" width=100 style=width:100px;height:152px; width=100>saaa</a>sdfasd";
+        String text = "aaaaa<tr powered-by=xiumi.us opera-tn-ra-comp=_$.pages:0.layers:0.comps:27.col1:0.classicTable1:0>bbbbbbbbbbbb";
         Matcher matcher = HTML_TAG_PATTERN.matcher(text);
 
         String[] rmAttrs = {"style", "class"};
@@ -245,7 +246,7 @@ public class RegexpTest {
             StringBuilder stringBuilder = new StringBuilder();
 
             for (String attr : attrs) {
-                boolean noneMatch = Stream.of(rmAttrs).noneMatch(attr::startsWith);
+                boolean noneMatch = Stream.of(rmAttrs).noneMatch(e -> attr.startsWith(e) || attr.contains("$"));
                 if (noneMatch) {
                     stringBuilder.append(attr).append(" ");
                 }

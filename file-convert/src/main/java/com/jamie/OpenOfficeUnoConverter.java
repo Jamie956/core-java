@@ -28,7 +28,7 @@ public class OpenOfficeUnoConverter {
         public void writeBytes(byte[] values) throws NotConnectedException, BufferSizeExceededException, com.sun.star.io.IOException {
             try {
                 this.write(values);
-            } catch (java.io.IOException e) {
+            } catch (IOException e) {
                 throw (new com.sun.star.io.IOException(e.getMessage()));
             }
         }
@@ -38,7 +38,7 @@ public class OpenOfficeUnoConverter {
             try {
                 super.flush();
                 super.close();
-            } catch (java.io.IOException e) {
+            } catch (IOException e) {
                 throw (new com.sun.star.io.IOException(e.getMessage()));
             }
         }
@@ -47,7 +47,7 @@ public class OpenOfficeUnoConverter {
         public void flush() {
             try {
                 super.flush();
-            } catch (java.io.IOException e) {
+            } catch (IOException e) {
             }
         }
     }
@@ -77,7 +77,7 @@ public class OpenOfficeUnoConverter {
 
                 buffer[0] = bytes;
                 return numberOfReadBytes;
-            } catch (java.io.IOException e) {
+            } catch (IOException e) {
                 throw new com.sun.star.io.IOException(e.getMessage(), this);
             }
         }
@@ -96,7 +96,7 @@ public class OpenOfficeUnoConverter {
         public void closeInput() throws NotConnectedException, com.sun.star.io.IOException {
             try {
                 close();
-            } catch (java.io.IOException e) {
+            } catch (IOException e) {
                 throw new com.sun.star.io.IOException(e.getMessage(), this);
             }
         }

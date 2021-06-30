@@ -15,6 +15,29 @@ public class IOTest {
     }
 
     /**
+     * 输入：将文件输入流
+     * 输出：字节数组输出流
+     */
+    @Test
+    public void htmlFilesUnescape() {
+        String filePath = "C:\\Users\\tgwzz\\Downloads\\ir\\laws\\605aea72c4bf9cb3841dae0a.html";
+        try (FileInputStream in = new FileInputStream(new File(filePath)); ByteArrayOutputStream bao = new ByteArrayOutputStream()) {
+            byte[] buf = new byte[1024];
+            while (true) {
+                int len = in.read(buf);
+                if (len != -1) {
+                    bao.write(buf, 0, len);
+                } else {
+                    break;
+                }
+            }
+            System.out.println(bao.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 字符流写出到文件
      *
      * @param fileName

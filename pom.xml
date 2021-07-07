@@ -16,6 +16,7 @@
         <module>spring</module>
         <module>hive-udf</module>
         <module>file-convert</module>
+        <module>office</module>
     </modules>
 
     <properties>

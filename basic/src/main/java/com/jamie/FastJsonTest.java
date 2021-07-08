@@ -13,6 +13,10 @@ public class FastJsonTest {
         JsonUser userObj = JSON.parseObject(userStr, JsonUser.class);
         System.out.println();
     }
+
+    //json object -> json string
+
+    //
 }
 
 

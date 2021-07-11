@@ -96,4 +96,10 @@ public class TextUtils {
         System.out.println("count="+count);
     }
 
+    @Test
+    public void countByte() {
+        int length = "撒打算打算大多数地方不回家撒打算大的".getBytes().length;
+        System.out.println(length+"b");
+    }
+
 }

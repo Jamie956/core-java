@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class MultiThread {
+public class MultiThreadTask {
     List<MKTask> taskList = new ArrayList<>();
 
     /**

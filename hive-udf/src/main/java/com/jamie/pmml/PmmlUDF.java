@@ -18,45 +18,21 @@ import java.util.Map;
 public class PmmlUDF extends UDF{
     public static void main(String[] args) {
         String a = new PmmlUDF().evaluate("1,2,3,4");
+        System.out.println(a);
     }
 
     public String evaluate(String str)  {
-
+        str = "1,2,3,4";
          String[] split = str.split(",");
         Map<String, Double>  map =new HashMap<>();
-//            map.put("sepal_length", 7.0);
-//            map.put("sepal_width", 3.2);
-//            map.put("petal_length", 4.7);
-//            map.put("petal_width", 1.4);
-
         map.put("sepal_length", Double.parseDouble(split[0]));
         map.put("sepal_width",Double.parseDouble(split[1]));
         map.put("petal_length", Double.parseDouble(split[2]));
         map.put("petal_width", Double.parseDouble(split[3]));
 
-        System.out.println("map:"+map.toString());
-
-
-
         ClassPathResource resource = new ClassPathResource("/lightgbm.pmml");
 
         try (InputStream is = resource.getInputStream()) {
-
-            System.out.println("is: "+is);
-
-//            OutputStream out = new ByteArrayOutputStream();
-//            byte[] buf = new byte[1024];
-//
-//            while (true) {
-//                int len = is.read(buf);
-//                if (len != -1) {
-//                    out.write(buf, 0, len);
-//                } else {
-//                    break;
-//                }
-//            }
-//            System.out.println("outstring:"+out.toString());
-
             PMML pmml = org.jpmml.model.PMMLUtil.unmarshal(is);
 
             ModelEvaluatorFactory modelEvaluatorFactory = ModelEvaluatorFactory.newInstance();
@@ -88,7 +64,6 @@ public class PmmlUDF extends UDF{
             return ret.toString();
         } catch (Exception e ) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
         return null;
     }

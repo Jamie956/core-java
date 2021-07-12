@@ -6,6 +6,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.MRJobConfig;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
@@ -25,11 +26,8 @@ import java.util.Map;
 public class JpmmlRunner implements Tool {
     private Configuration conf = null;
 
-    /**
-     * 去除日志中字段长度小于等于11的日志
-     */
     public static void main(String[] args) {
-        args = new String[]{"bigdata/src/main/resources/pmmldata", "bigdata/src/main/resources/out"};
+//        args = new String[]{"bigdata/src/main/resources/pmmldata", "bigdata/src/main/resources/out"};
 
         try {
             int code = ToolRunner.run(new JpmmlRunner(), args);
@@ -49,6 +47,7 @@ public class JpmmlRunner implements Tool {
         conf = this.getConf();
         conf.set("inputPath", args[0]);
         conf.set("outputPath", args[1]);
+//        conf.setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
 
         Job job = Job.getInstance(conf);
 
@@ -137,7 +136,6 @@ public class JpmmlRunner implements Tool {
             return ret.toString();
         } catch (Exception e ) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
         return "";
     }

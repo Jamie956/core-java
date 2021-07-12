@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<PMML xmlns="http://www.dmg.org/PMML-4_3" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.3">
+<PMML xmlns="http://www.dmg.org/PMML-4_2" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.2">
 	<Header>
 		<Application name="JPMML-LightGBM" version="1.3-SNAPSHOT"/>
 		<Timestamp>2021-07-08T03:51:01Z</Timestamp>

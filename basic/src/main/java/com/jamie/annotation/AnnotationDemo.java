@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-public class TestMain {
+public class AnnotationDemo {
     /**
      * 定义一个注解
      * Target ElementType.TYPE 作用对象：类、接口、枚举类

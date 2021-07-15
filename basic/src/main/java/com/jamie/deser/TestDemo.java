@@ -6,17 +6,58 @@ import java.io.*;
 
 public class TestDemo {
     public static void main(String[] args) {
-        String path = "./studentserializable.txt";
+//        String path = "./studentserializable.txt";
+//
+//        Student student = new Student("tim", 20);
+//        serializable(student, path);
+//
+//        Student studentDeser = (Student) deserializable(path);
+//        System.out.println(studentDeser);
 
         Student student = new Student("tim", 20);
-        serializable(student, path);
+        byte[] bytes = ser2byteArray(student);
+        Object deserializable = deserializable(bytes);
 
-        Student studentDeser = (Student) deserializable(path);
-        System.out.println(studentDeser);
     }
 
     /**
-     * 将 对象序列化 并写出到文件
+     * 将 对象序列化 且写到内存
+     *
+     * @param object 对象
+     */
+    public static byte[] ser2byteArray(Object object) {
+        try (ByteArrayOutputStream bao = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(bao)) {
+            oos.writeObject(object);
+            byte[] bytes = bao.toByteArray();
+            System.out.println("将 对象序列化 且写到内存: " + new String(bytes));
+            return bytes;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 将 字符串反序列化，转成对象
+     *
+     * @param serByte 序列化byte[]
+     * @return 反序列化的对象
+     */
+    public static Object deserializable(byte[] serByte) {
+        try (ByteArrayInputStream bai = new ByteArrayInputStream(serByte);
+             ObjectInputStream ois = new ObjectInputStream(bai)) {
+            Object o = ois.readObject();
+            System.out.println("将 字符串反序列化，转成对象: " + o);
+            return o;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 将 对象序列化 且写到文件
      *
      * @param object 对象
      * @param path   写出路径

@@ -26,5 +26,9 @@ public class DateTest {
         // 获取当前日期的前一天
         String yesterday = today.plusDays(-1).toString();
         System.out.println(yesterday);
+
+
+        String date2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault()).format(Instant.now());
+        System.out.println(date2);
     }
 }

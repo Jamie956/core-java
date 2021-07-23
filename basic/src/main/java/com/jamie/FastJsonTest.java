@@ -8,8 +8,11 @@ public class FastJsonTest {
 
     public static void main(String[] args) {
         JsonUser user = new JsonUser("tom", "100");
+        //java object -> string
         String userStr = JSON.toJSONString(user);
+        //string -> json
         JSONObject userJson = JSON.parseObject(userStr);
+        //string -> java object
         JsonUser userObj = JSON.parseObject(userStr, JsonUser.class);
         System.out.println();
     }

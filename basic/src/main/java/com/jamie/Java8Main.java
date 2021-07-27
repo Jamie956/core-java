@@ -1,5 +1,6 @@
 package com.jamie;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jamie.entity.Person;
 import org.junit.Test;
 
@@ -10,24 +11,24 @@ import java.util.stream.Stream;
 
 public class Java8Main {
     /**
-     * 根据对象double 类型变量 排序
+     * double 比较器 排序
      */
     @Test
-    public void orderingDouble() {
+    public void comparator() {
         Person p1 = new Person("Lord of the rings", 8.8);
         Person p2 = new Person("Back to the future", 8.5);
         Person p3 = new Person("Pulp fiction", 8.9);
         List<Person> ps = Arrays.asList(p1, p2, p3);
-        ps.sort(Comparator.comparingDouble(Person::getLength).reversed());
+        Comparator<Person> comparator = Comparator.comparingDouble(Person::getLength).reversed();
+        ps.sort(comparator);
         ps.forEach(System.out::println);
     }
 
     /**
      * Predicate< T >	接收T对象并返回boolean
-     * 函数接口，泛型指定参数类型
      */
     @Test
-    public void predict() {
+    public void predicate() {
         Predicate<Integer> p1 = i -> i > 5;
         Predicate<Integer> p2 = i -> i < 20;
         Predicate<Integer> p3 = i -> i % 2 == 0;
@@ -36,11 +37,15 @@ public class Java8Main {
 
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         //p1.and(p2).and(p3) -> (i > 5) && (i < 20) && (i % 2 == 0)
-        List test = numbers.stream().filter(p1.and(p2).and(p3)).collect(Collectors.toList());
+        Predicate<Integer> f1 = p1.and(p2).and(p3);
         //p1.and(p2).and(p3) -> (i > 5) && (i < 20) && (i % 2 != 0)
-        List test2 = numbers.stream().filter(p1.and(p2).and(p3.negate())).collect(Collectors.toList());
+        Predicate<Integer> f2 = p1.and(p2).and(p3.negate());
         //p1.and(p2).and(p3) -> (i > 5) && (i < 20) && (i == 7)
-        List test3 = numbers.stream().filter(p1.and(p2).and(p3.negate()).and(Predicate.isEqual(7))).collect(Collectors.toList());
+        Predicate<Integer> f3 = p1.and(p2).and(p3.negate()).and(Predicate.isEqual(7));
+
+        List test = numbers.stream().filter(f1).collect(Collectors.toList());
+        List test2 = numbers.stream().filter(f2).collect(Collectors.toList());
+        List test3 = numbers.stream().filter(f3).collect(Collectors.toList());
     }
 
     /**
@@ -182,14 +187,21 @@ public class Java8Main {
         Person p1 = new Person("Lord of the rings", 8.8);
         Person p2 = new Person("Back to the future", 8.5);
         Person p3 = new Person("Pulp fiction", 8.9);
-        List<Person> ps = Arrays.asList(p1, p2, p3);
+        List<Person> list1 = Arrays.asList(p1, p2, p3);
+        Function<Person, String> getName = Person::getName;
 
-        List<String> pss = ps.stream().map(Person::getName).collect(Collectors.toList());
+        List<Integer> list2 = Arrays.asList(6, 1, 7, 9, 3);
+        Function<Integer, JSONObject> mapper = e -> {
+            JSONObject json = new JSONObject();
+            json.put("k1", e);
+            json.put("k2", e+"-");
+            return json;
+        };
+
+        List<String> pss = list1.stream().map(getName).collect(Collectors.toList());
+        List<JSONObject> collect = list2.stream().map(mapper).collect(Collectors.toList());
     }
 
-    /**
-     * 泛型
-     */
     @Test
     public void testPCF() {
         List<Integer> list = Arrays.asList(1, 2, 5, 6);

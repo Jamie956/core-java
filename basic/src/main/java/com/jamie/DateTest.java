@@ -31,4 +31,13 @@ public class DateTest {
         String date2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault()).format(Instant.now());
         System.out.println(date2);
     }
+
+    @Test
+    public void ts() {
+        Instant instant = Instant.now();
+        //秒，时间戳
+        long epochSecond = instant.getEpochSecond();
+        //毫秒，时间戳
+        long timeStampMillis = instant.toEpochMilli();
+    }
 }

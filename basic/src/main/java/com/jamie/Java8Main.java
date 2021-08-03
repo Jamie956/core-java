@@ -25,7 +25,7 @@ public class Java8Main {
     }
 
     /**
-     * Predicate< T >	接收T对象并返回boolean
+     * Predicate< T >	接收T对象，返回boolean
      */
     @Test
     public void predicate() {
@@ -36,11 +36,11 @@ public class Java8Main {
         boolean a0 = p1.test(6);
 
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-        //p1.and(p2).and(p3) -> (i > 5) && (i < 20) && (i % 2 == 0)
+        //(i > 5) && (i < 20) && (i % 2 == 0)
         Predicate<Integer> f1 = p1.and(p2).and(p3);
-        //p1.and(p2).and(p3) -> (i > 5) && (i < 20) && (i % 2 != 0)
+        //(i > 5) && (i < 20) && (i % 2 != 0)
         Predicate<Integer> f2 = p1.and(p2).and(p3.negate());
-        //p1.and(p2).and(p3) -> (i > 5) && (i < 20) && (i == 7)
+        //(i > 5) && (i < 20) && (i == 7)
         Predicate<Integer> f3 = p1.and(p2).and(p3.negate()).and(Predicate.isEqual(7));
 
         List test = numbers.stream().filter(f1).collect(Collectors.toList());
@@ -49,27 +49,24 @@ public class Java8Main {
     }
 
     /**
-     * Consumer< T >	接收T对象，不返回值
-     * accept() 传入参数，调 lambda表达式，无返回
+     * Consumer< T >	接收T对象，不返回
      */
     @Test
-    public void testCon() {
+    public void consumer() {
         Consumer<String> c1 = message -> {
-            System.out.print("姓名:" + message.split(",")[0] + ", ");
+            System.out.print("name:" + message.split(",")[0] + ", ");
         };
         Consumer<String> c2 = message -> {
-            System.out.println("性别:" + message.split(",")[1]);
+            System.out.println("sex:" + message.split(",")[1]);
         };
-        c1.andThen(c2).accept("a,男");
+        c1.andThen(c2).accept("a,m");
     }
 
     /**
-     * BiConsumer
-     * 泛型指定2个参数类型，无返回
-     * accept() 传入2个参数，调 lambda表达式，无返回
+     * BiConsumer< T, V > 接收T对象, 接收V对象, 无返回
      */
     @Test
-    public void testBiConsumer() {
+    public void biConsumer() {
         BiConsumer<Integer, Integer> biConsumer = (a, b) -> System.out.println(a + b);
         biConsumer.accept(1, 1);
     }
@@ -78,7 +75,7 @@ public class Java8Main {
      * Function< T, R >	接收T对象，返回R对象
      */
     @Test
-    public void testFunction() {
+    public void function() {
         Function<Integer, String> mapper = i -> i + "...";
         String data = mapper.apply(111);
     }
@@ -87,14 +84,9 @@ public class Java8Main {
      * Supplier< T > 返回T
      */
     @Test
-    public void testSup() {
+    public void supplier() {
         Supplier<String> uuid = () -> UUID.randomUUID().toString();
-        Supplier<String> timestamp = () -> System.currentTimeMillis() + "";
-        Supplier<String> strSup = () -> "122";
-
         String s = uuid.get();
-        String s1 = timestamp.get();
-        String s2 = strSup.get();
     }
 
     /**

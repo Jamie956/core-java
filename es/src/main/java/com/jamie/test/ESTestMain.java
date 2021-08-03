@@ -44,6 +44,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -108,6 +109,15 @@ public class ESTestMain {
         IndexResponse response = client.index(request, RequestOptions.DEFAULT);
         System.out.println(response.getResult().toString());
     }
+
+    @Test
+    public void createWithDate() throws IOException {
+        String jsonStr = JSONObject.toJSONString(new User("tim", "take that", 50, "1970-12-12", "cd", new Date()));
+        IndexRequest request = new IndexRequest(INDEX, TYPE, "10").source(jsonStr, XContentType.JSON);
+        IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+        System.out.println(response.getResult().toString());
+    }
+
 
     /**
      * 更新文档

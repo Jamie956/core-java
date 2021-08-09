@@ -1,15 +1,10 @@
 package com.jamie;
 
-
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.poi.hssf.usermodel.*;
 
 import java.io.*;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
-
 
 /**
  * @author ZJM
@@ -26,8 +21,7 @@ public class ReadExcel {
     public static void main(String[] args) throws Exception {
         readTable2();
     }
-
-
+    
     //通过对单元格遍历的形式来获取信息 ，这里要判断单元格的类型才可以取出值
     public static void readTable() throws Exception {
         InputStream ips = new FileInputStream("C:\\Users\\tgwzz\\Downloads\\heimao.xls");
@@ -35,19 +29,18 @@ public class ReadExcel {
         HSSFSheet sheet = wb.getSheetAt(0);
         for (Iterator ite = sheet.rowIterator(); ite.hasNext(); ) {
             HSSFRow row = (HSSFRow) ite.next();
-//            System.out.println();
             row.getCell(0);
             for (Iterator itet = row.cellIterator(); itet.hasNext(); ) {
                 HSSFCell cell = (HSSFCell) itet.next();
                 String cellData = cell.getRichStringCellValue().toString();
                 System.out.println(cellData);
-
             }
         }
     }
 
     /**
      * 读取excel, 把每行的第一、二列写成一个一行json, 写到文件
+     *
      * @throws Exception
      */
     public static void readTable2() throws Exception {
@@ -66,15 +59,12 @@ public class ReadExcel {
                     line.put("id", id);
                     line.put("content", content);
                     bw.write(line + "\r\n");
-                }else {
+                } else {
                     System.out.println(1);
                 }
             }
             bw.flush();
         }
-//        fw.close();
-//        bw.close();
-//        ips.close();
     }
 
 }

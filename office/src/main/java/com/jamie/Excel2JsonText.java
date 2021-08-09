@@ -56,7 +56,7 @@ public class Excel2JsonText {
                 if (row.getCell(0) != null && row.getCell(1) != null) {
                     String id = row.getCell(0).getRichStringCellValue().toString();
                     String content = row.getCell(1).getRichStringCellValue().toString();
-                    content = content.replaceAll("\n", "<br>");
+                    content = content.replaceAll("\n|\r", "<br>");
                     JSONObject line = new JSONObject();
                     line.put("id", id);
                     line.put("content", content);

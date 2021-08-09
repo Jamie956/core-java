@@ -7,10 +7,11 @@ import java.io.*;
 import java.util.Iterator;
 
 /**
+ * 将excel 转成json 文件
  * @author ZJM
  * @date 2021/8/6 18:08
  */
-public class ReadExcel {
+public class Excel2JsonText {
 
     /**
      * 读取一个excel文件的内容
@@ -55,6 +56,7 @@ public class ReadExcel {
                 if (row.getCell(0) != null && row.getCell(1) != null) {
                     String id = row.getCell(0).getRichStringCellValue().toString();
                     String content = row.getCell(1).getRichStringCellValue().toString();
+                    content = content.replaceAll("\n", "<br>");
                     JSONObject line = new JSONObject();
                     line.put("id", id);
                     line.put("content", content);

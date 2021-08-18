@@ -1,5 +1,10 @@
 package com.jamie.enum1;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum Color {
     /**
      * Color(name, value)
@@ -11,19 +16,6 @@ public enum Color {
      */
     private final String code;
     private final String chinese;
-
-    Color(String code, String chinese) {
-        this.code = code;
-        this.chinese = chinese;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getChinese() {
-        return chinese;
-    }
 
     public static void main(String[] args) {
         for (Color value : Color.values()) {

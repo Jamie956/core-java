@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-public class AnnotationDemo {
+public class AnnoUtil {
     /**
      * 定义一个注解
      * Target ElementType.TYPE 作用对象：类、接口、枚举类
@@ -29,17 +29,21 @@ public class AnnotationDemo {
     static class Teacher {
     }
 
+
+    public static void main(String[] args) {
+        Student student = new Student();
+        System.out.println(annoValue(student));
+
+        Teacher teacher = new Teacher();
+        System.out.println(annoValue(teacher));
+    }
+
     /**
      * 获取注解的值
      */
-    public static void main(String[] args) {
-        Student student = new Student();
-        Role a1 = student.getClass().getAnnotation(Role.class);
-        System.out.println(a1.value());
-
-        Teacher teacher = new Teacher();
-        Role a2 = teacher.getClass().getAnnotation(Role.class);
-        System.out.println(a2.value());
+    public static String annoValue(Object o) {
+        Role role = o.getClass().getAnnotation(Role.class);
+        return role.value();
     }
 }
 

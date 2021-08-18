@@ -10,17 +10,15 @@ import java.util.Scanner;
 public class IOTest {
 
     public static void main(String[] args) {
-        writerIO("./myf.txt", "hi world");
-        cpFile("./myf.txt", "./cpmyf.txt");
+//        writerIO("./myf.txt", "hi world");
+//        cpFile("./myf.txt", "./cpmyf.txt");
     }
 
     /**
-     * 输入：将文件输入流
-     * 输出：字节数组输出流
+     * 文件 转 数组字节流
+     * 文件 -> 文件输入流 -> 字节数组输出流 -> 字节数组
      */
-    @Test
-    public void htmlFilesUnescape() {
-        String filePath = "C:\\Users\\tgwzz\\Downloads\\ir\\laws\\605aea72c4bf9cb3841dae0a.html";
+    public static byte[] file2ByteArray(String filePath) {
         try (FileInputStream in = new FileInputStream(new File(filePath)); ByteArrayOutputStream bao = new ByteArrayOutputStream()) {
             byte[] buf = new byte[1024];
             while (true) {
@@ -31,19 +29,20 @@ public class IOTest {
                     break;
                 }
             }
-            System.out.println(bao.toString());
+            return bao.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     /**
-     * 字符流写出到文件
+     * 字符 -> FileWriter -> 文件
      *
-     * @param fileName
-     * @param content
+     * @param fileName 路径
+     * @param content  内容
      */
-    public static void writerIO(String fileName, String content) {
+    public static void writeContent2File(String fileName, String content) {
         try (Writer out = new FileWriter(fileName)) {
             out.write(content);
             out.flush();
@@ -53,15 +52,14 @@ public class IOTest {
     }
 
     /**
-     * 字符流 复制文件
-     *
-     * @param srcFile
-     * @param destFile
+     * 复制文件
+     * 文件 -> FileReader -> FileWriter -> cp文件
+     * @param srcFile  源文件
+     * @param destFile 目标文件
      */
     public static void cpFile(String srcFile, String destFile) {
         try (Reader in = new FileReader(srcFile);
              Writer out = new FileWriter(destFile)) {
-
             char[] buf = new char[1024];
             while (true) {
                 int len = in.read(buf);
@@ -78,11 +76,11 @@ public class IOTest {
     }
 
     /**
-     * 把字节写到文件
-     * new byte[]{65, 66, 67}
+     * 字节数组转文件
+     * 字节数组 -> 文件输出流 -> 文件
      */
     @Test
-    public void fileOut(String fileName, byte[] bs) {
+    public void byte2File(String fileName, byte[] bs) {
         try (OutputStream out = new FileOutputStream(fileName)) {
             out.write(bs);
         } catch (IOException e) {

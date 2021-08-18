@@ -40,7 +40,8 @@ public class Secrect {
     }
 
     /**
-     * DES加密
+     * 对称加密，加密和解密都是同一个密钥
+     * DES: Data Encryption Standard
      */
     private static String encryptDES(String input, String key, String transformation, String algorithm) throws Exception {
         Cipher cipher = Cipher.getInstance(transformation);

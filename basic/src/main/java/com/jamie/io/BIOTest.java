@@ -5,8 +5,10 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -53,6 +55,49 @@ public class BIOTest {
         Socket socket = new Socket("127.0.0.1", 6666);
         while (true) {
 
+        }
+    }
+
+
+
+
+
+    @Test
+    public void notBlockingServer() {
+        try {
+            ServerSocket ss = new ServerSocket(8081);
+
+            while (true) {
+                Socket socket = ss.accept();
+                OutputStream out = socket.getOutputStream();
+                out.write("hi".getBytes());
+
+                out.close();
+                socket.close();
+            }
+
+//            ss.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void notBlockingClient() {
+        try {
+            Socket socket = new Socket("127.0.0.1", 8081);
+            InputStream in = socket.getInputStream();
+            Scanner scan = new Scanner(in);
+
+            while (scan.hasNext()) {
+                System.out.println(scan.next());
+            }
+
+            in.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

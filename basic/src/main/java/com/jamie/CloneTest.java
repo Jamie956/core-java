@@ -1,5 +1,6 @@
 package com.jamie;
 
+import com.jamie.deser.DeSerUtil;
 import com.jamie.entity.Address;
 import com.jamie.entity.Student;
 import com.jamie.entity.User;
@@ -16,7 +17,8 @@ public class CloneTest {
     public void deepClone() {
         try {
             User user = new User(new Address("stress1"));
-            User clone = (User) deepClone(user);
+            byte[] bytes = DeSerUtil.object2ByteArray(user);
+            User clone = (User) DeSerUtil.byte2Object(bytes);
 
             System.out.println(user == clone);
             System.out.println(user.getAddress() == clone.getAddress());
@@ -24,22 +26,6 @@ public class CloneTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 对象 -> 字节输出流 -> 对象
-     * @param object
-     * @return
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    public static Object deepClone(Object object) throws IOException, ClassNotFoundException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(object);
-
-        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        return ois.readObject();
     }
 
     /**

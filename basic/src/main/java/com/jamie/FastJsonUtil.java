@@ -9,22 +9,22 @@ import org.junit.Test;
  * @Author: Zjm
  * @Date: 2021/2/5 16:00
  */
-public class Algo {
+public class FastJsonUtil {
 
     /**
      * 递归遍历json 全部节点
      */
-    public static void jsonRecursion(Object object) {
+    public static void recursion(Object object) {
         if (object instanceof JSONObject) {
             JSONObject json = (JSONObject) object;
             for (String key : json.keySet()) {
                 Object value = json.get(key);
-                jsonRecursion(value);
+                recursion(value);
             }
         } else if (object instanceof JSONArray) {
             JSONArray array = (JSONArray) object;
             for (Object element : array) {
-                jsonRecursion(element);
+                recursion(element);
             }
         }
     }
@@ -33,6 +33,6 @@ public class Algo {
     public void testRecursion() {
         String jsonString = "{\"TITLE\":\"Json Title\",\"FORM\":{\"USERNAME\":\"Rick and Morty\"},\"ARRAY\":[{\"FIRST\":\"Rick\"},{\"LAST\":\"Morty\"}]}";
         JSONObject json = JSON.parseObject(jsonString);
-        jsonRecursion(json);
+        recursion(json);
     }
 }

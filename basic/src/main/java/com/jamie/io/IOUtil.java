@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class IOTest {
+public class IOUtil {
 
     public static void main(String[] args) {
 //        writerIO("./myf.txt", "hi world");
@@ -54,6 +54,7 @@ public class IOTest {
     /**
      * 复制文件
      * 文件 -> FileReader -> FileWriter -> cp文件
+     *
      * @param srcFile  源文件
      * @param destFile 目标文件
      */
@@ -79,7 +80,6 @@ public class IOTest {
      * 字节数组转文件
      * 字节数组 -> 文件输出流 -> 文件
      */
-    @Test
     public void byte2File(String fileName, byte[] bs) {
         try (OutputStream out = new FileOutputStream(fileName)) {
             out.write(bs);
@@ -90,26 +90,14 @@ public class IOTest {
 
     /**
      * 字节流
+     * 源文件 -> 文件输入流 -> 文件输出流 -> 目标文件
      *
-     * @param srcFile
-     * @param destFile
+     * @param srcFile  源路路径
+     * @param destFile 目标路径
      */
-    @Test
-    public void fileIO(String srcFile, String destFile) {
+    public void fileStream(String srcFile, String destFile) {
         try (InputStream in = new FileInputStream(srcFile);
              OutputStream out = new FileOutputStream(destFile)) {
-
-            //逐个字节写出
-            while (true) {
-                int b = in.read();
-                if (b != -1) {
-                    out.write(b);
-                } else {
-                    break;
-                }
-            }
-
-            //buf 写出
             byte[] b = new byte[20];
             while (true) {
                 int len = in.read(b);
@@ -119,45 +107,6 @@ public class IOTest {
                     break;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void notBlockingServer() {
-        try {
-            ServerSocket ss = new ServerSocket(8081);
-
-            while (true) {
-                Socket socket = ss.accept();
-                OutputStream out = socket.getOutputStream();
-                out.write("hi".getBytes());
-
-                out.close();
-                socket.close();
-            }
-
-//            ss.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void notBlockingClient() {
-        try {
-            Socket socket = new Socket("127.0.0.1", 8081);
-            InputStream in = socket.getInputStream();
-            Scanner scan = new Scanner(in);
-
-            while (scan.hasNext()) {
-                System.out.println(scan.next());
-            }
-
-            in.close();
-            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

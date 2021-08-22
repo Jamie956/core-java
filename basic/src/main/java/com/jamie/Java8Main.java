@@ -11,17 +11,42 @@ import java.util.stream.Stream;
 
 public class Java8Main {
     /**
-     * double 比较器 排序
+     * double 比较器 降序排序
      */
+    public static <T> List<T> compareObjectDoubleDesc(List<T> list, ToDoubleFunction<? super T> keyExtractor) {
+        return list.stream().sorted(Comparator.comparingDouble(keyExtractor).reversed()).collect(Collectors.toList());
+    }
+    /**
+     * double 比较器 升序排序
+     */
+    public static <T> List<T> compareObjectDoubleAsc(List<T> list, ToDoubleFunction<? super T> keyExtractor) {
+        return list.stream().sorted(Comparator.comparingDouble(keyExtractor)).collect(Collectors.toList());
+    }
+
     @Test
-    public void comparator() {
+    public void testComparator() {
         Person p1 = new Person("Lord of the rings", 8.8);
         Person p2 = new Person("Back to the future", 8.5);
         Person p3 = new Person("Pulp fiction", 8.9);
         List<Person> ps = Arrays.asList(p1, p2, p3);
-        Comparator<Person> comparator = Comparator.comparingDouble(Person::getLength).reversed();
-        ps.sort(comparator);
-        ps.forEach(System.out::println);
+        List<Person> people = compareObjectDoubleDesc(ps, Person::getLength);
+        List<Person> people2 = compareObjectDoubleAsc(ps, Person::getLength);
+    }
+
+    /**
+     * 两个整数是否相等
+     * @param a
+     * @param b
+     * @return
+     */
+    public static boolean isEqual(int a, int b) {
+        Predicate<Integer> predicate = i -> i == a;
+        return predicate.test(b);
+    }
+
+    public static boolean isEqualSeven(int a) {
+        Predicate<Object> predicate = Predicate.isEqual(7);
+        return predicate.test(a);
     }
 
     /**
@@ -29,6 +54,9 @@ public class Java8Main {
      */
     @Test
     public void predicate() {
+        boolean equal = isEqual(5, 5);
+        boolean equal1 = isEqualSeven(7);
+
         Predicate<Integer> p1 = i -> i > 5;
         Predicate<Integer> p2 = i -> i < 20;
         Predicate<Integer> p3 = i -> i % 2 == 0;

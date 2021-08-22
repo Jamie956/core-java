@@ -3,6 +3,7 @@ package com.jamie;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jamie.entity.JsonUser;
 import org.junit.Test;
 
 /**
@@ -34,5 +35,16 @@ public class FastJsonUtil {
         String jsonString = "{\"TITLE\":\"Json Title\",\"FORM\":{\"USERNAME\":\"Rick and Morty\"},\"ARRAY\":[{\"FIRST\":\"Rick\"},{\"LAST\":\"Morty\"}]}";
         JSONObject json = JSON.parseObject(jsonString);
         recursion(json);
+    }
+
+    public static void main(String[] args) {
+        JsonUser user = new JsonUser("tom", "100");
+        //java object -> string
+        String userStr = JSON.toJSONString(user);
+        //string -> json
+        JSONObject userJson = JSON.parseObject(userStr);
+        //string -> java object
+        JsonUser userObj = JSON.parseObject(userStr, JsonUser.class);
+        System.out.println();
     }
 }

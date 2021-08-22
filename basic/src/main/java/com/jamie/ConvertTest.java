@@ -6,7 +6,7 @@ import com.google.common.base.Converter;
 import org.apache.commons.text.StringEscapeUtils;
 import org.junit.Test;
 
-public class Convert {
+public class ConvertTest {
 
 
 

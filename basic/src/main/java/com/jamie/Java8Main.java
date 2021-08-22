@@ -35,45 +35,79 @@ public class Java8Main {
 
     /**
      * 两个整数是否相等
-     * @param a
-     * @param b
-     * @return
+     * @param a 数字
+     * @param b 数字
+     * @return 是否相等
      */
     public static boolean isEqual(int a, int b) {
         Predicate<Integer> predicate = i -> i == a;
         return predicate.test(b);
     }
 
+    /**
+     * 是否等于7
+     * @param a 数字
+     * @return 是否等于7
+     */
     public static boolean isEqualSeven(int a) {
         Predicate<Object> predicate = Predicate.isEqual(7);
         return predicate.test(a);
     }
 
     /**
+     * 是否在范围内
+     * @param from 起始
+     * @param to 结束
+     * @param num 测试数
+     * @return 是否在范围内
+     */
+    public static boolean inRange(int from, int to, int num) {
+        Predicate<Integer> fromPredicate = i -> i >= from;
+        Predicate<Integer> toPredicate = i -> i <= to;
+        return fromPredicate.and(toPredicate).test(num);
+    }
+
+    /**
+     * 是否是偶数
+     * @param num 数字
+     * @return 是否是偶数
+     */
+    public static boolean isEvenNumber(int num) {
+        Predicate<Integer> predicate = i -> i % 2 == 0;
+        return predicate.test(num);
+    }
+
+    /**
+     * 是否是奇数
+     * @param num 数字
+     * @return 是否是奇数
+     */
+    public static boolean isOdd(int num) {
+        Predicate<Integer> predicate = i -> i % 2 == 0;
+        return predicate.negate().test(num);
+    }
+
+    /**
+     * 找出全部奇数
+     * @param list 数字集合
+     * @return 奇数
+     */
+    public static List<Integer> findOdd(List<Integer> list) {
+        Predicate<Integer> predicate = i -> i % 2 == 0;
+        return list.stream().filter(predicate.negate()).collect(Collectors.toList());
+    }
+
+    /**
      * Predicate< T >	接收T对象，返回boolean
      */
     @Test
-    public void predicate() {
+    public void testPredicate() {
         boolean equal = isEqual(5, 5);
         boolean equal1 = isEqualSeven(7);
-
-        Predicate<Integer> p1 = i -> i > 5;
-        Predicate<Integer> p2 = i -> i < 20;
-        Predicate<Integer> p3 = i -> i % 2 == 0;
-
-        boolean a0 = p1.test(6);
-
-        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-        //(i > 5) && (i < 20) && (i % 2 == 0)
-        Predicate<Integer> f1 = p1.and(p2).and(p3);
-        //(i > 5) && (i < 20) && (i % 2 != 0)
-        Predicate<Integer> f2 = p1.and(p2).and(p3.negate());
-        //(i > 5) && (i < 20) && (i == 7)
-        Predicate<Integer> f3 = p1.and(p2).and(p3.negate()).and(Predicate.isEqual(7));
-
-        List test = numbers.stream().filter(f1).collect(Collectors.toList());
-        List test2 = numbers.stream().filter(f2).collect(Collectors.toList());
-        List test3 = numbers.stream().filter(f3).collect(Collectors.toList());
+        boolean inr = inRange(5, 20, 21);
+        boolean evenNumber = isEvenNumber(9);
+        boolean odd = isOdd(9);
+        List<Integer> odd1 = findOdd(Arrays.asList(1, 2, 3, 4, 5));
     }
 
     /**

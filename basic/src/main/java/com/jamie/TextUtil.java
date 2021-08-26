@@ -1,43 +1,24 @@
 package com.jamie;
 
-import com.jamie.resource.ClassPathResource;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import java.io.*;
-import java.util.Properties;
 
-public class TextUtils {
-    /**
-     * 读取资源文件
-     */
-    @Test
-    public void getProperty() throws IOException {
-        //获取输入流
-        ClassPathResource resource = new ClassPathResource("/test.properties");
-        InputStream in = resource.getInputStream();
-
-        Properties p = new Properties();
-        p.load(in);
-
-        String name = p.getProperty("user.name");
-    }
+public class TextUtil {
 
     /**
      * 数据比对
-     * source文件的每一行数据转成数组元素，去target文件找是否存
+     * source文件的每一行数据转成数组元素，逐行去target文件找是否存在
      */
-    @Test
-    public void myCompare() throws IOException {
-        String text = FileUtils.readFileToString(new File("src/main/resources/source"), "UTF-8");
-
-        String[] lines = text.split("\r\n");
-
-        String targetText = FileUtils.readFileToString(new File("src/main/resources/target"), "UTF-8");
+    public static void lineCompare(String srcPath, String targetPath) throws IOException {
+        String srcText = FileUtils.readFileToString(new File(srcPath), "UTF-8");
+        String[] srcLines = srcText.split("\r\n");
+        String targetText = FileUtils.readFileToString(new File(targetPath), "UTF-8");
 
         int matchCount = 0;
         int notMatchCount = 0;
-        for (String line : lines) {
+        for (String line : srcLines) {
             if (targetText.contains(line)) {
                 matchCount++;
                 System.out.println("source文件当前行在target找到匹配数据: " + line);
@@ -50,6 +31,10 @@ public class TextUtils {
         System.out.println("---------------总数统计---------------");
         System.out.println("匹配数目: " + matchCount);
         System.out.println("不匹配数目: " + notMatchCount);
+    }
+    @Test
+    public void testCompare() throws IOException {
+        lineCompare("src/main/resources/source", "src/main/resources/target");
     }
 
     /**
@@ -96,6 +81,9 @@ public class TextUtils {
         System.out.println("count="+count);
     }
 
+    /**
+     * 统计字符串byte 长度
+     */
     @Test
     public void countByte() {
         int length = "撒打算打算大多数地方不回家撒打算大的".getBytes().length;

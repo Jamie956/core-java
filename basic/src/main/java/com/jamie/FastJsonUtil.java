@@ -6,6 +6,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.jamie.entity.JsonUser;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @Author: Zjm
  * @Date: 2021/2/5 16:00
@@ -35,6 +40,21 @@ public class FastJsonUtil {
         String jsonString = "{\"TITLE\":\"Json Title\",\"FORM\":{\"USERNAME\":\"Rick and Morty\"},\"ARRAY\":[{\"FIRST\":\"Rick\"},{\"LAST\":\"Morty\"}]}";
         JSONObject json = JSON.parseObject(jsonString);
         recursion(json);
+    }
+
+    /**
+     * json double 排序
+     */
+    @Test
+    public void doubleSort() {
+        JSONObject j1 = new JSONObject();
+        j1.put("value", 0.01);
+        JSONObject j2 = new JSONObject();
+        j2.put("value", 7.11);
+        JSONObject j3 = new JSONObject();
+        j3.put("value", 3.01);
+        List<JSONObject> list = Arrays.asList(j1, j2, j3);
+        List<JSONObject> value = list.stream().sorted(Comparator.comparingDouble((JSONObject e) -> e.getDoubleValue("value"))).collect(Collectors.toList());
     }
 
     public static void main(String[] args) {

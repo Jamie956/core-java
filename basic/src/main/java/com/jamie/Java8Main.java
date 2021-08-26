@@ -111,21 +111,22 @@ public class Java8Main {
     }
 
     /**
-     * Consumer< T >	接收T对象，不返回
+     * Consumer< T >	接收T对象，无返回
      */
     @Test
     public void consumer() {
+        String a = "asas";
         Consumer<String> c1 = message -> {
-            System.out.print("name:" + message.split(",")[0] + ", ");
+            System.out.print("1:" + message + a);
         };
         Consumer<String> c2 = message -> {
-            System.out.println("sex:" + message.split(",")[1]);
+            System.out.println("2:" + message);
         };
-        c1.andThen(c2).accept("a,m");
+        c1.andThen(c2).accept("x");
     }
 
     /**
-     * BiConsumer< T, V > 接收T对象, 接收V对象, 无返回
+     * BiConsumer< T, V > 接收T，V对象, 无返回
      */
     @Test
     public void biConsumer() {
@@ -134,7 +135,7 @@ public class Java8Main {
     }
 
     /**
-     * Function< T, R >	接收T对象，返回R对象
+     * Function< T, R >	接收T对象，返回R
      */
     @Test
     public void function() {
@@ -143,7 +144,7 @@ public class Java8Main {
     }
 
     /**
-     * Supplier< T > 返回T
+     * Supplier< T > 不接收对象，返回T
      */
     @Test
     public void supplier() {
@@ -156,15 +157,13 @@ public class Java8Main {
      */
     @Test
     public void testCollect() {
-        //转list
+        //list 收集
         List<Integer> a0 = Stream.of(1, 4, 6, 8).collect(Collectors.toList());
-        //转map
+        //map 收集
         Map<String, String> a = Stream.of(1, 4, 7, 9).collect(Collectors.toMap(i -> i + "key", i -> i + "value"));
-        //分组
+        //分组 收集
         Map<String, List<Integer>> b = Stream.of(1, 4, 7, 9).collect(Collectors.groupingBy(i -> i > 5 ? "> 5" : "< 5"));
-        //一进一出
-        List<Integer> b1 = Stream.of(1, 4, 7, 9).collect(Collectors.mapping(e -> e + 1, Collectors.toList()));
-        //join 成字符串
+        //join 收集
         String c = Stream.of("a", "b", "c").collect(Collectors.joining());
         String d = Stream.of("a", "b", "c").collect(Collectors.joining(","));
         String e = Stream.of("a", "b", "c").collect(Collectors.joining(",", "{", "}"));
@@ -175,7 +174,7 @@ public class Java8Main {
      */
     @Test
     public void testStream() {
-        //过滤符合条件的数据
+        //过滤返回false的元素
         List<Integer> a = Stream.of(1, 5, 6, 7).filter(i -> i > 5).collect(Collectors.toList());
         //去重
         List<Integer> b = Stream.of(1, 1, 6, 7).distinct().collect(Collectors.toList());

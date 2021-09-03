@@ -635,5 +635,59 @@ public class DateUtil {
         return now.isAfter(from) && now.isBefore(to);
     }
 
+    /**
+     * 今天的起始时间
+     */
+    public static String todayStartTime() {
+        LocalDate nowDate = LocalDate.now();
+        LocalDateTime fistDateOfDay = LocalDateTime.of(nowDate, LocalTime.MIN);
+        return formatLocalDateTime(fistDateOfDay);
+    }
+
+    /**
+     * 今天的结束时间
+     */
+    public static String todayEndTime() {
+        LocalDate nowDate = LocalDate.now();
+        LocalDateTime fistDateOfDay = LocalDateTime.of(nowDate, LocalTime.MAX);
+        return formatLocalDateTime(fistDateOfDay);
+    }
+
+    /**
+     * 指定年第一天的起始时间(格式化)
+     */
+    public static String yearStartTime(int year) {
+        LocalDate firstDayOfYear = LocalDate.of(year, 1, 1).with(TemporalAdjusters.firstDayOfYear());
+        LocalDateTime fistDateOfDay = LocalDateTime.of(firstDayOfYear, LocalTime.MIN);
+        return formatLocalDateTime(fistDateOfDay);
+    }
+
+    /**
+     * 指定年最后一天的起始时间(格式化)
+     */
+    public static String yearEndTime(int year) {
+        LocalDate firstDayOfYear = LocalDate.of(year, 1, 1).with(TemporalAdjusters.lastDayOfYear());
+        LocalDateTime fistDateOfDay = LocalDateTime.of(firstDayOfYear, LocalTime.MAX);
+        return formatLocalDateTime(fistDateOfDay);
+    }
+
+    /**
+     * 生成指定年份的第一天起始的时间戳
+     */
+    public static long timeStampOfYearBegin(int year) {
+        LocalDate localDate = LocalDate.of(year, 1, 1).with(TemporalAdjusters.firstDayOfYear());
+        LocalDateTime localDateTime = LocalDateTime.of(localDate, LocalTime.MIN);
+        return localDateTimeToTimestamp(localDateTime);
+    }
+
+    /**
+     * 生成指定年份的最后一天结束的时间戳
+     */
+    public static long timeStampOfYearEnd(int year) {
+        LocalDate localDate = LocalDate.of(year, 12, 1).with(TemporalAdjusters.lastDayOfYear());
+        LocalDateTime localDateTime = LocalDateTime.of(localDate, LocalTime.MAX);
+        return localDateTimeToTimestamp(localDateTime);
+    }
+
 }
 

@@ -4,6 +4,8 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TextUtil {
 
@@ -18,6 +20,7 @@ public class TextUtil {
 
         int matchCount = 0;
         int notMatchCount = 0;
+        List<String> notMatchList = new ArrayList<>();
         for (String line : srcLines) {
             if (targetText.contains(line)) {
                 matchCount++;
@@ -25,12 +28,14 @@ public class TextUtil {
             } else {
                 notMatchCount++;
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>source文件当前行在target找不到匹配数据: " + line);
+                notMatchList.add(line);
             }
         }
 
         System.out.println("---------------总数统计---------------");
         System.out.println("匹配数目: " + matchCount);
         System.out.println("不匹配数目: " + notMatchCount);
+        System.out.println("不匹配list: " + notMatchList);
     }
     @Test
     public void testCompare() throws IOException {

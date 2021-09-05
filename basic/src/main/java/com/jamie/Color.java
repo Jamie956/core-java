@@ -1,4 +1,4 @@
-package com.jamie.enum1;
+package com.jamie;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,11 +1,25 @@
-package com.jamie.deser;
+package com.jamie.util;
 
-import com.jamie.entity.Person;
+import lombok.Data;
 
 import java.io.*;
 import java.util.Objects;
 
 public class DeSerUtil {
+    @Data
+    static class Student implements Serializable {
+        private static final long serialVersionUID = -4307074831333148448L;
+        private String name;
+        private int age;
+        //transient 代表字段不进行序列化
+//    private transient int age;
+
+        public Student(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+    }
+
     public static void main(String[] args) {
 //        String path = "./studentserializable.txt";
 //
@@ -38,6 +52,7 @@ public class DeSerUtil {
     /**
      * 对象序列化，转换成字节数组
      * 对象 -> 对象输出流 -> 字节数组输出流 -> 字节数组
+     *
      * @param object 对象
      * @return 字节数组
      */
@@ -55,6 +70,7 @@ public class DeSerUtil {
     /**
      * 字节数组 反序列化，转成对象
      * 字节数组 -> 字节数组输入流 -> 对象输入流 -> 对象
+     *
      * @param bytes 字节数组
      * @return 反序列化的对象
      */

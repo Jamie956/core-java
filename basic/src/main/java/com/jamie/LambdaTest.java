@@ -1,4 +1,4 @@
-package com.jamie.java8;
+package com.jamie;
 
 public class LambdaTest {
     public static void main(String[] args) {

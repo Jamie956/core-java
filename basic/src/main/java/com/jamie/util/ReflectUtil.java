@@ -1,4 +1,4 @@
-package com.jamie;
+package com.jamie.util;
 
 import com.jamie.entity.Person;
 import org.junit.Test;

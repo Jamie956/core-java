@@ -1,6 +1,5 @@
-package com.jamie;
+package com.jamie.util;
 
-import com.jamie.resource.ClassPathResource;
 import org.junit.Test;
 
 import java.io.IOException;

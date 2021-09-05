@@ -1,4 +1,4 @@
-package com.jamie;
+package com.jamie.util;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;

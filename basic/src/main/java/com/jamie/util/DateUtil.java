@@ -1,4 +1,4 @@
-package com.jamie;
+package com.jamie.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

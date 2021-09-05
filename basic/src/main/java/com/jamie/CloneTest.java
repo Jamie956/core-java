@@ -1,9 +1,9 @@
 package com.jamie;
 
-import com.jamie.deser.DeSerUtil;
 import com.jamie.entity.Address;
 import com.jamie.entity.Student;
 import com.jamie.entity.User;
+import com.jamie.util.DeSerUtil;
 import org.junit.Test;
 
 import java.io.*;

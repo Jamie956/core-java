@@ -1,7 +1,6 @@
-package com.jamie.test;
+package com.jamie;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jamie.entity.User;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
@@ -50,8 +49,6 @@ import java.util.Map;
 
 public class ESTestMain {
     private static RestHighLevelClient client;
-
-
     static {
         HttpHost http = new HttpHost("localhost", 9200);
         RestClientBuilder builder = RestClient.builder(http);
@@ -382,10 +379,11 @@ public class ESTestMain {
         boolQuery.should(QueryBuilders.termQuery("name", "zhangsan"));
         boolQuery.should(QueryBuilders.termQuery("name", "lisi"));
         boolQuery.should(QueryBuilders.termQuery("name", "wangwu"));
+
         boolQuery.mustNot(QueryBuilders.termQuery("age", 26));
+
         boolQuery.must(QueryBuilders.matchQuery("interests", "唱"));
         boolQuery.must(QueryBuilders.matchQuery("interests", "吃"));
-
 
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(boolQuery);

@@ -1,4 +1,4 @@
-package com.jamie.entity;
+package com.jamie;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;

@@ -1,12 +1,10 @@
 package com.jamie.util;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.nio.charset.Charset;
@@ -24,16 +22,70 @@ import java.util.Map;
  */
 public class encryptUtil {
     /**
+     * 生成AES DES 密钥
+     *
+     * @param length 长度
+     * @return 密钥
+     */
+    public static String generateAesKey(int length) throws Exception {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        //设置密钥长度
+        keyGenerator.init(length);
+        SecretKey key = keyGenerator.generateKey();
+        byte[] bytes = key.getEncoded();
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    @Test
+    public void generateAesKeyTest() throws Exception {
+        String s = generateAesKey(128);
+        System.out.println(s);
+    }
+
+
+    @Test
+    public void genRandom() {
+        //产生5位长度的随机字符串，中文环境下是乱码
+        RandomStringUtils.random(5);
+        //使用指定的字符生成5位长度的随机字符串
+        RandomStringUtils.random(5, new char[]{'a', 'b', 'c', 'd', 'e', 'f', '1', '2', '3'});
+        //生成指定长度的字母和数字的随机组合字符串
+        RandomStringUtils.randomAlphanumeric(5);
+        //生成随机数字字符串
+        RandomStringUtils.randomNumeric(5);
+        //生成随机[a-z]字符串，包含大小写
+        RandomStringUtils.randomAlphabetic(5);
+        //生成从ASCII 32到126组成的随机字符串
+        RandomStringUtils.randomAscii(4);
+
+        System.out.println(RandomStringUtils.randomAlphanumeric(16));
+    }
+
+    /**
      * 对称加密，加密和解密都是同一个密钥
      * DES : Data Encryption Standard，即数据加密标准，是一种使用密钥加密的块算法，1977年被美国联邦政府的国家标准局确定为联邦资料处理标准（FIPS），并授权在非密级政府通信中使用，随后该算法在国际上广泛流传开来。
      * AES : Advanced Encryption Standard, 高级加密标准 .在密码学中又称Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。
      */
     @Test
     public void desTest() throws Exception {
-        String input = "你好";
-        String key = "12345678";
+        String input = "123456";
+        String key = "njkasdgh";
         String transformation = "DES";
         String algorithm = "DES";
+
+        String encryptDes = encryptDES(input, key, transformation, algorithm);
+        System.out.println("加密:" + encryptDes);
+
+        String s = decryptDES(encryptDes, key, transformation, algorithm);
+        System.out.println("解密:" + s);
+    }
+
+    @Test
+    public void aesTest() throws Exception {
+        String input = "123456";
+        String key = "NKvVyDwnIKSDRABpR7NO9w==";
+        String transformation = "AES";
+        String algorithm = "AES";
 
         String encryptDes = encryptDES(input, key, transformation, algorithm);
         System.out.println("加密:" + encryptDes);
@@ -155,7 +207,7 @@ public class encryptUtil {
         // 生成公钥
         PublicKey publicKey = keyPair.getPublic();
         byte[] publicKeyEncoded = publicKey.getEncoded();
-        String base64PublicKey =  Base64.getEncoder().encodeToString(publicKeyEncoded);
+        String base64PublicKey = Base64.getEncoder().encodeToString(publicKeyEncoded);
 
         Map<String, String> map = new HashMap<>();
         map.put("public", base64PublicKey);

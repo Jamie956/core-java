@@ -1,6 +1,5 @@
 package com.jamie;
 
-
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.poi.xwpf.converter.core.FileImageExtractor;
 import org.apache.poi.xwpf.converter.core.FileURIResolver;

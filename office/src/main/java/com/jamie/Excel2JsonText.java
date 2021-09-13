@@ -29,7 +29,7 @@ public class Excel2JsonText {
         InputStream ips = new FileInputStream("C:\\Users\\tgwzz\\Downloads\\heimao2.xls");
         HSSFWorkbook wb = new HSSFWorkbook(ips);
         HSSFSheet sheet = wb.getSheetAt(0);
-        for (Iterator ite = sheet.rowIterator(); ite.hasNext(); ) {
+        for (Iterator<Row> ite = sheet.rowIterator(); ite.hasNext(); ) {
             HSSFRow row = (HSSFRow) ite.next();
             row.getCell(0);
             for (Iterator itet = row.cellIterator(); itet.hasNext(); ) {

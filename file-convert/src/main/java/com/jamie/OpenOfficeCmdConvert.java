@@ -1,13 +1,13 @@
 package com.jamie;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * LibreOffice
+ * 需要安装 LibreOffice
  */
 public class OpenOfficeCmdConvert {
-
-    //需要安装 LibreOffice
     private String sofficeDir = "D:\\software\\OpenOffice4\\program";
 
     public void word2pdf(String inPath, String outPath) throws Exception {
@@ -22,12 +22,11 @@ public class OpenOfficeCmdConvert {
 
     protected String executeCommand(String command) throws IOException, InterruptedException {
         StringBuilder output = new StringBuilder();
-        Process p;
-        p = Runtime.getRuntime().exec(command);
+        Process p = Runtime.getRuntime().exec(command);
         p.waitFor();
-        try (InputStreamReader inputStreamReader = new InputStreamReader(p.getInputStream(), "UTF-8");
+        try (InputStreamReader inputStreamReader = new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8);
              BufferedReader reader = new BufferedReader(inputStreamReader)) {
-            String line = "";
+            String line;
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }

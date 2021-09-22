@@ -1,5 +1,7 @@
 package com.jamie.util;
 
+import org.junit.Test;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -687,6 +689,18 @@ public class DateUtil {
         LocalDate localDate = LocalDate.of(year, 12, 1).with(TemporalAdjusters.lastDayOfYear());
         LocalDateTime localDateTime = LocalDateTime.of(localDate, LocalTime.MAX);
         return localDateTimeToTimestamp(localDateTime);
+    }
+
+    /**
+     * 昨天
+     */
+    public static String getPreDate(String pattern) {
+        return LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    @Test
+    public void getPreDateTest() {
+        String preDate = getPreDate(DATE_FORMATTER);
     }
 
 }

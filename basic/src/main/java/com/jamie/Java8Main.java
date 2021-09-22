@@ -1,6 +1,7 @@
 package com.jamie;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jamie.entity.CgTagEntity;
 import com.jamie.entity.Person;
 import org.junit.Test;
 
@@ -167,6 +168,25 @@ public class Java8Main {
         String c = Stream.of("a", "b", "c").collect(Collectors.joining());
         String d = Stream.of("a", "b", "c").collect(Collectors.joining(","));
         String e = Stream.of("a", "b", "c").collect(Collectors.joining(",", "{", "}"));
+    }
+
+    /**
+     * 多次分组
+     */
+    public void multiGroupBy(){
+        List<CgTagEntity> list = new ArrayList<>();
+        list.add(new CgTagEntity("inspection", "industry", "产品"));
+        list.add(new CgTagEntity("inspection", "industry", "化妆品"));
+        list.add(new CgTagEntity("opinion", "injury", "产品致伤"));
+        list.add(new CgTagEntity("opinion", "injury", "食品致伤"));
+        list.add(new CgTagEntity("opinion", "damage", "致伤病"));
+        list.add(new CgTagEntity("opinion", "damage", "致财产损失"));
+
+        Map<String, Map<String, List<String>>> collect = list.stream().collect(
+                Collectors.groupingBy(CgTagEntity::getTheme,
+                        Collectors.groupingBy(CgTagEntity::getType,
+                                Collectors.mapping(CgTagEntity::getName, Collectors.toList())))
+        );
     }
 
     /**

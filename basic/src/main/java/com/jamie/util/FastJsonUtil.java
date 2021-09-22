@@ -6,9 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jamie.entity.JsonUser;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -65,6 +63,12 @@ public class FastJsonUtil {
         JSONObject userJson = JSON.parseObject(userStr);
         //string -> java object
         JsonUser userObj = JSON.parseObject(userStr, JsonUser.class);
+        //map -> json
+        Map<String,Object> map = new HashMap<>();
+        map.put("age", 24);
+        map.put("name", "11111");
+        JSONObject json = new JSONObject(map);
+
         System.out.println();
     }
 }

@@ -4,8 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jamie.entity.JsonUser;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.junit.Test;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -55,6 +59,14 @@ public class FastJsonUtil {
         List<JSONObject> value = list.stream().sorted(Comparator.comparingDouble((JSONObject e) -> e.getDoubleValue("value"))).collect(Collectors.toList());
     }
 
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    static class User implements Serializable {
+        public Integer age;
+        public String name;
+    }
+
     public static void main(String[] args) {
         JsonUser user = new JsonUser("tom", "100");
         //java object -> string
@@ -69,6 +81,9 @@ public class FastJsonUtil {
         map.put("name", "11111");
         JSONObject json = new JSONObject(map);
 
+        //json -> java object
+        User user1 = json.toJavaObject(User.class);
+//        User student = JSON.toJavaObject(json, User.class);
         System.out.println();
     }
 }

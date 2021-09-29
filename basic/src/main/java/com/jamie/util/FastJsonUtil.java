@@ -69,21 +69,32 @@ public class FastJsonUtil {
 
     public static void main(String[] args) {
         JsonUser user = new JsonUser("tom", "100");
-        //java object -> string
+        //java object -> json string
         String userStr = JSON.toJSONString(user);
-        //string -> json
+
+        //json string -> json
         JSONObject userJson = JSON.parseObject(userStr);
-        //string -> java object
+
+        //json string -> java object
         JsonUser userObj = JSON.parseObject(userStr, JsonUser.class);
+
         //map -> json
         Map<String,Object> map = new HashMap<>();
         map.put("age", 24);
         map.put("name", "11111");
         JSONObject json = new JSONObject(map);
 
+        //json -> string
+        String jsonString = json.toJSONString();
+
         //json -> java object
         User user1 = json.toJavaObject(User.class);
-//        User student = JSON.toJavaObject(json, User.class);
-        System.out.println();
+        User user2 = JSON.toJavaObject(json, User.class);
+
+        //string -> array
+        JSONArray jsonArray = JSON.parseArray("[{\"studentName\":\"lily\",\"studentAge\":12},{\"studentName\":\"lucy\",\"studentAge\":15}]");
+        //array -> string
+        String jsonString123 = JSON.toJSONString(jsonArray);
+
     }
 }

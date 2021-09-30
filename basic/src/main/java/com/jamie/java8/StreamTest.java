@@ -1,4 +1,4 @@
-package com.jamie;
+package com.jamie.java8;
 
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;

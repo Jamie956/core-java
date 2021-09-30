@@ -1,4 +1,4 @@
-package com.jamie;
+package com.jamie.java8;
 
 
 import org.junit.Test;
@@ -9,26 +9,21 @@ import java.util.stream.Collectors;
 
 public class FunctionalInterfaceTest {
 
-    public List<String> filterStr(List<String> list, Predicate<String> predicate) {
-        return list.stream().filter(predicate).collect(Collectors.toList());
-    }
-
     @Test
     public void testPredicate() {
-        filterStr(Arrays.asList("hello", "java8", "function", "predicate"), s -> s.length() > 5).forEach(System.out::println);
-    }
+        List<String> list = Arrays.asList("hello", "java8", "function", "predicate");
+        Predicate<String> predicate = s -> s.length() > 5;
 
-    public String strHandler(String str, Function<String, String> function) {
-        return function.apply(str);
+        //集合按 predicate 条件过滤
+        List<String> collect = list.stream().filter(predicate).collect(Collectors.toList());
+
+        collect.forEach(System.out::println);
     }
 
     @Test
     public void testFunction() {
-        String str1 = strHandler("测试内置函数式接口", s -> s.substring(2));
-        System.out.println(str1);
-
-        String str2 = strHandler("abcdefg", String::toUpperCase);
-        System.out.println(str2);
+        Function<String, String> function = String::toUpperCase;
+        String ret = function.apply("abcdefg");
     }
 
     public List<Integer> getNumList(int num, Supplier<Integer> supplier) {

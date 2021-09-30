@@ -14,7 +14,6 @@ public class Person implements Serializable {
     private Double length;
 
     public Person() {
-        System.out.println(1);
         this.name = "tom";
     }
 

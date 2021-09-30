@@ -57,4 +57,5 @@ public class FunctionalInterfaceTest {
     public void testConsumer() {
         modifyValue(3, s -> System.out.println(s * 3));
     }
+
 }

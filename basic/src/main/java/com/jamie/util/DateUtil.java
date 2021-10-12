@@ -1,7 +1,5 @@
 package com.jamie.util;
 
-import org.junit.Test;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -41,11 +39,11 @@ public class DateUtil {
     /**
      * 获取当前时间戳
      *
-     * @return timestamp
+     * @return 时间戳（毫秒）
      */
     public static long getTimestamp() {
         // LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
-        // LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+//         LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         // Timestamp.valueOf(LocalDateTime.now()).getTime();
         // Instant.now().toEpochMilli();
         return Instant.now().toEpochMilli();
@@ -53,6 +51,7 @@ public class DateUtil {
 
     /**
      * 获取当前时间戳
+     *
      * @return 时间戳（秒）
      */
     public static long getSec() {
@@ -69,7 +68,7 @@ public class DateUtil {
     }
 
     /**
-     * 获取当前年月
+     * 获取当前年月（yyyy-MM）
      *
      * @return yyyy-MM
      */
@@ -78,7 +77,7 @@ public class DateUtil {
     }
 
     /**
-     * 获取当前日期
+     * 获取当前日期（yyyy-MM-dd）
      *
      * @return yyyy-MM-dd
      */
@@ -87,7 +86,7 @@ public class DateUtil {
     }
 
     /**
-     * 获取下一天日期
+     * 获取下一天日期（yyyy-MM-dd）
      *
      * @return yyyy-MM-dd
      */
@@ -174,6 +173,13 @@ public class DateUtil {
      */
     public static String getNextDate(String pattern) {
         return LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * 昨天
+     */
+    public static String getYesterday(String pattern) {
+        return LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern(pattern));
     }
 
     /**
@@ -593,6 +599,7 @@ public class DateUtil {
 
     /**
      * LocalDate转换成Date
+     *
      * @param localDate
      * @return
      */
@@ -692,16 +699,58 @@ public class DateUtil {
     }
 
     /**
-     * 昨天
+     * api测试
      */
-    public static String getPreDate(String pattern) {
-        return LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern(pattern));
-    }
+    public static void main(String[] args) {
+        //当前 LocalDate
+        LocalDate nowLocalDate = LocalDate.now();
+        //LocalDate 格式化
+        String formatLocalDate = nowLocalDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
+        //LocalDate 偏移
+        LocalDate nextLocalDate = nowLocalDate.plusDays(1);
 
-    @Test
-    public void getPreDateTest() {
-        String preDate = getPreDate(DATE_FORMATTER);
-    }
+        //当前 LocalTime
+        LocalTime nowLocalTime = LocalTime.now();
+        //LocalTime 格式化
+        String FormatLocalTime = nowLocalTime.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
 
+        //ts 转 Instant
+        Instant tsInstant = Instant.ofEpochMilli(1634010328685L);
+        //Instant 转 LocalDateTime
+        LocalDateTime tsLocalDateTime = LocalDateTime.ofInstant(tsInstant, ZoneId.systemDefault());
+
+        //LocalDateTime 转 instant
+        Instant instant = tsLocalDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        //instant 转 ts
+        long ts = instant.toEpochMilli();
+
+        //当前 LocalDateTime
+        LocalDateTime nowLocalDateTime = LocalDateTime.now();
+        //LocalDateTime 格式化
+        String formatLocalDateTime = nowLocalDateTime.format(DateTimeFormatter.ofPattern(DATETIME_FORMATTER));
+
+        //格式化转 LocalDate
+        LocalDate parseLocalDate = LocalDate.parse("2021-01-01", DateTimeFormatter.ofPattern(DATE_FORMATTER));
+
+        //本月第一天
+        LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        //本月最后一天
+        LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        //周第一天
+        LocalDate.now().minusWeeks(0).with(DayOfWeek.MONDAY);
+        LocalDate.now().getDayOfWeek().getValue();
+        //天数
+        long l = LocalDate.now().toEpochDay();
+        //相隔小时
+        Duration.between(LocalDate.now(), parseLocalDate).toHours();
+
+        //比较
+        LocalDate.now().equals(LocalDate.now());
+        LocalTime.now().isAfter(LocalTime.now());
+
+        //今天的起始时间
+        LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+        //指定年的最后一天
+        LocalDate.of(2021, 1, 1).with(TemporalAdjusters.lastDayOfYear());
+    }
 }
-

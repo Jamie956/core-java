@@ -1,11 +1,16 @@
 package com.jamie.util;
 
+import cn.hutool.http.HtmlUtil;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TextUtil {
 
@@ -95,4 +100,35 @@ public class TextUtil {
         System.out.println(length+"b");
     }
 
+    /**
+     * source.id join target.id
+     */
+    @Test
+    public void join() throws IOException {
+        String srcText = FileUtils.readFileToString(new File("src/main/resources/source"), "UTF-8");
+        String[] srcLines = srcText.split("\r\n");
+        String targetText = FileUtils.readFileToString(new File("src/main/resources/target"), "UTF-8");
+        String[] targetLines = targetText.split("\r\n");
+
+        Map<String, String> map = new HashMap<>();
+        for (String targetLine : targetLines) {
+            String[] split = targetLine.split("#split#");
+            if (split.length > 1) {
+                String contentId = split[0];
+                String content = split[1];
+                map.put(contentId, content);
+            }
+        }
+        FileWriter fileWriter = new FileWriter("src/main/resources/output");
+        for (String srcLine : srcLines) {
+            String content = map.get(srcLine);
+            content = HtmlUtil.removeHtmlTag(content,"img");
+            if (content == null) {
+                content = "";
+            }
+            String ret = srcLine+"^"+content+"\r\n";
+            fileWriter.write(ret);
+        }
+        fileWriter.flush();
+    }
 }

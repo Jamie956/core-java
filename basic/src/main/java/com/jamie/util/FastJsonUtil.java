@@ -3,6 +3,7 @@ package com.jamie.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.jamie.entity.JsonUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,23 @@ import java.util.stream.Collectors;
  * @Date: 2021/2/5 16:00
  */
 public class FastJsonUtil {
+
+    @Data
+    static class KeywordSearchPageModel {
+        @JSONField(name = "pub_time")
+        private String pubTime;
+    }
+
+    /**
+     * JSONField name: 对象 转json 使用别名
+     */
+    @Test
+    public void jsonFileNameConvert() {
+        KeywordSearchPageModel model = new KeywordSearchPageModel();
+        model.setPubTime("asdasd");
+        String s = JSON.toJSONString(model);
+        System.out.println(s);
+    }
 
     /**
      * 递归遍历json 全部节点

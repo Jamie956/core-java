@@ -20,6 +20,15 @@ import java.util.stream.Collectors;
  */
 public class FastJsonUtil {
 
+
+    @Data
+    static class KeywordSearchPageModel111 {
+        private String pubTime;
+        //字段不转成JSON
+        @JSONField(serialize = false)
+        private List<String> tags;
+    }
+
     @Data
     static class KeywordSearchPageModel {
         @JSONField(name = "pub_time")

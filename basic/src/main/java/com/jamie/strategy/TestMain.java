@@ -7,10 +7,8 @@ import java.util.Arrays;
 public class TestMain {
     public static void main(String[] args) {
         Context context = new Context();
-
         context.init(Context.WORKA_TYPE);
         context.doHandle(Context.WORKA_TYPE);
-
     }
 
     @Test

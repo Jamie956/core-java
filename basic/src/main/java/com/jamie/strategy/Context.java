@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Context {
-    private static final Map<Integer, Work> MAP = new HashMap<>();
+    private static final Map<Integer, Work> MAP;
 
     public static final int WORKA_TYPE = 1;
     public static final int WORKB_TYPE = 2;
 
     static {
+        //静态代码块初始映射对象
+        MAP = new HashMap<>();
         MAP.put(WORKA_TYPE, new WorkA());
         MAP.put(WORKB_TYPE, new WorkB());
     }
@@ -33,13 +35,11 @@ interface Work {
 class WorkA implements Work {
     @Override
     public void init() {
-
         System.out.println("WorkA 正在初始化");
     }
 
     @Override
     public void doHandle() {
-
         System.out.println("WorkA 正在处理中");
     }
 }
@@ -48,12 +48,10 @@ class WorkB implements Work {
     @Override
     public void init() {
         System.out.println("WorkB 正在初始化");
-
     }
 
     @Override
     public void doHandle() {
         System.out.println("WorkB 正在处理中");
-
     }
 }

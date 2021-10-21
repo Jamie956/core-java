@@ -4,13 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * java8 consumer lambda 实现策略模式
- */
 public class Query {
-    public Map<String, Wrapper> map = new HashMap<>();
+    public Map<String, Wrapper> map;
 
     public Query() {
+        map = new HashMap<>();
         map.put("lt", () -> " < ");
         map.put("eq", () -> " = ");
     }

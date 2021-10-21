@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * @date 2021/9/13 9:42
  */
 @Data
-public class EsClient {
+public class ElasticClient {
     private String indices;
     private String type;
     private static RestHighLevelClient client;
@@ -58,12 +58,12 @@ public class EsClient {
         client =  new RestHighLevelClient(builder);
     }
 
-    EsClient(String indices, String type) {
+    ElasticClient(String indices, String type) {
         this.indices = indices;
         this.type = type;
     }
 
-    EsClient(String indices) {
+    ElasticClient(String indices) {
         this.indices = indices;
     }
 

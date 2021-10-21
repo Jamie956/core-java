@@ -18,7 +18,7 @@
     <modules>
         <module>bigdata</module>
         <module>mybatis</module>
-        <module>es</module>
+        <module>elastic</module>
         <module>basic</module>
         <module>spring</module>
         <module>hive-udf</module>

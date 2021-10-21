@@ -3,14 +3,16 @@ package com.jamie;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class ExcelTest {
+public class ExcelAPITest {
     public static void main(String[] args) throws IOException {
         FileOutputStream out = new FileOutputStream(new File("D:/test.xlsx"));
-
         XSSFWorkbook workbook = new XSSFWorkbook();
 
         //创建sheet
@@ -31,7 +33,7 @@ public class ExcelTest {
         font.setFontName("Verdana");
 //        font.setColor(HSSFFont.COLOR_RED);
         //自定义颜色
-        java.awt.Color rgb = HTMLColorTranslator.translate("#ff9900");
+        java.awt.Color rgb = translate("#ff9900");
         XSSFColor xssfColor = new XSSFColor(rgb, new DefaultIndexedColorMap());
         font.setColor(xssfColor);
         cellStyle.setFont(font);
@@ -52,4 +54,19 @@ public class ExcelTest {
         out.close();
     }
 
+    public static java.awt.Color translate(String rgbStr) {
+        if (rgbStr.startsWith("rgb")){
+            Pattern c = Pattern.compile("rgb *\\( *([0-9]+), *([0-9]+), *([0-9]+) *\\)");
+            Matcher m = c.matcher(rgbStr);
+
+            if (m.matches()) {
+                return new java.awt.Color(Integer.parseInt(m.group(1)),
+                        Integer.parseInt(m.group(2)),
+                        Integer.parseInt(m.group(3)));
+            }
+        } else if(rgbStr.startsWith("#")) {
+            return Color.decode(rgbStr);
+        }
+        return null;
+    }
 }

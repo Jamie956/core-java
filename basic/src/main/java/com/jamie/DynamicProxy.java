@@ -1,7 +1,5 @@
 package com.jamie;
 
-import com.jamie.entity.HelloImpl;
-import com.jamie.entity.IHello;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationHandler;
@@ -40,6 +38,17 @@ public class DynamicProxy implements InvocationHandler {
         return (T) Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), this);
     }
 
+
+    static class HelloImpl implements IHello {
+        @Override
+        public void greeting() {
+            System.out.println("Hi");
+        }
+    }
+
+    interface IHello {
+        void greeting();
+    }
 
     /**
      * JDK代理

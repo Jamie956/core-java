@@ -4,47 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.jamie.entity.JsonUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * @Author: Zjm
- * @Date: 2021/2/5 16:00
- */
+
 public class FastJsonUtil {
-
-
-    @Data
-    static class KeywordSearchPageModel111 {
-        private String pubTime;
-        //字段不转成JSON
-        @JSONField(serialize = false)
-        private List<String> tags;
-    }
-
-    @Data
-    static class KeywordSearchPageModel {
-        @JSONField(name = "pub_time")
-        private String pubTime;
-    }
-
-    /**
-     * JSONField name: 对象 转json 使用别名
-     */
-    @Test
-    public void jsonFileNameConvert() {
-        KeywordSearchPageModel model = new KeywordSearchPageModel();
-        model.setPubTime("asdasd");
-        String s = JSON.toJSONString(model);
-        System.out.println(s);
-    }
 
     /**
      * 递归遍历json 全部节点
@@ -86,28 +55,61 @@ public class FastJsonUtil {
         List<JSONObject> value = list.stream().sorted(Comparator.comparingDouble((JSONObject e) -> e.getDoubleValue("value"))).collect(Collectors.toList());
     }
 
-    @AllArgsConstructor
-    @NoArgsConstructor
     @Data
-    static class User implements Serializable {
-        public Integer age;
-        public String name;
+    @AllArgsConstructor
+    static class JsonUser implements Serializable {
+        private static final long serialVersionUID = -4537716904357183030L;
+
+        //定义转成json 对应字段的名字
+        @JSONField(name = "jsonFieldCustomName")
+        private String name;
+        private String age;
+        //字段不转成JSON
+        @JSONField(serialize = false)
+        private List<String> tags;
+
+        public JsonUser(String name, String age) {
+            this.name = name;
+            this.age = age;
+        }
     }
 
+    /**
+     * JSONField name: 对象 转json 使用别名
+     * JSONField serialize = false：字段不转成JSON
+     */
+    @Test
+    public void jsonFileNameConvert() {
+        List<String> tags = Arrays.asList("a", "b");
+        JsonUser user = new JsonUser("tom", "12", tags);
+        String s = JSON.toJSONString(user);
+        System.out.println(s);
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class User {
+        private String name;
+        private String age;
+    }
+
+    /**
+     * JSON.parseXXX: string to ?
+     * JSON.toXXX: json to ?
+     */
     public static void main(String[] args) {
-        JsonUser user = new JsonUser("tom", "100");
         //java object -> json string
-        String userStr = JSON.toJSONString(user);
+        String userStr = JSON.toJSONString(new User("tom", "100"));
 
         //json string -> json
-        JSONObject userJson = JSON.parseObject(userStr);
+        JSONObject userJson = JSON.parseObject("{\"age\":\"100\",\"name\":\"tom\"}");
 
         //json string -> java object
-        JsonUser userObj = JSON.parseObject(userStr, JsonUser.class);
+        User userObj = JSON.parseObject("{\"age\":\"100\",\"name\":\"tom\"}", User.class);
 
         //map -> json
         Map<String,Object> map = new HashMap<>();
-        map.put("age", 24);
+        map.put("age", "24");
         map.put("name", "11111");
         JSONObject json = new JSONObject(map);
 

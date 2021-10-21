@@ -1,20 +1,28 @@
 package com.jamie;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.jamie.entity.User;
-import org.junit.Test;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Map;
+import java.io.Serializable;
 
-/**
- * @Author: Zjm
- * @Date: 2021/2/24 14:18
- */
 public class GsonGson {
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class User implements Serializable {
+        private static final long serialVersionUID = -3307269962764425802L;
+        private Integer id;
+        private String name;
+
+        public User(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+    }
 
     public static void main(String[] args) {
         Gson gson = new Gson();

@@ -1,19 +1,31 @@
 package com.jamie.freemarker;
 
-import com.jamie.entity.User;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.junit.Test;
 
 import java.io.*;
 import java.util.*;
 
-/**
- * @Author: Zjm
- * @Date: 2021/4/12 17:16
- */
 public class FMUtils {
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class User implements Serializable {
+        private static final long serialVersionUID = -3307269962764425802L;
+        private Integer id;
+        private String name;
+
+        public User(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+    }
 
     @Test
     public void test1() {
@@ -28,7 +40,7 @@ public class FMUtils {
      * 变量、函数、运算
      */
     @Test
-    public void test2(){
+    public void test2() {
         String dir = "src/main/java/com/jamie/freemarker";
         String file = "first.ftl";
         Map<String, Object> dataMap = new HashMap<>(2);
@@ -43,7 +55,7 @@ public class FMUtils {
      * 集合遍历
      */
     @Test
-    public void test3(){
+    public void test3() {
         List<User> users = new ArrayList<>();
         users.add(new User(1, "tom"));
         users.add(new User(2, "tim"));
@@ -63,8 +75,8 @@ public class FMUtils {
      * map 遍历
      */
     @Test
-    public void test4(){
-        Map<String,List<String>> kindsMap  = new HashMap<>();
+    public void test4() {
+        Map<String, List<String>> kindsMap = new HashMap<>();
         kindsMap.put("a", Arrays.asList("a1", "a2"));
         kindsMap.put("b", Arrays.asList("b1", "b2"));
 
@@ -80,7 +92,7 @@ public class FMUtils {
     }
 
     @Test
-    public void test5(){
+    public void test5() {
         String dir = "src/main/java/com/jamie/freemarker";
         String file = "four.ftl";
 
@@ -112,7 +124,7 @@ public class FMUtils {
 
             Configuration conf = new Configuration();
             conf.setTemplateLoader(stringLoader);
-            Template template = conf.getTemplate("myTemplate","utf-8");
+            Template template = conf.getTemplate("myTemplate", "utf-8");
             StringWriter writer = new StringWriter();
             template.process(dataMap, writer);
             return writer.toString();

@@ -1,7 +1,10 @@
 package com.jamie.java8;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.junit.Test;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.chrono.IsoChronology;
 import java.util.*;
@@ -9,6 +12,23 @@ import java.util.function.*;
 import java.util.stream.Collectors;
 
 public class LambdaTest {
+    @Data
+    @AllArgsConstructor
+    static class Person2 implements Serializable {
+        private static final long serialVersionUID = -2687432631518129972L;
+
+        private String name;
+        private Double length;
+
+        public Person2() {
+            this.name = "tom";
+        }
+
+        public Person2(String name) {
+            this.name = name;
+        }
+    }
+
     private static class Person {
         public enum Sex {
             MALE, FEMALE
@@ -128,12 +148,12 @@ public class LambdaTest {
 
     @Test
     public void testComparator() {
-        com.jamie.entity.Person p1 = new com.jamie.entity.Person("Lord of the rings", 8.8);
-        com.jamie.entity.Person p2 = new com.jamie.entity.Person("Back to the future", 8.5);
-        com.jamie.entity.Person p3 = new com.jamie.entity.Person("Pulp fiction", 8.9);
-        List<com.jamie.entity.Person> ps = Arrays.asList(p1, p2, p3);
-        List<com.jamie.entity.Person> people = compareObjectDoubleDesc(ps, com.jamie.entity.Person::getLength);
-        List<com.jamie.entity.Person> people2 = compareObjectDoubleAsc(ps, com.jamie.entity.Person::getLength);
+        Person2 p1 = new Person2("Lord of the rings", 8.8);
+        Person2 p2 = new Person2("Back to the future", 8.5);
+        Person2 p3 = new Person2("Pulp fiction", 8.9);
+        List<Person2> ps = Arrays.asList(p1, p2, p3);
+        List<Person2> people = compareObjectDoubleDesc(ps, Person2::getLength);
+        List<Person2> people2 = compareObjectDoubleAsc(ps, Person2::getLength);
     }
 
     /**

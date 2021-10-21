@@ -1,11 +1,30 @@
 package com.jamie.util;
 
-import com.jamie.entity.Person;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.junit.Test;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 
 public class ReflectUtil {
+    @Data
+    @AllArgsConstructor
+    static class Person implements Serializable {
+        private static final long serialVersionUID = -2687432631518129972L;
+
+        private String name;
+        private Double length;
+
+        public Person() {
+            this.name = "tom";
+        }
+
+        public Person(String name) {
+            this.name = name;
+        }
+    }
+
     /**
      * 反射获取成员变量
      */

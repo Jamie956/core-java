@@ -1,8 +1,11 @@
 package com.jamie.java8;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.junit.Test;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.chrono.IsoChronology;
 import java.util.*;
@@ -12,6 +15,23 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StreamTest {
+    @Data
+    @AllArgsConstructor
+    static class Person2 implements Serializable {
+        private static final long serialVersionUID = -2687432631518129972L;
+
+        private String name;
+        private Double length;
+
+        public Person2() {
+            this.name = "tom";
+        }
+
+        public Person2(String name) {
+            this.name = name;
+        }
+    }
+
     private static class Person {
         public enum Sex {
             MALE, FEMALE
@@ -144,11 +164,11 @@ public class StreamTest {
     @Test
     public void mapm() {
         //从对象列表中提取某一列
-        com.jamie.entity.Person p1 = new com.jamie.entity.Person("Lord of the rings", 8.8);
-        com.jamie.entity.Person p2 = new com.jamie.entity.Person("Back to the future", 8.5);
-        com.jamie.entity.Person p3 = new com.jamie.entity.Person("Pulp fiction", 8.9);
-        List<com.jamie.entity.Person> list1 = Arrays.asList(p1, p2, p3);
-        Function<com.jamie.entity.Person, String> getName = com.jamie.entity.Person::getName;
+        Person2 p1 = new Person2("Lord of the rings", 8.8);
+        Person2 p2 = new Person2("Back to the future", 8.5);
+        Person2 p3 = new Person2("Pulp fiction", 8.9);
+        List<Person2> list1 = Arrays.asList(p1, p2, p3);
+        Function<Person2, String> getName = Person2::getName;
 
         List<Integer> list2 = Arrays.asList(6, 1, 7, 9, 3);
         Function<Integer, JSONObject> mapper = e -> {

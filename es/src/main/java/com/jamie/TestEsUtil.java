@@ -5,6 +5,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.range.Range;
 import org.elasticsearch.search.aggregations.metrics.stats.extended.ExtendedStats;
 import org.junit.Test;
@@ -84,27 +85,27 @@ public class TestEsUtil {
     @Test
     public void terms() throws IOException {
         EsClient esClient = new EsClient("lib", "user");
-        QueryBuilder query = EsUtil.terms("birthday", "1970-12-12", "1998-10-12");
+        QueryBuilder query = QueryBuilders.termsQuery("birthday", "1970-12-12", "1998-10-12");
         List<User> search = esClient.query(query, User.class);
     }
 
     @Test
     public void multiMatch() throws IOException {
-        QueryBuilder query = EsUtil.multiMatch("步", "interests", "address");
+        QueryBuilder query = QueryBuilders.multiMatchQuery("步", "interests", "address");
         EsClient esClient = new EsClient("lib", "user");
         List<User> search = esClient.query(query, User.class);
     }
 
     @Test
     public void match() throws IOException {
-        QueryBuilder query = EsUtil.match("interests", "喝酒睡觉");
+        QueryBuilder query = QueryBuilders.matchQuery("interests", "喝酒睡觉");
         EsClient esClient = new EsClient("lib", "user");
         List<User> search = esClient.query(query, User.class);
     }
 
     @Test
     public void range() throws IOException {
-        QueryBuilder query = EsUtil.range("age", 22, 28);
+        QueryBuilder query = QueryBuilders.rangeQuery("age").gte(22).lte(28);
         EsClient esClient = new EsClient("lib", "user");
         List<User> search = esClient.query(query, User.class);
     }
@@ -145,7 +146,7 @@ public class TestEsUtil {
 
     @Test
     public void aggExtendsTest() throws IOException {
-        AggregationBuilder aggBuilder = EsUtil.aggExtends("myagg", "age");
+        AggregationBuilder aggBuilder = AggregationBuilders.extendedStats("myagg").field("age");
         EsClient esClient = new EsClient("lib", "user");
         Aggregation agg = esClient.agg(aggBuilder, "myagg");
         double max = ((ExtendedStats) agg).getMax();
@@ -153,7 +154,7 @@ public class TestEsUtil {
 
     @Test
     public void aggRange() throws IOException {
-        AggregationBuilder aggBuilder = EsUtil.aggRange("group", "age", 21, 28);
+        AggregationBuilder aggBuilder = AggregationBuilders.range("group").field("age").addRange(21, 28);
         EsClient esClient = new EsClient("lib", "user");
         Range agg = (Range) esClient.agg(aggBuilder, "group");
         agg.getBuckets().forEach(e -> {

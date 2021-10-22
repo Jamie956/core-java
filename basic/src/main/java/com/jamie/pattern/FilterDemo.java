@@ -7,6 +7,9 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 过滤器模式（Filter Pattern）或标准模式（Criteria Pattern）是一种设计模式，这种模式允许开发人员使用不同的标准来过滤一组对象，通过逻辑运算以解耦的方式把它们连接起来。这种类型的设计模式属于结构型模式，它结合多个标准来获得单一标准。
+ */
 public class FilterDemo {
     public static void main(String[] args) {
         List<Person> persons = new ArrayList<>();
@@ -44,6 +47,9 @@ public class FilterDemo {
         List<Person> meetCriteria(List<Person> persons);
     }
 
+    /**
+     * 过滤出 gender=MALE 的对象
+     */
     static class CriteriaMale implements Criteria {
         @Override
         public List<Person> meetCriteria(List<Person> persons) {
@@ -57,6 +63,9 @@ public class FilterDemo {
         }
     }
 
+    /**
+     * 过滤出 gender=FEMALE 的对象
+     */
     static class CriteriaFemale implements Criteria {
         @Override
         public List<Person> meetCriteria(List<Person> persons) {
@@ -70,6 +79,9 @@ public class FilterDemo {
         }
     }
 
+    /**
+     * 过滤出 maritalStatus=SINGLE 的对象
+     */
     static class CriteriaSingle implements Criteria {
         @Override
         public List<Person> meetCriteria(List<Person> persons) {
@@ -83,35 +95,39 @@ public class FilterDemo {
         }
     }
 
+    /**
+     * and 过滤链
+     */
     @AllArgsConstructor
     static class AndCriteria implements Criteria {
-
-        private Criteria criteria;
-        private Criteria otherCriteria;
+        private Criteria firstFilter;
+        private Criteria secondFilter;
 
         @Override
         public List<Person> meetCriteria(List<Person> persons) {
-            List<Person> firstCriteriaPersons = criteria.meetCriteria(persons);
-            return otherCriteria.meetCriteria(firstCriteriaPersons);
+            List<Person> firstFilterResult = firstFilter.meetCriteria(persons);
+            return secondFilter.meetCriteria(firstFilterResult);
         }
     }
 
+    /**
+     * 并集
+     */
     @AllArgsConstructor
     static class OrCriteria implements Criteria {
-
-        private Criteria criteria;
-        private Criteria otherCriteria;
+        private Criteria firstFilter;
+        private Criteria secondFilter;
 
         @Override
         public List<Person> meetCriteria(List<Person> persons) {
-            List<Person> firstCriteriaPersons = criteria.meetCriteria(persons);
-            List<Person> otherCriteriaPersons = otherCriteria.meetCriteria(firstCriteriaPersons);
-            for (Person otherCriteriaPerson : otherCriteriaPersons) {
-                if (!firstCriteriaPersons.contains(otherCriteriaPerson)) {
-                    firstCriteriaPersons.add(otherCriteriaPerson);
+            List<Person> firstFilterItems = firstFilter.meetCriteria(persons);
+            List<Person> secondFilterItems = secondFilter.meetCriteria(firstFilterItems);
+            for (Person secondFilterItem : secondFilterItems) {
+                if (!firstFilterItems.contains(secondFilterItem)) {
+                    firstFilterItems.add(secondFilterItem);
                 }
             }
-            return firstCriteriaPersons;
+            return firstFilterItems;
         }
     }
 

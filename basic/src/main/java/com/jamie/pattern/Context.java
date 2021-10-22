@@ -1,9 +1,15 @@
-package com.jamie.strategy;
+package com.jamie.pattern;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Context {
+    public static void main(String[] args) {
+        Context context = new Context();
+        context.init(Context.WORKA_TYPE);
+        context.doHandle(Context.WORKA_TYPE);
+    }
+
     private static final Map<Integer, Work> MAP;
 
     public static final int WORKA_TYPE = 1;
@@ -16,6 +22,7 @@ public class Context {
         MAP.put(WORKB_TYPE, new WorkB());
     }
 
+    //获取映射对象并调取对象方法（方法来自实现的同一接口）
     public void init(int type) {
         MAP.get(type).init();
     }

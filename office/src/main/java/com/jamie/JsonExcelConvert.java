@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Json2Excel {
+public class JsonExcelConvert {
     public static void main(String[] args) throws Exception {
         //json2Excel
         JSONArray jsonArray = new JSONArray();

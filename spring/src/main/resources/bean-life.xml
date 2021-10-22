@@ -8,12 +8,12 @@
     <bean id="person"
           destroy-method="myDestroy"
           init-method="myInit"
-          class="com.jamie.bean.life.Person">
+          class="com.jamie.Person">
         <property name="name">
             <value>jamie</value>
         </property>
     </bean>
 
     <!-- 配置自定义的后置处理器 -->
-    <bean id="processor" class="com.jamie.bean.life.Processor"/>
+    <bean id="processor" class="com.jamie.Processor"/>
 </beans>

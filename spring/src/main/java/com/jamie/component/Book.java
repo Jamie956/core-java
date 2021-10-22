@@ -1,13 +1,16 @@
-package com.jamie.bean.annotation;
+package com.jamie.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Book {
-	@Autowired
 	private Author author;
-	
+	@Autowired
+	public void setAuthor(Author author) {
+		this.author = author;
+	}
+
 	public Book() {
 		System.out.println("New Book");
 	}

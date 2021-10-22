@@ -2,6 +2,7 @@ package com.jamie.pattern;
 
 /**
  * 适配器模式
+ * 选择适配器，适配具体的对象，并执行适配后操作
  */
 public class AdapterDemo {
     public static void main(String[] args) {
@@ -12,18 +13,16 @@ public class AdapterDemo {
         audioPlayer.play("avi", "mind me.avi");
     }
 
-
-
     interface AdvanceMediaPlayer {
         void playVlc(String fileName);
+
         void playMp4(String fileName);
     }
 
     static class VlcPlayer implements AdvanceMediaPlayer {
-
         @Override
         public void playVlc(String fileName) {
-            System.out.println("play vlc name="+fileName);
+            System.out.println("play vlc " + fileName);
         }
 
         @Override
@@ -40,7 +39,7 @@ public class AdapterDemo {
 
         @Override
         public void playMp4(String fileName) {
-            System.out.println("play mp4 name="+fileName);
+            System.out.println("play mp4 " + fileName);
         }
     }
 
@@ -51,6 +50,9 @@ public class AdapterDemo {
     static class MediaAdapter implements MediaPlayer {
         AdvanceMediaPlayer advanceMediaPlayer;
 
+        /**
+         * 根据 audioType 适配具体的对象
+         */
         public MediaAdapter(String audioType) {
             switch (audioType) {
                 case "vlc":
@@ -64,6 +66,9 @@ public class AdapterDemo {
             }
         }
 
+        /**
+         * 适配后的操作
+         */
         @Override
         public void play(String audioType, String fileName) {
             switch (audioType) {
@@ -79,25 +84,25 @@ public class AdapterDemo {
         }
     }
 
+    /**
+     * 根据 audioType 选择适配器，并执行适配后操作
+     */
     static class AudioPlayer implements MediaPlayer {
-        MediaAdapter mediaAdapter;
-
         @Override
         public void play(String audioType, String fileName) {
             switch (audioType) {
                 case "mp3":
-                    System.out.println("play mp3 name="+fileName);
+                    System.out.println("play mp3 " + fileName);
                     break;
                 case "vlc":
                 case "mp4":
-                    mediaAdapter = new MediaAdapter(audioType);
+                    MediaAdapter mediaAdapter = new MediaAdapter(audioType);
                     mediaAdapter.play(audioType, fileName);
                     break;
                 default:
-                    System.out.println("Not support "+audioType);
+                    System.out.println("Not support " + audioType);
             }
         }
     }
-
 
 }

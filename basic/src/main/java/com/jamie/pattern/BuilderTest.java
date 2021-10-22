@@ -20,12 +20,6 @@ public class BuilderTest {
         System.out.println("cost="+meal1.getCost());
     }
 
-    interface Item {
-        String name();
-        Packing packing();
-        float price();
-    }
-
     interface Packing {
         String pack();
     }
@@ -42,6 +36,12 @@ public class BuilderTest {
         public String pack() {
             return "Bottle";
         }
+    }
+
+    interface Item {
+        String name();
+        Packing packing();
+        float price();
     }
 
     abstract static class Burger implements Item {

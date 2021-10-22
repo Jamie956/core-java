@@ -1,5 +1,8 @@
 package com.jamie.pattern;
 
+/**
+ * 桥接
+ */
 public class BridgeDemo {
     public static void main(String[] args) {
 
@@ -29,10 +32,10 @@ public class BridgeDemo {
     }
 
     abstract static class Shape {
-        protected DrawAPI drawAPI;
+        protected DrawAPI drawApi;
 
-        protected Shape(DrawAPI drawAPI) {
-            this.drawAPI = drawAPI;
+        protected Shape(DrawAPI drawApi) {
+            this.drawApi = drawApi;
         }
 
         abstract void draw();
@@ -41,8 +44,8 @@ public class BridgeDemo {
     static class Circle extends Shape {
         private int x, y, radius;
 
-        protected Circle(int x, int y, int radius, DrawAPI drawAPI) {
-            super(drawAPI);
+        protected Circle(int x, int y, int radius, DrawAPI drawApi) {
+            super(drawApi);
             this.x = x;
             this.y = y;
             this.radius = radius;
@@ -50,7 +53,7 @@ public class BridgeDemo {
 
         @Override
         void draw() {
-            drawAPI.drawCircle(radius, x, y);
+            drawApi.drawCircle(radius, x, y);
         }
     }
 

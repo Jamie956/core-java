@@ -2,6 +2,7 @@ package com.jamie.pattern;
 
 /**
  * 抽象工厂模式
+ * 抽象工厂创建具体工厂（共同抽象类），具体工厂创建实例对象（共同接口）
  */
 public class AbstractFactoryTest {
     public static void main(String[] args) {
@@ -20,7 +21,6 @@ public class AbstractFactoryTest {
         blue.fill();
         Color green = color.getColor("Green");
         green.fill();
-
     }
 
     interface Shape {
@@ -52,21 +52,21 @@ public class AbstractFactoryTest {
         void fill();
     }
 
-    static class Red implements Color{
+    static class Red implements Color {
         @Override
         public void fill() {
             System.out.println("fill Red");
         }
     }
 
-    static class Green implements Color{
+    static class Green implements Color {
         @Override
         public void fill() {
             System.out.println("fill Green");
         }
     }
 
-    static class Blue implements Color{
+    static class Blue implements Color {
         @Override
         public void fill() {
             System.out.println("fill Blue");
@@ -75,15 +75,19 @@ public class AbstractFactoryTest {
 
     abstract static class AbstractFactory {
         public abstract Color getColor(String color);
+
         public abstract Shape getShape(String shape);
     }
 
-    static class ShapeFactory extends AbstractFactory{
+    static class ShapeFactory extends AbstractFactory {
         @Override
         public Color getColor(String color) {
             return null;
         }
 
+        /**
+         * 具体工厂创建对象实例
+         */
         @Override
         public Shape getShape(String shapeType) {
             switch (shapeType) {
@@ -100,7 +104,10 @@ public class AbstractFactoryTest {
         }
     }
 
-    static class ColorFactory extends AbstractFactory{
+    static class ColorFactory extends AbstractFactory {
+        /**
+         * 具体工厂创建对象实例
+         */
         @Override
         public Color getColor(String color) {
             switch (color) {
@@ -123,6 +130,9 @@ public class AbstractFactoryTest {
     }
 
     static class FactoryProducer {
+        /**
+         * 抽象工厂创建具体工厂实例，具体工厂继承同一个抽象类
+         */
         public static AbstractFactory getFactory(String choice) {
             switch (choice) {
                 case "SHAPE":
@@ -132,7 +142,7 @@ public class AbstractFactoryTest {
                 default:
                     break;
             }
-            return null;
+            throw new RuntimeException("对象不存在");
         }
     }
 

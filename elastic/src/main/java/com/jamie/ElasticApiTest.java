@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
@@ -185,4 +186,11 @@ public class ElasticApiTest {
         });
     }
 
+    /**
+     * 搜索词空格分词查询，全匹配
+     */
+    @Test
+    public void keywordSearchTest() {
+        QueryBuilders.matchQuery("title", "安徽 生姜").operator(Operator.AND).analyzer("whitespace");
+    }
 }

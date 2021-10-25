@@ -4,7 +4,7 @@ package com.jamie.pattern;
  * 抽象工厂模式
  * 抽象工厂创建具体工厂（共同抽象类），具体工厂创建实例对象（共同接口）
  */
-public class AbstractFactoryTest {
+public class AbstractFactoryDemo {
     public static void main(String[] args) {
         AbstractFactory shape = FactoryProducer.getFactory("SHAPE");
         Shape rectangle = shape.getShape("Rectangle");

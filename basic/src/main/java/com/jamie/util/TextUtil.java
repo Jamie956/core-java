@@ -7,44 +7,38 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TextUtil {
-
     /**
      * 数据比对
      * source文件的每一行数据转成数组元素，逐行去target文件找是否存在
      */
-    public static void lineCompare(String srcPath, String targetPath) throws IOException {
-        String srcText = FileUtils.readFileToString(new File(srcPath), "UTF-8");
-        String[] srcLines = srcText.split("\r\n");
-        String targetText = FileUtils.readFileToString(new File(targetPath), "UTF-8");
+    @Test
+    public void lineCompare() throws IOException {
+        String srcPath = "src/main/resources/source";
+        String targetPath = "src/main/resources/target";
+
+        String[] srcLineArray = FileUtils.readFileToString(new File(srcPath), "UTF-8").split("\r\n");
+        String[] targetLineArray = FileUtils.readFileToString(new File(targetPath), "UTF-8").split("\r\n");
 
         int matchCount = 0;
         int notMatchCount = 0;
         List<String> notMatchList = new ArrayList<>();
-        for (String line : srcLines) {
-            if (targetText.contains(line)) {
+        for (String srcLine : srcLineArray) {
+            boolean isContain = Arrays.stream(targetLineArray).anyMatch(e -> e.contains(srcLine));
+            if (isContain) {
                 matchCount++;
-                System.out.println("source文件当前行在target找到匹配数据: " + line);
             } else {
                 notMatchCount++;
-                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>source文件当前行在target找不到匹配数据: " + line);
-                notMatchList.add(line);
+                notMatchList.add(srcLine);
             }
         }
-
         System.out.println("---------------总数统计---------------");
-        System.out.println("匹配数目: " + matchCount);
-        System.out.println("不匹配数目: " + notMatchCount);
-        System.out.println("不匹配list: " + notMatchList);
-    }
-    @Test
-    public void testCompare() throws IOException {
-        lineCompare("src/main/resources/source", "src/main/resources/target");
+        System.out.println("匹配行数: " + matchCount);
+        System.out.println("不匹配行数: " + notMatchCount);
+        System.out.println("src在target找不到匹配的src行: " + notMatchList);
     }
 
     /**
@@ -52,23 +46,17 @@ public class TextUtil {
      */
     @Test
     public void findDup() throws IOException {
-        String text = FileUtils.readFileToString(new File("src/main/resources/source"), "UTF-8");
-        //每行转成数组
-        String[] lines = text.split("\r\n");
-        //每一行和整个数组比较，统计出现次数
-        for (String line : lines) {
-            int count = 0;
-            for (String ele : lines) {
-                if (ele.equals(line)) {
-                    count++;
-                }
-            }
-            if (count > 1) {
-                System.out.println(line + " 总共出现了 " + count + "次");
-            }
-        }
-    }
+        String[] lines = FileUtils.readFileToString(new File("src/main/resources/source"), "UTF-8").split("\r\n");
 
+        Map<String, Integer> map = new HashMap<>();
+        for (String line : lines) {
+            Integer value = map.get(line) == null ? 1 : map.get(line) + 1;
+            map.put(line, value);
+        }
+
+        Map<String, Integer> collect = map.entrySet().stream().filter(e -> e.getValue() > 1).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        collect.forEach((key, value) -> System.out.println("重复行=" + key + "；重复次数=" + value));
+    }
 
     /**
      * 统计非法数字
@@ -84,11 +72,11 @@ public class TextUtil {
                 Float.parseFloat(line);
             } catch (NumberFormatException e) {
                 count++;
-                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> "+line);
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> " + line);
                 e.printStackTrace();
             }
         }
-        System.out.println("count="+count);
+        System.out.println("count=" + count);
     }
 
     /**
@@ -97,7 +85,7 @@ public class TextUtil {
     @Test
     public void countByte() {
         int length = "撒打算打算大多数地方不回家撒打算大的".getBytes().length;
-        System.out.println(length+"b");
+        System.out.println(length + "b");
     }
 
     /**
@@ -122,11 +110,11 @@ public class TextUtil {
         FileWriter fileWriter = new FileWriter("src/main/resources/output");
         for (String srcLine : srcLines) {
             String content = map.get(srcLine);
-            content = HtmlUtil.removeHtmlTag(content,"img");
+            content = HtmlUtil.removeHtmlTag(content, "img");
             if (content == null) {
                 content = "";
             }
-            String ret = srcLine+"^"+content+"\r\n";
+            String ret = srcLine + "^" + content + "\r\n";
             fileWriter.write(ret);
         }
         fileWriter.flush();

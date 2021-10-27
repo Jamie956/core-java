@@ -12,9 +12,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 public class FastJsonUtil {
-
     /**
      * 递归遍历json 全部节点
      */
@@ -126,4 +124,21 @@ public class FastJsonUtil {
         String jsonString123 = JSON.toJSONString(jsonArray);
 
     }
+
+    @Data
+    static class DateTest {
+        private String author;
+        @JSONField(format = "yyyy-MM-dd")
+        private Date pubTime;
+    }
+
+    /**
+     * 转换日期格式(yyyy-MM-d) json
+     */
+    @Test
+    public void jsonStr2ObjectDateField() {
+        String jsonStr = "{ \"author\": \"环京津网\", \"pub_time\": \"2020-11-5\" }";
+        DateTest dateTest = JSON.parseObject(jsonStr, DateTest.class);
+    }
+
 }

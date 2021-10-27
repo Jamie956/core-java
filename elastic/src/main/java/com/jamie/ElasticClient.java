@@ -1,6 +1,7 @@
 package com.jamie;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import org.apache.http.HttpHost;
@@ -93,6 +94,15 @@ public class ElasticClient {
     public void bulkCreateDoc(List<Object> list) throws IOException {
         BulkRequest bulkRequest = new BulkRequest();
         list.forEach(e -> bulkRequest.add(new IndexRequest(indices, type).source(JSONObject.toJSONString(e), XContentType.JSON)));
+        client.bulk(bulkRequest, RequestOptions.DEFAULT);
+    }
+
+    /**
+     * 批量创建文档
+     */
+    public void bulkCreateDocByJSONArray(JSONArray jsonArray) throws IOException {
+        BulkRequest bulkRequest = new BulkRequest();
+        jsonArray.forEach(e -> bulkRequest.add(new IndexRequest(indices, type).source(JSONObject.toJSONString(e), XContentType.JSON)));
         client.bulk(bulkRequest, RequestOptions.DEFAULT);
     }
 

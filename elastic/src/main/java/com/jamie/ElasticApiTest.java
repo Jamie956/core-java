@@ -1,5 +1,8 @@
 package com.jamie;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +19,9 @@ import org.elasticsearch.search.aggregations.metrics.stats.extended.ExtendedStat
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -32,7 +38,7 @@ public class ElasticApiTest {
         private Integer age;
         private String birthday;
         private String interests;
-        @JSONField(format="yyyy-MM-dd")
+        @JSONField(format = "yyyy-MM-dd")
         private Date left;
 
         public User(String name, String address, Integer age, String birthday, String interests) {
@@ -77,6 +83,32 @@ public class ElasticApiTest {
         map.put("1", new User("wangwu", "gdfgfdgfdg", 26, "1998-10-12", "111"));
         map.put("2", new User("zhangsan", "bei jing chao yang qu", 29, "1988-10-12", "hfghfg"));
         esClient.bulkCreateDoc(map);
+    }
+
+    public JSONArray getMockData() {
+        try (
+                InputStream inputStream = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("data.json"));
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.defaultCharset())
+        ) {
+            StringBuilder sb = new StringBuilder();
+            char[] buffer = new char[1024];
+            int len = 0;
+            while ((len = inputStreamReader.read(buffer)) != -1) {
+                sb.append(new String(buffer, 0, len));
+            }
+            JSONObject json = JSON.parseObject(sb.toString());
+            return json.getJSONArray("hits");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Test
+    public void bulkCreateDocByJSONArrayTest() throws IOException {
+        ElasticClient esClient = new ElasticClient("article_api", "index");
+        JSONArray mockData = getMockData();
+        esClient.bulkCreateDocByJSONArray(mockData);
     }
 
     @Test

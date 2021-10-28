@@ -126,6 +126,9 @@ public class IOUtil {
         }
     }
 
+    /**
+     * 文件输入流读取 data.json
+     */
     @Test
     public void getMockData() {
         try (InputStream inputStream = new FileInputStream("data.json");

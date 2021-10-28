@@ -92,6 +92,22 @@ public class StreamTest {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
+    /**
+     * json double 排序
+     */
+    @Test
+    public void doubleSort() {
+        JSONObject j1 = new JSONObject();
+        j1.put("value", 0.01);
+        JSONObject j2 = new JSONObject();
+        j2.put("value", 7.11);
+        JSONObject j3 = new JSONObject();
+        j3.put("value", 3.01);
+        List<JSONObject> list = Arrays.asList(j1, j2, j3);
+        List<JSONObject> value = list.stream().sorted(Comparator.comparingDouble(e -> e.getDoubleValue("value"))).collect(Collectors.toList());
+        value.forEach(System.out::print);
+    }
+
     @Test
     public void mapm() {
         //从对象列表中提取某一列

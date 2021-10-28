@@ -1,4 +1,4 @@
-package com.jamie.io;
+package com.jamie;
 
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
  * 直接缓冲区 allocateDirect：在物理内存中创建，比较高效
  * 非直接缓冲区 allocate：在JVM 中创建
  */
-public class BufferTest {
+public class NIOBufferTest {
     /**
      * 字节缓冲区 ByteBuffer API
      */

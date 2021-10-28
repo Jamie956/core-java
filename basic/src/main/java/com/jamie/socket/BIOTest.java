@@ -1,4 +1,4 @@
-package com.jamie.io;
+package com.jamie.socket;
 
 import com.jamie.concurrency.ThreadUtil;
 import org.junit.Test;
@@ -9,8 +9,6 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class BIOTest {
     /**

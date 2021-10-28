@@ -1,4 +1,4 @@
-package com.jamie.io;
+package com.jamie.socket;
 
 import org.junit.Test;
 

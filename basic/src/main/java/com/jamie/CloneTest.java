@@ -1,12 +1,11 @@
 package com.jamie;
 
-import com.jamie.util.DeSerUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.Test;
 
-import java.io.Serializable;
+import java.io.*;
 
 public class CloneTest {
     @Data
@@ -50,19 +49,30 @@ public class CloneTest {
 
     /**
      * 深克隆，引用类型也会被克隆
+     * 对象 -> 对象流输出 -> 数组输出流 -> 数组输入流 -> 对象输出流
      */
     @Test
-    public void deepClone() {
-        try {
-            User user = new User(new Address("stress1"));
-            byte[] bytes = DeSerUtil.object2ByteArray(user);
-            User clone = (User) DeSerUtil.byte2Object(bytes);
+    public void deepClone() throws IOException {
+        User user = new User(new Address("stress1"));
+        try (
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)
+        ) {
+            objectOutputStream.writeObject(user);
+            byteArrayOutputStream.flush();
+            byte[] bytes = byteArrayOutputStream.toByteArray();
 
-            System.out.println(user == clone);
-            System.out.println(user.getAddress() == clone.getAddress());
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            try (
+                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+                    ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)
+            ) {
+                User clone = (User) objectInputStream.readObject();
+                System.out.println(user == clone);
+                //全局引用类型变量也能克隆
+                System.out.println(user.getAddress() == clone.getAddress());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 

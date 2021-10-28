@@ -101,4 +101,12 @@ public class StringUtil {
         System.out.println(caseFormat.convert("userName"));
     }
 
+    /**
+     * 统计字符串byte 长度
+     */
+    @Test
+    public void countByte() {
+        int length = "撒打算打算大多数地方不回家撒打算大的".getBytes().length;
+        System.out.println(length + "b");
+    }
 }

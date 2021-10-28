@@ -1,4 +1,4 @@
-package com.jamie;
+package com.jamie.algo;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TreeTest {
+public class TreeCreate {
     @Data
     static class Node{
         private String id;

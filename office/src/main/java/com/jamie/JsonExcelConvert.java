@@ -1,7 +1,9 @@
 package com.jamie;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -9,30 +11,42 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Test;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class JsonExcelConvert {
-    public static void main(String[] args) throws Exception {
-        //json2Excel
-        JSONArray jsonArray = new JSONArray();
-        JSONObject json1 = new JSONObject();
-        json1.put("name", "tim");
-        json1.put("age", "11");
-        JSONObject json2 = new JSONObject();
-        json2.put("name", "tom");
-        json2.put("age", "21");
-        jsonArray.add(json1);
-        jsonArray.add(json2);
+//    public static void main(String[] args) throws Exception {
+//        //json2Excel
+//        JSONArray jsonArray = new JSONArray();
+//        JSONObject json1 = new JSONObject();
+//        json1.put("name", "tim");
+//        json1.put("age", "11");
+//        JSONObject json2 = new JSONObject();
+//        json2.put("name", "tom");
+//        json2.put("age", "21");
+//        jsonArray.add(json1);
+//        jsonArray.add(json2);
+//
+//        json2Excel(jsonArray, "D:/test.xlsx");
+//
+//        //excel2json
+//        excel2json("C:\\Users\\tgwzz\\Downloads\\heimao2.xls",
+//                "C:\\Users\\tgwzz\\Downloads\\heimao_output.txt");
+//    }
 
-        json2Excel(jsonArray, "D:/test.xlsx");
+    @Test
+    public void esData2Excel() throws IOException {
+        String data = FileUtils.readFileToString(new File("src/main/resources/data.json"), "UTF-8");
+        List<JSONObject> collect = JSON.parseObject(data).getJSONArray("hits").stream()
+                .map(e -> JSON.parseObject(e.toString()).getJSONObject("_source")).collect(Collectors.toList());
 
-        //excel2json
-        excel2json("C:\\Users\\tgwzz\\Downloads\\heimao2.xls",
-                "C:\\Users\\tgwzz\\Downloads\\heimao_output.txt");
+        JSONArray arr = JSON.parseArray(collect.toString());
+        json2Excel(arr, "src/main/resources/output.xlsx");
     }
 
     /**

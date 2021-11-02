@@ -22,31 +22,46 @@
 
     <build>
         <plugins>
+<!-- 打包依赖到jar-->
+<!--            <plugin>-->
+<!--                &lt;!&ndash; NOTE: We don't need a groupId specification because the group is-->
+<!--             org.apache.maven.plugins ...which is assumed by default. &ndash;&gt;-->
+<!--                <artifactId>maven-assembly-plugin</artifactId>-->
+<!--                <version>3.3.0</version>-->
+<!--                <configuration>-->
+<!--                    <descriptorRefs>-->
+<!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
+<!--                    </descriptorRefs>-->
+<!--                    &lt;!&ndash; 打包可执行应用指定入口 &ndash;&gt;-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <mainClass>com.cat.Application</mainClass>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
+<!--                        <phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
+<!--                        <goals>-->
+<!--                            <goal>single</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
+<!-- 打包命令 mvn clean assembly:single -->
             <plugin>
-                <!-- NOTE: We don't need a groupId specification because the group is
-             org.apache.maven.plugins ...which is assumed by default. -->
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <!-- 打包可执行应用指定入口 -->
-                    <archive>
-                        <manifest>
-                            <mainClass>com.cat.Application</mainClass>
-                        </manifest>
-                    </archive>
+                    <filters>
+                        <filter>src/assembly/filter.properties</filter>
+                    </filters>
+                    <descriptors>
+                        <descriptor>src/assembly/distribution2.xml</descriptor>
+                    </descriptors>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 public class ElasticClient {
     private String indices;
     private String type;
-    private static RestHighLevelClient client;
+    public static RestHighLevelClient client;
 
     static {
         HttpHost http = new HttpHost("localhost", 9200);

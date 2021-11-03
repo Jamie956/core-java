@@ -7,6 +7,9 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
+import org.elasticsearch.action.admin.indices.get.GetIndexResponse;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -224,5 +227,22 @@ public class ElasticApiTest {
     @Test
     public void keywordSearchTest() {
         QueryBuilders.matchQuery("title", "安徽 生姜").operator(Operator.AND).analyzer("whitespace");
+    }
+
+    /**
+     * 获取索引文档的全部字段
+     */
+    @Test
+    public void getEsMappingProperty() throws IOException {
+        String index = "test_index";
+        String type = "index";
+
+        GetIndexRequest request = new GetIndexRequest().indices(index);
+        GetIndexResponse response = ElasticClient.client.indices().get(request, RequestOptions.DEFAULT);
+
+        JSONObject jsonResponse = JSON.parseObject(response.toString());
+        Set<String> fields = jsonResponse.getJSONObject(index).getJSONObject("mappings").getJSONObject(type).getJSONObject("properties").keySet();
+
+        System.out.println(fields);
     }
 }

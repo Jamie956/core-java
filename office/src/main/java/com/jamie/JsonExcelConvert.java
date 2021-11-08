@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -13,7 +12,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -76,14 +74,11 @@ public class JsonExcelConvert {
              FileWriter fileWriter = new FileWriter(destPath);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
             Sheet sheet = workbook.getSheetAt(0);
-            List<String> headers = excelHeaderList(sheet.getRow(0));
+            Row firstRow = sheet.getRow(0);
 
-            for (Row row : sheet) {
-                //排除表头
-                if (row.getRowNum() == 0) {
-                    continue;
-                }
-                JSONObject json = excelRowToJson(headers, row);
+            for (int i = 1; i < sheet.getLastRowNum() + 1; i++) {
+                Row row = sheet.getRow(i);
+                JSONObject json = excelRowToJson(firstRow, row);
                 bufferedWriter.write(json.toJSONString() + "\r\n");
             }
             bufferedWriter.flush();
@@ -91,38 +86,21 @@ public class JsonExcelConvert {
     }
 
     /**
-     * excel首行作为header
-     */
-    private static List<String> excelHeaderList(Row row) {
-        List<String> headers = new ArrayList<>();
-        for (Cell cell : row) {
-
-            String header = cell.getStringCellValue();
-            if (StringUtils.isNotBlank(header)) {
-                if (headers.contains(header)) {
-                    throw new RuntimeException("存在重复表头");
-                }
-                headers.add(header);
-            }
-        }
-        return headers;
-    }
-
-    /**
      * 将excel 的一行数据转成json
      */
-    private static JSONObject excelRowToJson(List<String> headers, Row row) {
+    private static JSONObject excelRowToJson(Row headers, Row row) {
         JSONObject json = new JSONObject();
-        for (int i = 0; i < headers.size(); i++) {
-            String key = headers.get(i);
+
+        for (int i = 0; i < row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
+            String header = headers.getCell(i).getStringCellValue();
             if (cell != null) {
                 CellType cellType = cell.getCellType();
                 if (cellType.equals(CellType.NUMERIC)) {
-                    json.put(key, cell.getNumericCellValue());
+                    json.put(header, cell.getNumericCellValue());
                 }
                 if (cellType.equals(CellType.STRING)) {
-                    json.put(key, cell.getRichStringCellValue().toString());
+                    json.put(header, cell.getRichStringCellValue().toString());
                 }
             }
         }

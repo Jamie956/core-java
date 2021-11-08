@@ -5,8 +5,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -21,24 +19,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class JsonExcelConvert {
-//    public static void main(String[] args) throws Exception {
-//        //json2Excel
-//        JSONArray jsonArray = new JSONArray();
-//        JSONObject json1 = new JSONObject();
-//        json1.put("name", "tim");
-//        json1.put("age", "11");
-//        JSONObject json2 = new JSONObject();
-//        json2.put("name", "tom");
-//        json2.put("age", "21");
-//        jsonArray.add(json1);
-//        jsonArray.add(json2);
-//
-//        json2Excel(jsonArray, "D:/test.xlsx");
-//
-//        //excel2json
-//        excel2json("C:\\Users\\tgwzz\\Downloads\\heimao2.xls",
-//                "C:\\Users\\tgwzz\\Downloads\\heimao_output.txt");
-//    }
 
     @Test
     public void esData2Excel() throws IOException {
@@ -81,49 +61,72 @@ public class JsonExcelConvert {
         }
     }
 
+    @Test
+    public void excel2jsonTest() throws Exception {
+//        excel2json("src/main/resources/test.xlsx", "src/main/resources/output.json");
+        excel2json("C:\\Users\\tgwzz\\Desktop\\20211103_舆情数据_1102导出.xlsx", "src/main/resources/output.json");
+    }
+
     /**
      * excel文件 转成json 文件
      */
     public static void excel2json(String srcPath, String destPath) throws Exception {
         try (InputStream inputStream = new FileInputStream(srcPath);
-             HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
              FileWriter fileWriter = new FileWriter(destPath);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
-            //读取索引0的sheet
-            HSSFSheet sheet = workbook.getSheetAt(0);
-            //表头
-            List<String> headers = new ArrayList<>();
+            Sheet sheet = workbook.getSheetAt(0);
+            List<String> headers = excelHeaderList(sheet.getRow(0));
+
             for (Row row : sheet) {
+                //排除表头
                 if (row.getRowNum() == 0) {
-                    for (Cell cell : row) {
-                        String header = cell.getStringCellValue();
-                        if (StringUtils.isNotBlank(header)) {
-                            if (headers.contains(header)) {
-                                throw new RuntimeException("存在重复表头");
-                            }
-                            headers.add(cell.getStringCellValue());
-                        }
-                    }
                     continue;
                 }
-                JSONObject json = new JSONObject();
-                for (int i = 0; i < headers.size(); i++) {
-                    String key = headers.get(i);
-                    Cell cell = row.getCell(i);
-                    if (cell != null) {
-                        CellType cellType = cell.getCellType();
-                        if (cellType.equals(CellType.NUMERIC)) {
-                            json.put(key, cell.getNumericCellValue());
-                        }
-                        if (cellType.equals(CellType.STRING)) {
-                            json.put(key, cell.getRichStringCellValue().toString());
-                        }
-                    }
-                }
+                JSONObject json = excelRowToJson(headers, row);
                 bufferedWriter.write(json.toJSONString() + "\r\n");
             }
             bufferedWriter.flush();
         }
+    }
+
+    /**
+     * excel首行作为header
+     */
+    private static List<String> excelHeaderList(Row row) {
+        List<String> headers = new ArrayList<>();
+        for (Cell cell : row) {
+
+            String header = cell.getStringCellValue();
+            if (StringUtils.isNotBlank(header)) {
+                if (headers.contains(header)) {
+                    throw new RuntimeException("存在重复表头");
+                }
+                headers.add(header);
+            }
+        }
+        return headers;
+    }
+
+    /**
+     * 将excel 的一行数据转成json
+     */
+    private static JSONObject excelRowToJson(List<String> headers, Row row) {
+        JSONObject json = new JSONObject();
+        for (int i = 0; i < headers.size(); i++) {
+            String key = headers.get(i);
+            Cell cell = row.getCell(i);
+            if (cell != null) {
+                CellType cellType = cell.getCellType();
+                if (cellType.equals(CellType.NUMERIC)) {
+                    json.put(key, cell.getNumericCellValue());
+                }
+                if (cellType.equals(CellType.STRING)) {
+                    json.put(key, cell.getRichStringCellValue().toString());
+                }
+            }
+        }
+        return json;
     }
 
 }

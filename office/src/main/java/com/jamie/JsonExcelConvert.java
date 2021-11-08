@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -108,8 +109,16 @@ public class JsonExcelConvert {
                 JSONObject json = new JSONObject();
                 for (int i = 0; i < headers.size(); i++) {
                     String key = headers.get(i);
-                    String value = row.getCell(i).getRichStringCellValue().toString();
-                    json.put(key, value);
+                    Cell cell = row.getCell(i);
+                    if (cell != null) {
+                        CellType cellType = cell.getCellType();
+                        if (cellType.equals(CellType.NUMERIC)) {
+                            json.put(key, cell.getNumericCellValue());
+                        }
+                        if (cellType.equals(CellType.STRING)) {
+                            json.put(key, cell.getRichStringCellValue().toString());
+                        }
+                    }
                 }
                 bufferedWriter.write(json.toJSONString() + "\r\n");
             }

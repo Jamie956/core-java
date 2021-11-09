@@ -24,7 +24,6 @@
         <module>hive-udf</module>
         <module>file-convert</module>
         <module>office</module>
-        <module>mvn-plugins</module>
     </modules>
 
     <properties>

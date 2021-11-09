@@ -62,7 +62,7 @@ public class JsonExcelConvert {
     @Test
     public void excel2jsonTest() throws Exception {
 //        excel2json("src/main/resources/test.xlsx", "src/main/resources/output.json");
-        excel2json("C:\\Users\\tgwzz\\Desktop\\20211103_舆情数据_1102导出.xlsx", "src/main/resources/output.json");
+        excel2json("C:\\Users\\tgwzz\\Desktop\\11.xlsx", "src/main/resources/output.json");
     }
 
     /**

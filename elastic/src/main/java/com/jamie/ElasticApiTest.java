@@ -7,9 +7,16 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexResponse;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -32,6 +39,14 @@ import java.util.*;
  * @date 2021/9/7 16:12
  */
 public class ElasticApiTest {
+    public static RestHighLevelClient client;
+
+    static {
+        HttpHost http = new HttpHost("localhost", 9200);
+        RestClientBuilder builder = RestClient.builder(http);
+        client =  new RestHighLevelClient(builder);
+    }
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -244,5 +259,30 @@ public class ElasticApiTest {
         Set<String> fields = jsonResponse.getJSONObject(index).getJSONObject("mappings").getJSONObject(type).getJSONObject("properties").keySet();
 
         System.out.println(fields);
+    }
+
+    /**
+     * 批量更新，不存在就创建
+     */
+    @Test
+    public void batchUpdateInsert() throws IOException {
+        String index = "my_index";
+        String type = "_doc";
+
+        JSONObject doc1 = new JSONObject();
+        doc1.put("name", "tom");
+        doc1.put("age", 11);
+        UpdateRequest updateRequest1 = new UpdateRequest(index, type, "10001").doc(doc1).docAsUpsert(true);
+
+        JSONObject doc2 = new JSONObject();
+        doc2.put("name", "tim");
+        doc2.put("age", 22);
+        UpdateRequest updateRequest2 = new UpdateRequest(index, type, "10002").doc(doc2).docAsUpsert(true);
+
+        BulkRequest request = new BulkRequest();
+        request.add(updateRequest1);
+        request.add(updateRequest2);
+
+        BulkResponse response = client.bulk(request, RequestOptions.DEFAULT);
     }
 }

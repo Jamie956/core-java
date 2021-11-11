@@ -93,4 +93,34 @@ public class FastJsonUtil {
         DateTest dateTest = JSON.parseObject(jsonStr, DateTest.class);
     }
 
+    /**
+     * 判断Json 值是 数组或者json 还是字符串
+     */
+    public static Object jsonStrType(String jsonStr) {
+
+        Object object = null;
+        try {
+            object = JSON.parse(jsonStr);
+        } catch (Exception e) {
+            System.out.println(jsonStr+" 是 字符串");
+            return jsonStr;
+        }
+        if (object instanceof JSONObject) {
+            System.out.println(jsonStr + " 是 json");
+            return object;
+        } else if (object instanceof JSONArray) {
+            System.out.println(jsonStr+" 是 数组");
+            return object;
+        }
+
+        throw new RuntimeException("未知类型");
+    }
+
+    @Test
+    public void jsonStrTypeTest() {
+        Object o1 = jsonStrType("[\"a\",\"b\",\"c\"]");
+        Object o2 = jsonStrType("{\"aaa\" : \"111\"}");
+        Object o3 = jsonStrType("{\"aaa\" : \"111\"");
+        Object o4 = jsonStrType("asdasfsdg");
+    }
 }

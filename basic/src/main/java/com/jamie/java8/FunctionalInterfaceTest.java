@@ -10,32 +10,40 @@ import java.util.stream.Stream;
 
 public class FunctionalInterfaceTest {
 
+    /**
+     * Predicate: <T> -> boolean
+     */
     @Test
     public void predicateFilterTest() {
-        //@FunctionalInterface  <T> -> boolean
         Predicate<String> predicate = s -> s.length() > 5;
         //集合按 predicate 条件过滤
         List<String> collect = Stream.of("hello", "java8", "function", "predicate").filter(predicate).collect(Collectors.toList());
         collect.forEach(System.out::println);
     }
 
+    /**
+     * Function: <T> -> <V>
+     */
     @Test
     public void testFunction() {
-        //@FunctionalInterface  <T> -> <V>
         Function<String, String> function = String::toUpperCase;
         String ret = function.apply("abcdefg");
     }
 
+    /**
+     * Supplier: () -> <T>
+     */
     @Test
     public void testSupplier() {
-        //@FunctionalInterface () -> <T>
         Supplier<Integer> supplier = () -> (int) (Math.random() * 100);
         Integer integer = supplier.get();
     }
 
+    /**
+     * Consumer: <T> -> void
+     */
     @Test
     public void testConsumer() {
-        //@FunctionalInterface  <T> -> void
         Consumer<Integer> consumer = s -> System.out.println(s * 3);
         consumer.accept(3);
     }
@@ -133,7 +141,7 @@ public class FunctionalInterfaceTest {
     }
 
     /**
-     * BiConsumer< T, V > 接收T，V对象, 无返回
+     * BiConsumer: < T, V > -> void
      */
     @Test
     public void biConsumer() {

@@ -93,34 +93,40 @@ public class FastJsonUtil {
         DateTest dateTest = JSON.parseObject(jsonStr, DateTest.class);
     }
 
-    /**
-     * 判断Json 值是 数组或者json 还是字符串
-     */
-    public static Object jsonStrType(String jsonStr) {
+    @Test
+    public void jsonStrTypeTest() {
+        String s1 = "[\"a\",\"b\",\"c\"]";
+        String s2 = "{\"aaa\" : \"111\"}";
+        String s3 = "{\"aaa\" : \"111\"";
+        String s4 = "asdasfsdg";
 
-        Object object = null;
+        System.out.println(s1.getClass().getTypeName());
+        System.out.println(s2.getClass().getTypeName());
+        System.out.println(s3.getClass().getTypeName());
+        System.out.println(s4.getClass().getTypeName());
+
+        Object o1 = checkAndConvertStrToJson("[\"a\",\"b\",\"c\"]");
+        Object o2 = checkAndConvertStrToJson("{\"aaa\" : \"111\"}");
+        Object o3 = checkAndConvertStrToJson("{\"aaa\" : \"111\"");
+        Object o4 = checkAndConvertStrToJson("asdasfsdg");
+
+        System.out.println("-------------------");
+        System.out.println(o1.getClass().getTypeName());
+        System.out.println(o2.getClass().getTypeName());
+        System.out.println(o3.getClass().getTypeName());
+        System.out.println(o4.getClass().getTypeName());
+    }
+
+    /**
+     * 字符串转换成 json object 或者json array 或者字符串
+     */
+    public static Object checkAndConvertStrToJson(String jsonStr) {
+        Object object;
         try {
             object = JSON.parse(jsonStr);
         } catch (Exception e) {
-            System.out.println(jsonStr+" 是 字符串");
             return jsonStr;
         }
-        if (object instanceof JSONObject) {
-            System.out.println(jsonStr + " 是 json");
-            return object;
-        } else if (object instanceof JSONArray) {
-            System.out.println(jsonStr+" 是 数组");
-            return object;
-        }
-
-        throw new RuntimeException("未知类型");
-    }
-
-    @Test
-    public void jsonStrTypeTest() {
-        Object o1 = jsonStrType("[\"a\",\"b\",\"c\"]");
-        Object o2 = jsonStrType("{\"aaa\" : \"111\"}");
-        Object o3 = jsonStrType("{\"aaa\" : \"111\"");
-        Object o4 = jsonStrType("asdasfsdg");
+        return object;
     }
 }

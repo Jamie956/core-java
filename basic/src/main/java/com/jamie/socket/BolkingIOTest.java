@@ -10,7 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class BIOTest {
+public class BolkingIOTest {
     /**
      * 阻塞IO，服务端
      * 终端连接服务端：telnet 127.0.0.1 6666

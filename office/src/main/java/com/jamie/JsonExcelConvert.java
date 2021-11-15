@@ -1,9 +1,7 @@
 package com.jamie;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -14,18 +12,28 @@ import org.junit.Test;
 import java.io.*;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class JsonExcelConvert {
 
     @Test
     public void esData2Excel() throws IOException {
-        String data = FileUtils.readFileToString(new File("src/main/resources/data.json"), "UTF-8");
-        List<JSONObject> collect = JSON.parseObject(data).getJSONArray("hits").stream()
-                .map(e -> JSON.parseObject(e.toString()).getJSONObject("_source")).collect(Collectors.toList());
+//        String data = FileUtils.readFileToString(new File("src/main/resources/data.json"), "UTF-8");
+//        List<JSONObject> collect = JSON.parseObject(data).getJSONArray("hits").stream()
+//                .map(e -> JSON.parseObject(e.toString()).getJSONObject("_source")).collect(Collectors.toList());
+//
+//        JSONArray arr = JSON.parseArray(collect.toString());
 
-        JSONArray arr = JSON.parseArray(collect.toString());
-        json2Excel(arr, "src/main/resources/output.xlsx");
+        JSONArray jsonArray = new JSONArray();
+        JSONObject j1 = new JSONObject();
+        j1.put("name", "tim");
+        j1.put("age", "11");
+        JSONObject j2 = new JSONObject();
+        j2.put("name", "tom");
+        j2.put("age", "22");
+        jsonArray.add(j1);
+        jsonArray.add(j2);
+
+        json2Excel(jsonArray, "src/main/resources/output.xlsx");
     }
 
     /**

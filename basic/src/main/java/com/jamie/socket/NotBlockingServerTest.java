@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class NIOTest {
+public class NotBlockingServerTest {
     //客户端
     @Test
     public void client() throws IOException {

@@ -20,7 +20,6 @@
         <module>mybatis</module>
         <module>elastic</module>
         <module>basic</module>
-        <module>spring</module>
         <module>hive-udf</module>
         <module>file-convert</module>
         <module>office</module>
@@ -178,19 +177,6 @@
                 <groupId>freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>2.3.8</version>
-            </dependency>
-
-            <!-- Spring -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>4.3.14.RELEASE</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
-                <version>5.2.4.RELEASE</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

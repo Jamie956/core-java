@@ -16,11 +16,8 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>mybatis</module>
-        <module>elastic</module>
         <module>basic</module>
-        <module>file-convert</module>
-        <module>office</module>
+        <module>utils</module>
     </modules>
 
     <properties>
@@ -60,32 +57,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- 数据库 -->
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql-connector.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>${mybatis.version}</version>
-            </dependency>
-
-            <!-- elasticsearch -->
-            <dependency>
-                <groupId>org.elasticsearch</groupId>
-                <artifactId>elasticsearch</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                <version>${elasticsearch-client.version}</version>
-            </dependency>
-
             <!-- 工具 -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
@@ -155,6 +126,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
 </project>

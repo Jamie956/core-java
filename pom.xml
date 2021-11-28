@@ -16,11 +16,9 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>bigdata</module>
         <module>mybatis</module>
         <module>elastic</module>
         <module>basic</module>
-        <module>hive-udf</module>
         <module>file-convert</module>
         <module>office</module>
     </modules>
@@ -62,29 +60,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- 分布式、大数据 -->
-            <dependency>
-                <groupId>org.apache.hadoop</groupId>
-                <artifactId>hadoop-common</artifactId>
-                <version>${hadoop-common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.hadoop</groupId>
-                <artifactId>hadoop-client</artifactId>
-                <version>${hadoop-client.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.hadoop</groupId>
-                <artifactId>hadoop-hdfs</artifactId>
-                <version>${hadoop-hdfs.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.zookeeper</groupId>
-                <artifactId>zookeeper</artifactId>
-                <version>${zookeeper.version}</version>
-            </dependency>
-
             <!-- 数据库 -->
             <dependency>
                 <groupId>mysql</groupId>

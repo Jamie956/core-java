@@ -1,4 +1,4 @@
-package com.jamie.pattern;
+package com.jamie.design.pattern;
 
 import lombok.Getter;
 import lombok.Setter;

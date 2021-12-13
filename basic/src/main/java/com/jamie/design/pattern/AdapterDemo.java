@@ -1,4 +1,4 @@
-package com.jamie.pattern;
+package com.jamie.design.pattern;
 
 /**
  * 适配器模式

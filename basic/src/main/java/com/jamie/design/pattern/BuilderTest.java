@@ -1,4 +1,4 @@
-package com.jamie.pattern;
+package com.jamie.design.pattern;
 
 import java.util.ArrayList;
 import java.util.List;

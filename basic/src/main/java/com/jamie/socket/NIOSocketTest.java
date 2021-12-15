@@ -11,7 +11,7 @@ import java.nio.channels.SocketChannel;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-public class XIOTest {
+public class NIOSocketTest {
 
     //客户端
     @Test
@@ -42,19 +42,14 @@ public class XIOTest {
         sChannel.close();
     }
 
-
     @Test
     public void server() throws IOException {
         ServerSocketChannel ssChannel = ServerSocketChannel.open();
-
-        FileChannel outChannel = FileChannel.open(Paths.get("2.jpg"), StandardOpenOption.WRITE, StandardOpenOption.CREATE);
-
         ssChannel.bind(new InetSocketAddress(9898));
-
         SocketChannel sChannel = ssChannel.accept();
 
         ByteBuffer buf = ByteBuffer.allocate(1024);
-
+        FileChannel outChannel = FileChannel.open(Paths.get("2.jpg"), StandardOpenOption.WRITE, StandardOpenOption.CREATE);
         while (sChannel.read(buf) != -1) {
             buf.flip();
             outChannel.write(buf);

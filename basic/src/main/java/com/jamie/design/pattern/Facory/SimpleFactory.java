@@ -1,9 +1,13 @@
-package com.jamie.design.pattern;
+package com.jamie.design.pattern.Facory;
 
 /**
- * 工厂模式
+ * 简单工厂模式 -- 静态工厂模式
+ * 缺点：每增加一种类型都要去修改工厂方法，违背开闭原则
+ * <p>
+ * 工厂按类型创建对象
+ * 被创建的对象 实现共同接口/继承同一个类
  */
-public class FactoryTest {
+public class SimpleFactory {
     public static void main(String[] args) {
         ShapeFactory shapeFactory = new ShapeFactory();
         Shape rectangle = shapeFactory.getShape("Rectangle");
@@ -55,11 +59,9 @@ public class FactoryTest {
         }
     }
 
-    /**
-     * 工厂根据 shapeType 创建新实例
-     */
     static class ShapeFactory {
         public Shape getShape(String shapeType) {
+            //根据 shapeType 创建新实例
             switch (shapeType) {
                 case "Rectangle":
                     return new Rectangle();

@@ -1,4 +1,4 @@
-package com.jamie.design.pattern.Facory;
+package com.jamie.design.pattern.factory;
 
 /**
  * 简单工厂模式 -- 静态工厂模式

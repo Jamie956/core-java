@@ -1,4 +1,4 @@
-package com.jamie.design.pattern.Facory.method2;
+package com.jamie.design.pattern.factory.method2;
 
 /**
  * Share 模版

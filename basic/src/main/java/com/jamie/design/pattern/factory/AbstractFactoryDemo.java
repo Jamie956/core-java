@@ -1,4 +1,4 @@
-package com.jamie.design.pattern;
+package com.jamie.design.pattern.factory;
 
 /**
  * 抽象工厂模式

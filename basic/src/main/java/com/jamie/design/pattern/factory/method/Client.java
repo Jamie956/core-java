@@ -1,4 +1,4 @@
-package com.jamie.design.pattern.Facory.method;
+package com.jamie.design.pattern.factory.method;
 
 public class Client {
     public static void main(String[] args) {

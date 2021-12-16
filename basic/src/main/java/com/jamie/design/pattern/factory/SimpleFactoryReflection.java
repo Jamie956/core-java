@@ -1,4 +1,4 @@
-package com.jamie.design.pattern.Facory;
+package com.jamie.design.pattern.factory;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.jamie.design.pattern.Facory.method2;
+package com.jamie.design.pattern.factory.method2;
 
 /**
  * 分享成功订单

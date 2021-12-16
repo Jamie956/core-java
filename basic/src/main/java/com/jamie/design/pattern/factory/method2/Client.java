@@ -1,4 +1,4 @@
-package com.jamie.design.pattern.Facory.method2;
+package com.jamie.design.pattern.factory.method2;
 
 /**
  * 当对象的创建逻辑比较复杂，不只是简单的 new 一下就可以，而是要组合其他类对象，

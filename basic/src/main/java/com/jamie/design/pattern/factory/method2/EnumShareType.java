@@ -1,15 +1,17 @@
-package com.jamie.design.pattern.Facory.method;
+package com.jamie.design.pattern.factory.method2;
 
-public enum EnumActivityType {
+/**
+ * 分享模版枚举
+ */
+public enum EnumShareType{
     /**
-     * 活动类型枚举
+     * 分享类型
      */
-    activityOne("one"),
-    activityTwo("two");
+    SUCCESS_ORDER("successOrder");
 
     private String name;
 
-    EnumActivityType(String name){
+    EnumShareType(String name) {
         this.name = name;
     }
 

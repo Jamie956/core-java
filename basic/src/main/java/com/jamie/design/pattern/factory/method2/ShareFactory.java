@@ -1,4 +1,4 @@
-package com.jamie.design.pattern.Facory.method2;
+package com.jamie.design.pattern.factory.method2;
 
 import java.util.ArrayList;
 import java.util.List;

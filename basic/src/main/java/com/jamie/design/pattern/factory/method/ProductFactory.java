@@ -1,4 +1,4 @@
-package com.jamie.design.pattern.Facory.method;
+package com.jamie.design.pattern.factory.method;
 
 /**
  * 具体工厂，继承抽象工厂

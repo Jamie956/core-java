@@ -5,14 +5,17 @@ package com.jamie.design.pattern.factory.method;
  */
 public abstract class AbstractProductFactory {
     /**
-     * 有子类实现具体的创建方法
+     * 由子类实现抽象方法
      * 按活动类型创建对象
      */
-    protected abstract Product createProduct(String activity);
+    protected abstract Product createProduct(String type);
 
-    public Product Product(String activity, String name) {
-        Product product = createProduct(activity);
-        //对象共性处理
+    /**
+     * 共同的处理逻辑
+     */
+    public Product Product(String type, String name) {
+        System.out.println("抽象工厂做了处理");
+        Product product = createProduct(type);
         product.setName(name);
         return product;
     }

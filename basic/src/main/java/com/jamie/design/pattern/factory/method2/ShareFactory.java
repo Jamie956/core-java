@@ -8,12 +8,12 @@ import java.util.List;
  */
 public class ShareFactory {
     /**
-     * 分享模版缓存
+     * 缓存
      */
     private List<Share> shareFunctionList;
 
     /**
-     * 获取分享模版
+     * 遍历缓存获取实例
      */
     public Share getShareFunction(String type) {
         for (Share share : shareFunctionList) {
@@ -25,7 +25,7 @@ public class ShareFactory {
     }
 
     /**
-     * 添加分享模版
+     * 缓存实例
      */
     public void addShareList(Share share){
         if (shareFunctionList == null) {

@@ -1,10 +1,12 @@
 package com.jamie.design.pattern.factory.method2;
 
 /**
- * 分享成功订单
- * 实现Share 接口
+ * 实现Share接口
  */
 public class SuccessOrderShare implements Share {
+    /**
+     * 获取分享类型
+     */
     @Override
     public String getShareFunctionType() {
         return EnumShareType.SUCCESS_ORDER.getName();
@@ -12,7 +14,7 @@ public class SuccessOrderShare implements Share {
 
     @Override
     public String mainProcess(String shareName) {
-        //do something
+        System.out.println("成功订单做了处理");
         return shareName;
     }
 }

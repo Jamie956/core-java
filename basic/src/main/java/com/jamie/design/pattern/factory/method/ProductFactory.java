@@ -1,18 +1,18 @@
 package com.jamie.design.pattern.factory.method;
 
 /**
- * 具体工厂，继承抽象工厂
+ * 继承抽象工厂的工厂
  */
 public class ProductFactory extends AbstractProductFactory {
     /**
      * 重写父类的创建方法
      */
     @Override
-    protected Product createProduct(String activity) {
-        if (EnumActivityType.activityOne.getName().equalsIgnoreCase(activity)) {
-            //个性处理
+    protected Product createProduct(String type) {
+        System.out.println("具体工厂创建对象");
+        if (EnumProductType.productOne.getName().equalsIgnoreCase(type)) {
             return new OneProduct();
-        } else if (EnumActivityType.activityTwo.getName().equalsIgnoreCase(activity)) {
+        } else if (EnumProductType.productTwo.getName().equalsIgnoreCase(type)) {
             return new TwoProduct();
         }
         return null;

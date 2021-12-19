@@ -1,15 +1,15 @@
 package com.jamie.design.pattern.factory.method;
 
-public enum EnumActivityType {
-    /**
-     * 活动类型枚举
-     */
-    activityOne("one"),
-    activityTwo("two");
+/**
+ * 枚举实体类型
+ */
+public enum EnumProductType {
+    productOne("one"),
+    productTwo("two");
 
     private String name;
 
-    EnumActivityType(String name){
+    EnumProductType(String name){
         this.name = name;
     }
 

@@ -1,9 +1,9 @@
-package com.jamie.design.pattern.factory.method;
+package com.jamie.design.pattern.factory.simple.reflection;
 
 /**
- * 定义实体对象
+ * 实体对象
  */
-public class Product{
+public class Product {
     private String name;
 
     public String getName() {

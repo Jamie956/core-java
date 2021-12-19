@@ -1,7 +1,12 @@
 package com.jamie.design.pattern.singleton;
 
 /**
- * 懒汉式：双检锁
+ * 懒汉式 -- 双检锁
+ * - 定义私有静态变量的单例（未创建）
+ * - 私有构造，不允许外部实例化
+ * - 静态方法获取实例，实例不存在时创建。是加锁版的升级，先判断实例非空再上锁，再判空，而不是一开始就上锁
+ * - `INSTANCE = new LazySingleton3()`对象的创建和赋值是两个指令，会有指令重排问题
+ *
  */
 public class LazySingleton3 {
     private static LazySingleton3 INSTANCE;

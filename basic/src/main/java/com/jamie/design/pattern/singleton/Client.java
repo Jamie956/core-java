@@ -2,7 +2,7 @@ package com.jamie.design.pattern.singleton;
 
 import org.junit.Test;
 
-public class Main {
+public class Client {
 
     /**
      * 并发获取饿汉实例，线程安全

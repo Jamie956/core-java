@@ -23,6 +23,31 @@ public class FastJsonUtil {
         private List<String> tags;
     }
 
+    @Data
+    static class JsonUser2 {
+        private String summary;
+
+        public String getSummary() {
+            return summary;
+        }
+
+        @JSONField(alternateNames = {"abstract", "summary"})
+        public void setSummary(String summary) {
+            this.summary = summary;
+        }
+    }
+
+    @Test
+    public void multiField() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("abstract", "content1");
+//        jsonObject.put("summary", "content2");
+        String str = jsonObject.toJSONString();
+
+        JsonUser2 jsonUser2 = JSON.parseObject(str, JsonUser2.class);
+        System.out.println(jsonUser2);
+    }
+
     /**
      * JSONField name: 对象 转json 使用别名
      * JSONField serialize = false：字段不转成JSON

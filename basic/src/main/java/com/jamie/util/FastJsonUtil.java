@@ -25,23 +25,15 @@ public class FastJsonUtil {
 
     @Data
     static class JsonUser2 {
-        private String summary;
-
-        public String getSummary() {
-            return summary;
-        }
-
+        //json 字段多别名，可以将abstract或summary 的key value 设置到对象
         @JSONField(alternateNames = {"abstract", "summary"})
-        public void setSummary(String summary) {
-            this.summary = summary;
-        }
+        private String summary;
     }
 
     @Test
     public void multiField() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("abstract", "content1");
-//        jsonObject.put("summary", "content2");
         String str = jsonObject.toJSONString();
 
         JsonUser2 jsonUser2 = JSON.parseObject(str, JsonUser2.class);

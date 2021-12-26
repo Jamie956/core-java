@@ -1,7 +1,7 @@
 package com.jamie.design.pattern.adapter;
 
 /**
- * 播放媒介子类：mp4
+ * 播放媒介实现类：mp4
  */
 public class Mp4Player implements AdvanceMediaPlayer {
     /**

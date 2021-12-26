@@ -5,8 +5,8 @@ package com.jamie.design.pattern.adapter;
  */
 interface MediaPlayer {
     /**
-     * 执行播放，有实现类实现
-     * @param audioType 播放格式
+     * 播放器根据格式和文件名执行播放，由实现类实现
+     * @param audioType 文件格式
      * @param fileName 文件名
      */
     void play(String audioType, String fileName);

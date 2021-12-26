@@ -2,7 +2,7 @@ package com.jamie.design.pattern.adapter;
 
 /**
  * 适配器模式
- * 选择适配器，适配具体的对象，并执行适配后操作
+ * 播放器能播放不同格式的文件
  */
 public class Client {
     public static void main(String[] args) {

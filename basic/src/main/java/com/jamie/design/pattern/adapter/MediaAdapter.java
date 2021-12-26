@@ -1,13 +1,14 @@
 package com.jamie.design.pattern.adapter;
 
 /**
- * 播放器实现类
+ * 适配器，实现播放器接口，把自己也当作播放器
+ * 播放器选择一个或多个指定格式的文件交给适配器去具体执行
  */
 public class MediaAdapter implements MediaPlayer {
     AdvanceMediaPlayer advanceMediaPlayer;
 
     /**
-     * 按不同格式，适配不同的播放格式类型
+     * 按格式实例化格式播放器
      */
     public MediaAdapter(String audioType) {
         switch (audioType) {
@@ -23,7 +24,7 @@ public class MediaAdapter implements MediaPlayer {
     }
 
     /**
-     * 按播放格式，使用播放媒介播放文件
+     * 按格式播放文件
      */
     @Override
     public void play(String audioType, String fileName) {

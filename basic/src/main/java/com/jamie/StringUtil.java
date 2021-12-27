@@ -8,15 +8,6 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.junit.Test;
 
 public class StringUtil {
-    public static void main(String[] args) {
-        String replace = cleanLineBeak("   \tname\r\n                              ");
-        System.out.println(replace);
-    }
-
-    public static String cleanLineBeak(String str) {
-        return str.replaceAll("[\n\t\r]","").trim();
-    }
-
     /**
      * 截取文章前n个字(截取部分包含关键字)
      */

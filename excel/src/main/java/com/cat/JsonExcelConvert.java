@@ -7,37 +7,16 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Test;
 
 import java.io.*;
 import java.util.List;
 import java.util.Set;
 
 public class JsonExcelConvert {
-
-    @Test
-    public void esData2Excel() throws IOException {
-//        String data = FileUtils.readFileToString(new File("src/main/resources/data.json"), "UTF-8");
-//        List<JSONObject> collect = JSON.parseObject(data).getJSONArray("hits").stream()
-//                .map(e -> JSON.parseObject(e.toString()).getJSONObject("_source")).collect(Collectors.toList());
-//
-//        JSONArray arr = JSON.parseArray(collect.toString());
-
-        JSONArray jsonArray = new JSONArray();
-        JSONObject j1 = new JSONObject();
-        j1.put("name", "tim");
-        j1.put("age", "11");
-        JSONObject j2 = new JSONObject();
-        j2.put("name", "tom");
-        j2.put("age", "22");
-        jsonArray.add(j1);
-        jsonArray.add(j2);
-
-        json2Excel(jsonArray, "src/main/resources/output.xlsx");
-    }
-
     /**
-     * json array 转 execel
+     * Json array 转 Excel
+     * @param jsonArray Json array 数据
+     * @param destPath Excel 输出路径
      */
     public static void json2Excel(JSONArray jsonArray, String destPath) throws IOException {
         try (FileOutputStream out = new FileOutputStream(new File(destPath));
@@ -67,14 +46,10 @@ public class JsonExcelConvert {
         }
     }
 
-    @Test
-    public void excel2jsonTest() throws Exception {
-//        excel2json("src/main/resources/test.xlsx", "src/main/resources/output.json");
-        excel2json("C:\\Users\\tgwzz\\Desktop\\11.xlsx", "src/main/resources/output.json");
-    }
-
     /**
-     * excel文件 转成json 文件
+     * Excel文件 转成 Json文件
+     * @param srcPath Excel 文件 输入路径
+     * @param destPath Json 文件 输出路径
      */
     public static void excel2json(String srcPath, String destPath) throws Exception {
         try (InputStream inputStream = new FileInputStream(srcPath);
@@ -90,6 +65,27 @@ public class JsonExcelConvert {
                 bufferedWriter.write(json.toJSONString() + "\r\n");
             }
             bufferedWriter.flush();
+        }
+    }
+
+    /**
+     * Excel文件 转成 Json Array
+     * @param srcPath Excel 文件 输入路径
+     */
+    public static JSONArray excel2jsonFile(String srcPath) throws Exception {
+        try (InputStream inputStream = new FileInputStream(srcPath);
+             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+        ) {
+            Sheet sheet = workbook.getSheetAt(0);
+            Row firstRow = sheet.getRow(0);
+
+            JSONArray items = new JSONArray();
+            for (int i = 1; i < sheet.getLastRowNum() + 1; i++) {
+                Row row = sheet.getRow(i);
+                JSONObject item = excelRowToJson(firstRow, row);
+                items.add(item);
+            }
+            return items;
         }
     }
 
@@ -114,5 +110,4 @@ public class JsonExcelConvert {
         }
         return json;
     }
-
 }

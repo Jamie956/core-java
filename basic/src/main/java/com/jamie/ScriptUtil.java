@@ -18,6 +18,57 @@ import java.util.stream.Collectors;
 
 public class ScriptUtil {
 
+    @Test
+    public void printEsDslTest() throws IOException {
+        List<JSONObject> items = getJsonArray("data.json");
+        List<JSONObject> idMaps = getJsonArray("data2.json");
+
+        for (JSONObject item : items) {
+            String snapshotId = item.getString("id");
+            boolean find = false;
+            for (JSONObject idMap : idMaps) {
+                String snapshotIdInMap = idMap.getString("snapshotId");
+                String articleIdInMap = idMap.getString("articleId");
+                String contentIdInMap = idMap.getString("content_id");
+                if (snapshotId.equals(snapshotIdInMap)) {
+                    find = true;
+                    item.put("id", articleIdInMap);
+                    item.put("content_id", contentIdInMap);
+                }
+            }
+
+//            if (!find) {
+//                System.out.println("--> "+ snapshotId);
+//            }
+        }
+
+        printEsDsl("comparative_test_detail_20220104", items, "id");
+    }
+
+    /**
+     * 根据 Json 数据，生成ES DSL
+     */
+    public static void printEsDsl(String indexName, List<JSONObject> items, String docIdFieldName) {
+        System.out.println(String.format("POST /%s/index/_bulk", indexName));
+        for (JSONObject item : items) {
+            System.out.println(String.format("{ \"index\": { \"_id\": %s }}", item.getString(docIdFieldName)));
+            System.out.println(item.toJSONString());
+        }
+    }
+
+    /**
+     * ES hits 转 Json 集合
+     */
+    public static List<JSONObject> esHitsToJson(String fileName) throws IOException {
+        List<JSONObject> result = new ArrayList<>();
+        List<JSONObject> items = getJsonArray("data.json");
+        for (JSONObject item : items) {
+            JSONObject source = item.getJSONObject("_source");
+            result.add(source);
+        }
+        return result;
+    }
+
     /**
      * es data join mongodb files data
      * create es create DSL

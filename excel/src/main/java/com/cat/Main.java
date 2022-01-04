@@ -31,8 +31,14 @@ public class Main {
 
     @Test
     public void excel2jsonTest() throws Exception {
-        JsonExcelConvert.excel2json("D:\\ab.xlsx",
+        JsonExcelConvert.excel2jsonLine("D:\\2.xlsx",
                 "src/main/resources/output.json");
+    }
+
+    @Test
+    public void excel2jsonFileTest2() throws Exception {
+        JSONArray jsonArray = JsonExcelConvert.excel2jsonFile("D:\\2.xlsx");
+        System.out.println(jsonArray);
     }
 
     @Test
@@ -55,7 +61,6 @@ public class Main {
                     System.out.println(categoryIdArray.length);
                     System.out.println(categoryArray.length == categoryIdArray.length);
                     System.out.println("=======");
-
 
                     JSONArray categories = new JSONArray();
                     for (int i = 0; i < categoryArray.length; i++) {

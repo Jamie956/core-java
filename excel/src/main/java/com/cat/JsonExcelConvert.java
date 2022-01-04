@@ -51,7 +51,7 @@ public class JsonExcelConvert {
      * @param srcPath Excel 文件 输入路径
      * @param destPath Json 文件 输出路径
      */
-    public static void excel2json(String srcPath, String destPath) throws Exception {
+    public static void excel2jsonLine(String srcPath, String destPath) throws Exception {
         try (InputStream inputStream = new FileInputStream(srcPath);
              XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
              FileWriter fileWriter = new FileWriter(destPath);

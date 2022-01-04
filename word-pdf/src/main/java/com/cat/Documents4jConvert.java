@@ -1,4 +1,4 @@
-package com.jamie;
+package com.cat;
 
 import com.documents4j.api.DocumentType;
 import com.documents4j.api.IConverter;

@@ -1,4 +1,4 @@
-package com.jamie;
+package com.cat;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.poi.xwpf.converter.core.FileImageExtractor;

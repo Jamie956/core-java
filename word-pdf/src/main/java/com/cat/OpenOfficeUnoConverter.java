@@ -1,4 +1,4 @@
-package com.jamie;
+package com.cat;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.comp.helper.BootstrapException;

@@ -18,6 +18,8 @@
     <modules>
         <module>basic</module>
         <module>utils</module>
+        <module>excel</module>
+        <module>word-pdf</module>
     </modules>
 
     <properties>

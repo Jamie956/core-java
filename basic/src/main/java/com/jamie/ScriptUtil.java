@@ -17,31 +17,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ScriptUtil {
-
     @Test
     public void printEsDslTest() throws IOException {
         List<JSONObject> items = getJsonArray("data.json");
-        List<JSONObject> idMaps = getJsonArray("data2.json");
+        List<JSONObject> categoryMaps = getJsonArray("data2.json");
 
         for (JSONObject item : items) {
-            String snapshotId = item.getString("id");
-            boolean find = false;
-            for (JSONObject idMap : idMaps) {
-                String snapshotIdInMap = idMap.getString("snapshotId");
-                String articleIdInMap = idMap.getString("articleId");
-                String contentIdInMap = idMap.getString("content_id");
+            String snapshotId = item.getString("snapshotId");
+            for (JSONObject categoryMap : categoryMaps) {
+                String snapshotIdInMap = categoryMap.getString("id");
+                JSONArray categoriesInMap = categoryMap.getJSONArray("categories");
+
                 if (snapshotId.equals(snapshotIdInMap)) {
-                    find = true;
-                    item.put("id", articleIdInMap);
-                    item.put("content_id", contentIdInMap);
+                    item.put("categories", categoriesInMap);
                 }
             }
-
-//            if (!find) {
-//                System.out.println("--> "+ snapshotId);
-//            }
         }
-
         printEsDsl("comparative_test_detail_20220104", items, "id");
     }
 

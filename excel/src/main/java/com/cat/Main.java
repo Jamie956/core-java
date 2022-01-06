@@ -37,13 +37,13 @@ public class Main {
 
     @Test
     public void excel2jsonFileTest2() throws Exception {
-        JSONArray jsonArray = JsonExcelConvert.excel2jsonFile("D:\\2.xlsx");
+        JSONArray jsonArray = JsonExcelConvert.excel2jsonFile("D:\\test_mysql.xlsx");
         System.out.println(jsonArray);
     }
 
     @Test
     public void excel2jsonFileTest() throws Exception {
-        JSONArray items = JsonExcelConvert.excel2jsonFile("D:\\1.xlsx");
+        JSONArray items = JsonExcelConvert.excel2jsonFile("D:\\test_category.xlsx");
         JSONArray result = new JSONArray();
         for (Object o : items) {
             if (o instanceof JSONObject) {

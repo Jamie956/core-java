@@ -1,5 +1,8 @@
 package com.jamie.design.pattern.factory.method;
 
+/**
+ * 工厂方法模式
+ */
 public class Client {
     public static void main(String[] args) {
         ProductFactory factory = new ProductFactory();

@@ -86,11 +86,20 @@ public class FutureTest {
         });
         t1.start();
 
-
         Thread.sleep(5000);
         futureTask.cancel(false);
 
         t1.join();
     }
 
+    @Test
+    public void t5() throws ExecutionException, InterruptedException, TimeoutException {
+        FutureTask<Integer> futureTask = new FutureTask<>(t);
+
+        //futureTask 还没run
+        //state 为 NEW 时，调 LockSupport.park 阻塞，阻塞3秒后中断
+        //如果任务超过3秒都还没完成，状态还是NEW，就抛出异常
+        Integer ret = futureTask.get(3, TimeUnit.SECONDS);
+        System.out.println("result：" + ret);
+    }
 }

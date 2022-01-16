@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.concurrent.*;
 
-public class FutureTest {
+public class FutureApiTest {
     Callable<Integer> t = () -> {
         TimeUnit.SECONDS.sleep(2);
         int sum = 0;

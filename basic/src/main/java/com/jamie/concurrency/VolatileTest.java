@@ -3,42 +3,40 @@ package com.jamie.concurrency;
 import java.util.concurrent.TimeUnit;
 
 public class VolatileTest {
+    static class MyThread extends Thread{
+//            private volatile boolean flag = false;
+        private boolean flag = false;
+
+        @Override
+        public void run() {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            setFlag(true);
+            System.out.println(Thread.currentThread().getName() + "修改了flag值");
+        }
+
+        public boolean isFlag() {
+            return flag;
+        }
+
+        public void setFlag(boolean flag) {
+            this.flag = flag;
+        }
+    }
 
     public static void main(String[] args) {
-        Task task = new Task();
-        ThreadUtil.execute(task);
+        //新建一条线程修改flag，如果flag 使用volatile 修饰，其他线程也可以看到 flag的更新
+        MyThread t = new MyThread();
+        t.start();
 
         while (true) {
-            //第一次进去循环时，flag还没设成true，当task 线程把flag 改成true，main 线程并不能获取最新的flag的值
-            if (task.isFlag()) {
-                System.out.println("--------------");
+            if (t.isFlag()) {
+                System.out.println(Thread.currentThread().getName() + "读取的flag 被其他线程修改了");
                 break;
             }
         }
-    }
-}
-
-class Task implements Runnable{
-
-    private boolean flag = false;
-    //volatile 使变量在内存可见
-//    private volatile boolean flag = false;
-    @Override
-    public void run() {
-        try {
-            TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        flag = true;
-        System.out.println(isFlag());
-    }
-
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
     }
 }

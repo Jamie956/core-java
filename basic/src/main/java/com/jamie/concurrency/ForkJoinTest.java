@@ -1,4 +1,4 @@
-package com.jamie.concurrency.juc;
+package com.jamie.concurrency;
 
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;

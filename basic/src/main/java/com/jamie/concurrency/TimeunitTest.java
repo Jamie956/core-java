@@ -1,4 +1,4 @@
-package com.jamie.concurrency.juc;
+package com.jamie.concurrency;
 
 import org.junit.Test;
 

@@ -30,6 +30,7 @@ public class SyncObject {
     };
 
     private Runnable runWithSync2 = () -> {
+        //对象锁
         synchronized (this) {
             try {
                 for (int i = 0; i < 5; i++) {
@@ -43,6 +44,7 @@ public class SyncObject {
     };
 
     private Runnable syncClass = () -> {
+        //类锁
         synchronized (SyncObject.class) {
             try {
                 for (int i = 0; i < 5; i++) {
@@ -55,6 +57,7 @@ public class SyncObject {
         }
     };
 
+    //相当于类锁
     public static synchronized void staticSync() {
         try {
             for (int i = 0; i < 5; i++) {

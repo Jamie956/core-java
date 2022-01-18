@@ -1,10 +1,9 @@
-package com.jamie.concurrency.juc.pool;
+package com.jamie.concurrency.pool;
+
+import org.junit.Test;
 
 import java.text.MessageFormat;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class ThreadPoolExecutorTest {
     public static void main(String[] args) {
@@ -82,5 +81,33 @@ public class ThreadPoolExecutorTest {
         System.out.println(String.format("-> poolSize=%s, queueSize=%s", pool.getPoolSize(), workQueue.size()));
 
         pool.shutdown();
+    }
+
+    Callable<Integer> t = () -> {
+        TimeUnit.SECONDS.sleep(2);
+        int sum = 0;
+        for (int i = 0; i < 100; i++) {
+            sum += i;
+        }
+        return sum;
+    };
+
+    /**
+     * FutureTask implements Runnable
+     * ThreadPoolExecutor.submit(Runnable)
+     */
+    @Test
+    public void fut() throws ExecutionException, InterruptedException {
+        LinkedBlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(1);
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(
+                2, 3, 1,
+                TimeUnit.HOURS, workQueue,
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.AbortPolicy());
+
+        FutureTask<Integer> futureTask = new FutureTask<>(t);
+        pool.submit(futureTask);
+
+        System.out.println(futureTask.get());
     }
 }

@@ -1,4 +1,4 @@
-package com.jamie.concurrency.juc.collections;
+package com.jamie.concurrency.collections;
 
 import com.jamie.concurrency.ThreadUtil;
 import org.junit.Test;

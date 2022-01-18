@@ -1,4 +1,4 @@
-package com.jamie.concurrency.juc.lock;
+package com.jamie.concurrency.lock;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;

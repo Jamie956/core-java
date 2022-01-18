@@ -1,13 +1,9 @@
-package com.jamie.concurrency.juc.collections;
+package com.jamie.concurrency.collections;
 
 
 import com.jamie.concurrency.ThreadUtil;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 public class ConcurrentHashMapTest {
     public static void work(ConcurrentHashMap<String, String> map) {

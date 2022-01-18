@@ -1,4 +1,4 @@
-package com.jamie.concurrency.juc.collections;
+package com.jamie.concurrency.collections;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

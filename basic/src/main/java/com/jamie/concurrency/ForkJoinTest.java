@@ -40,6 +40,7 @@ public class ForkJoinTest {
     public static void main(String[] args) throws Exception {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         Future<Long> future = forkJoinPool.submit(new Sum(1, 10000));
-        System.out.println("Sum：" + future.get());//Sum：50005000
+        //Sum：50005000
+        System.out.println("Sum：" + future.get());
     }
 }

@@ -5,40 +5,35 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ConditionTest {
-
-    public static void work(ReentrantLock lock, Condition condition) {
-        lock.lock();
-        try {
-            System.out.println("lock condition await 之前");
-            TimeUnit.SECONDS.sleep(1);
-            condition.await();
-            System.out.println("lock condition await 之后");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public static void continueWork(ReentrantLock lock, Condition condition) {
-        lock.lock();
-        try {
-            System.out.println("Signal");
-            condition.signal();
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         ReentrantLock lock = new ReentrantLock();
         Condition condition = lock.newCondition();
 
-        new Thread(() -> work(lock, condition)).start();
+        new Thread(() -> {
+            lock.lock();
+            try {
+                System.out.println(Thread.currentThread().getName() + " before lock condition await");
+                condition.await();
+                System.out.println(Thread.currentThread().getName() + " after lock condition await");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
+            }
+        }).start();
 
-        System.out.println("3 秒之后 signal lock condition");
-        TimeUnit.SECONDS.sleep(3);
-        continueWork(lock, condition);
+        new Thread(() -> {
+            lock.lock();
+            try {
+                TimeUnit.SECONDS.sleep(5);
+                System.out.println(Thread.currentThread().getName() + " execute Signal");
+                condition.signal();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
+            }
+        }).start();
     }
 
 }

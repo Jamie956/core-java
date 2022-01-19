@@ -3,11 +3,13 @@ package com.jamie.concurrency;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Thread implements Runnable
+ * <p>
  * 1）Runnable提供run方法，无法通过throws抛出异常，
  * 所有CheckedException必须在run方法内部处理。Callable提供call方法，直接抛出Exception异常。
- *
+ * <p>
  * 2）Runnable的run方法无返回值，Callable的call方法提供返回值用来表示任务运行的结果
- *
+ * <p>
  * 3）Runnable可以作为Thread构造器的参数，通过开启新的线程来执行，
  * 也可以通过线程池来执行。而Callable只能通过线程池执行。
  */
@@ -62,11 +64,59 @@ public class ThreadApiTest {
         System.out.println("end");
     }
 
+    public void interruptTest() {
+        Thread.interrupted();
+        Thread.currentThread().interrupt();
+    }
+
+    public void yieldTest() {
+        Runnable task = () -> {
+            for (int i = 0; i < 100; i++) {
+                System.out.println(Thread.currentThread().getName() + ":" + i);
+                if (i % 2 == 0) {
+                    System.out.println(Thread.currentThread().getName() + ":" + i + "  yield");
+                    Thread.yield();
+                }
+            }
+        };
+        new Thread(task).start();
+        new Thread(task).start();
+        new Thread(task).start();
+    }
+
+    public void yieldTest2() {
+        Object lock = new Object();
+        Runnable task = () -> {
+            //yield不会释放锁
+            synchronized (lock) {
+                for (int i = 0; i < 10; i++) {
+                    System.out.println(Thread.currentThread().getName() + ":  " + i);
+                    if (i % 2 == 0) {
+                        System.out.println(Thread.currentThread().getName() + ":  " + i + "  yield");
+                        Thread.yield();
+                    }
+                }
+            }
+        };
+        new Thread(task).start();
+        new Thread(task).start();
+        new Thread(task).start();
+    }
+
+    public void curThread() {
+        Thread thread = Thread.currentThread();
+        Thread.interrupted();
+        System.out.println();
+    }
+
     public static void main(String[] args) throws InterruptedException {
 //        noJoin();
 //        joinTest1();
 //        joinTest2();
-        joinTest3();
+//        joinTest3();
+//        new ThreadApiTest().yieldTest();
+//        new ThreadApiTest().yieldTest2();
+        new ThreadApiTest().curThread();
     }
 
 }

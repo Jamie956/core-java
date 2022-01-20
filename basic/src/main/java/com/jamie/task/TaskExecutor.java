@@ -1,9 +1,9 @@
 package com.jamie.task;
 
-import com.jamie.concurrency.ThreadUtil;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -36,7 +36,9 @@ public class TaskExecutor {
             taskList.add(task);
 
             System.out.println(String.format("数据切分start=%s, end=%s，分派一条线程处理数据集 %s", start, end, subList));
-            ThreadUtil.execute(task);
+//            ThreadUtil.execute(task);
+            ExecutorService pool = Executors.newFixedThreadPool(10);
+            pool.execute(task);
         }
     }
 

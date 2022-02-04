@@ -67,7 +67,14 @@ public class Demo1 {
 
     @Test
     public void t5() {
-
+        String s1 = new StringBuilder("ax").append("xa").toString();
+        //JDK6 intern() 把首次遇到的字符串实例复制到永久代的字符串常量池
+        //JDK6 之后 不需要拷贝到永久代，引用的是同一个字符串
+        //true，
+        System.out.println(s1 == s1.intern());
+        //常量池原来就存在java 字符串
+        String s2 = new StringBuilder("ja").append("va").toString();
+        System.out.println(s2 == s2.intern());
     }
 
 }

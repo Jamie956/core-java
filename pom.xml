@@ -11,15 +11,16 @@
     </parent>
 
     <groupId>com.jamie</groupId>
-    <artifactId>java-core</artifactId>
+    <artifactId>java-demo</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
         <module>basic</module>
-        <module>utils</module>
         <module>excel</module>
         <module>word-pdf</module>
+        <module>elastic</module>
+        <module>mybatis</module>
     </modules>
 
     <properties>

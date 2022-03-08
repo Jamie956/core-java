@@ -1,4 +1,4 @@
-package com.cat.pattern.factory.simple.reflection;
+package com.cat.pattern.factory.reflection;
 
 /**
  * 实体对象

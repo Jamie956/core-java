@@ -1,11 +1,8 @@
 package com.cat.pattern.factory.simple;
 
 /**
- * 定义形状接口
+ * 定义接口和方法
  */
 interface Shape {
-    /**
-     * 画画
-     */
     void draw();
 }

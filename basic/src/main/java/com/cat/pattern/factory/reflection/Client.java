@@ -1,4 +1,4 @@
-package com.cat.pattern.factory.simple.reflection;
+package com.cat.pattern.factory.reflection;
 
 public class Client {
     public static void main(String[] args) throws InstantiationException, IllegalAccessException {

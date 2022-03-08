@@ -1,4 +1,4 @@
-package com.cat.pattern.factory.simple.reflection;
+package com.cat.pattern.factory.reflection;
 
 import java.util.HashMap;
 import java.util.Map;

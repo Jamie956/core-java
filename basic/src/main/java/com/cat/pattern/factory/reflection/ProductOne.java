@@ -1,4 +1,4 @@
-package com.cat.pattern.factory.simple.reflection;
+package com.cat.pattern.factory.reflection;
 
 /**
  * 继承实体父类，活动一

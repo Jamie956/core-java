@@ -1,14 +1,11 @@
 package com.cat.pattern.factory.simple;
 
 /**
- * 工厂类
+ * 工厂类：据key创建新实例
  */
-public class ShapeFactory {
-    public Shape getShape(String shapeType) {
-        //根据key创建新实例
-        switch (shapeType) {
-            case "Rectangle":
-                return new Rectangle();
+public class Factory {
+    public Shape getInstance(String key) {
+        switch (key) {
             case "Square":
                 return new Square();
             case "Circle":

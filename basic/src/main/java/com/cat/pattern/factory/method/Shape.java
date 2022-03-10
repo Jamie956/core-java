@@ -1,7 +1,7 @@
 package com.cat.pattern.factory.method;
 
 /**
- * 定义实体对象
+ * 定义实体
  */
 public class Shape{
     private String name;

@@ -1,7 +1,7 @@
 package com.cat.pattern.factory.method;
 
 /**
- * 继承实体对象
+ * 实体子类
  */
 public class Circle extends Shape {
 }

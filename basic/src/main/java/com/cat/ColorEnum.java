@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Color {
+public enum ColorEnum {
     /**
      * Color(name, value)
      */
@@ -18,17 +18,17 @@ public enum Color {
     private final String chinese;
 
     public static void main(String[] args) {
-        for (Color value : Color.values()) {
+        for (ColorEnum value : ColorEnum.values()) {
             System.out.println(value.name() + " " + value.getCode() + " " + value.getChinese());
         }
 
         //根据枚举名字，获取指定的枚举实例
-        Color a = Color.valueOf("RED");
+        ColorEnum a = ColorEnum.valueOf("RED");
         System.out.println(a);
-        Color c = Color.RED;
+        ColorEnum c = ColorEnum.RED;
         System.out.println(c);
         //获取枚举的索引
-        int b = Color.valueOf("YELLOW").ordinal();
+        int b = ColorEnum.valueOf("YELLOW").ordinal();
         System.out.println(b);
     }
 

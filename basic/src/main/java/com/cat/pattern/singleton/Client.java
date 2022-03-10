@@ -2,9 +2,6 @@ package com.cat.pattern.singleton;
 
 import org.junit.Test;
 
-/**
- *
- */
 public class Client {
 
     /**
@@ -23,11 +20,6 @@ public class Client {
     /**
      * 并发获取懒汉实例，实例创建没有加锁，线程不安全
      * 重现并发问题
-     * com.jamie.design.pattern.singleton.LazySingleton1@32f276b5
-     * com.jamie.design.pattern.singleton.LazySingleton1@6a18032
-     * com.jamie.design.pattern.singleton.LazySingleton1@6a18032
-     * com.jamie.design.pattern.singleton.LazySingleton1@5a00783b
-     * com.jamie.design.pattern.singleton.LazySingleton1@32f276b5
      */
     @Test
     public void concurrentGetNoLockLazySingletonTest(){
@@ -64,24 +56,21 @@ public class Client {
 
     @Test
     public void concurrentGetInnerClassLazySingletonTest(){
-        for (int i = 0; i < 1000; i++) {
-            new Thread(() -> {
-                LazySingleton5 instance = LazySingleton5.getInstance();
-                System.out.println(instance);
-            }).start();
-        }
+//        for (int i = 0; i < 1000; i++) {
+//            new Thread(() -> {
+//                LazySingleton5 instance = LazySingleton5.getInstance();
+//                System.out.println(instance);
+//            }).start();
+//        }
+
+        LazySingleton5 i1 = LazySingleton5.getInstance();
+        LazySingleton5 i2 = LazySingleton5.getInstance();
     }
 
     @Test
     public void enumSingletonTest() {
-        Singleton instance = Singleton.Instance;
-        Singleton instance2 = Singleton.Instance;
-
-        Singleton hi = Singleton.Hi;
-        Singleton hi2 = Singleton.Hi;
-
-        System.out.println(instance == instance2);
-        System.out.println(hi == hi2);
-        System.out.println(instance == hi2);
+        SingletonEnum a = SingletonEnum.Instance;
+        SingletonEnum b = SingletonEnum.Instance;
+        System.out.println(a == b);
     }
 }

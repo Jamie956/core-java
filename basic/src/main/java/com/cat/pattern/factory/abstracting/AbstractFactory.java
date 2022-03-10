@@ -5,11 +5,11 @@ package com.cat.pattern.factory.abstracting;
  */
 public abstract class AbstractFactory {
     /**
-     * 获取颜色实例抽象方法，由子类实现
+     * 获取实例，由子类实现
      */
     public abstract Color getColor(String color);
     /**
-     * 获取形状实例抽象方法，由子类实现
+     * 获取实例，由子类实现
      */
     public abstract Shape getShape(String shape);
 }

@@ -1,11 +1,8 @@
 package com.cat.pattern.factory.abstracting;
 
-/**
- * 形状接口的实现：圆形
- */
 public class Circle implements Shape {
     /**
-     * 画圆形
+     * 实现接口方法
      */
     @Override
     public void draw() {

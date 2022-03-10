@@ -1,7 +1,7 @@
 package com.cat.pattern.factory.abstracting;
 
 /**
- * 创建具体工厂的类
+ * 创建工厂的工厂
  */
 public class FactoryProducer {
     public static AbstractFactory getFactory(String choice) {

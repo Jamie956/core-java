@@ -5,7 +5,7 @@ package com.cat.pattern.adapter;
  * 播放器选择一个或多个指定格式的文件交给适配器去具体执行
  */
 public class MediaAdapter implements MediaPlayer {
-    AdvanceMediaPlayer advanceMediaPlayer;
+    AdvanceMediaPlayer play;
 
     /**
      * 按格式实例化格式播放器
@@ -13,10 +13,10 @@ public class MediaAdapter implements MediaPlayer {
     public MediaAdapter(String audioType) {
         switch (audioType) {
             case "vlc":
-                advanceMediaPlayer = new VlcPlayer();
+                play = new VlcPlayer();
                 break;
             case "mp4":
-                advanceMediaPlayer = new Mp4Player();
+                play = new Mp4Player();
                 break;
             default:
                 break;
@@ -30,10 +30,10 @@ public class MediaAdapter implements MediaPlayer {
     public void play(String audioType, String fileName) {
         switch (audioType) {
             case "vlc":
-                advanceMediaPlayer.playVlc(fileName);
+                play.playVlc(fileName);
                 break;
             case "mp4":
-                advanceMediaPlayer.playMp4(fileName);
+                play.playMp4(fileName);
                 break;
             default:
                 break;

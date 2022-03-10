@@ -5,8 +5,8 @@ package com.cat.pattern.factory.method;
  */
 public class Client {
     public static void main(String[] args) {
-        ProductFactory factory = new ProductFactory();
-        Product product = factory.Product("one", "one");
-        System.out.println(product.getName());
+        ShapeFactory factory = new ShapeFactory();
+        Shape s = factory.shape("circle", "ccc");
+        System.out.println(s.getName());
     }
 }

@@ -1,17 +1,10 @@
 package com.cat.pattern.factory.method;
 
 /**
- * 枚举实体类型
+ * 定义实体对象
  */
-public enum EnumProductType {
-    productOne("one"),
-    productTwo("two");
-
+public class Shape{
     private String name;
-
-    EnumProductType(String name){
-        this.name = name;
-    }
 
     public String getName() {
         return name;

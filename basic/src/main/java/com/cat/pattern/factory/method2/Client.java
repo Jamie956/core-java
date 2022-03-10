@@ -1,17 +1,18 @@
 package com.cat.pattern.factory.method2;
 
 /**
- * 工厂方法模式 -- 缓存实例
+ * 工厂方法模式
  */
 public class Client {
     public static void main(String[] args) {
-        //创建分享模版工厂
-        ShareFactory shareFactory = new ShareFactory();
-        //添加分享模版
-        shareFactory.addShareList(new SuccessOrderShare());
-        //获取模版
-        Share shareFunction = shareFactory.getShareFunction(EnumShareType.SUCCESS_ORDER.getName());
-        String successOrder = shareFunction.mainProcess("Success Order");
-        System.out.println(successOrder);
+        ShapeFactory factory = new ShapeFactory();
+        factory.register(new Circle());
+        factory.register(new Rectangle());
+
+        Shape c = factory.getInstance("key-circle");
+        c.process("a");
+
+        Shape r = factory.getInstance("key-rectangle");
+        r.process("b");
     }
 }

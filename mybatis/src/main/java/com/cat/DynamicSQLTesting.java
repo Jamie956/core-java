@@ -1,10 +1,10 @@
 package com.cat;
 
+import com.cat.pojo.Product;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import pojo.Product;
 
 import java.io.IOException;
 import java.util.ArrayList;

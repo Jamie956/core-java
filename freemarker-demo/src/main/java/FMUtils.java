@@ -1,5 +1,3 @@
-package com.cat.freemarker;
-
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;

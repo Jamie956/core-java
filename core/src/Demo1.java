@@ -1,5 +1,3 @@
-package com.cat.interview;
-
 import org.junit.Test;
 
 import java.lang.reflect.Field;

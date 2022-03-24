@@ -1,14 +1,7 @@
-package com.cat;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class RegexpTest {
     @Test
@@ -204,79 +197,79 @@ public class RegexpTest {
         System.out.println(str.substring(0, cur));
     }
 
-    /**
-     * 正则表达式解析sql
-     */
-    @Test
-    public void sqlRegParse() throws IOException {
-        //匹配整个ddl，将ddl分为表名，列sql部分，表注释
-        String ddlReg = "\\s*create\\s+table\\s+(?<tableName>\\S+)[^\\(]*\\((?<columnsSQL>[\\s\\S]+)\\)[^\\)]+?(comment\\s*(=|on\\s+table)\\s*'(?<tableComment>.*?)'\\s*;?)?$";
-        //匹配列sql部分，分别解析每一列的列名 类型 和列注释
-        String colReg = "\\s*(?<fieldName>\\S+)\\s+(?<fieldType>\\w+)\\s*(?:\\([\\s\\d,]+\\))?((?!comment).)*(comment\\s*'(?<fieldComment>.*?)')?\\s*(,|$)";
+//    /**
+//     * 正则表达式解析sql
+//     */
+//    @Test
+//    public void sqlRegParse() throws IOException {
+//        //匹配整个ddl，将ddl分为表名，列sql部分，表注释
+//        String ddlReg = "\\s*create\\s+table\\s+(?<tableName>\\S+)[^\\(]*\\((?<columnsSQL>[\\s\\S]+)\\)[^\\)]+?(comment\\s*(=|on\\s+table)\\s*'(?<tableComment>.*?)'\\s*;?)?$";
+//        //匹配列sql部分，分别解析每一列的列名 类型 和列注释
+//        String colReg = "\\s*(?<fieldName>\\S+)\\s+(?<fieldType>\\w+)\\s*(?:\\([\\s\\d,]+\\))?((?!comment).)*(comment\\s*'(?<fieldComment>.*?)')?\\s*(,|$)";
+//
+//        Pattern ddlPattern = Pattern.compile(ddlReg, Pattern.CASE_INSENSITIVE);
+//        Pattern colPattern = Pattern.compile(colReg, Pattern.CASE_INSENSITIVE);
+//        String sql = FileUtils.readFileToString(new File("src/main/resources/myddl"), "UTF-8");
+//
+//        Matcher matcher = ddlPattern.matcher(sql);
+//        if (matcher.find()) {
+//            String tableName = matcher.group("tableName");
+//            String tableComment = matcher.group("tableComment");
+//
+//            System.out.println(tableName + "\t\t" + tableComment);
+//            System.out.println("--------------------");
+//
+//            String columnsSql = matcher.group("columnsSQL");
+//
+//            if (columnsSql != null && columnsSql.length() > 0) {
+//                Matcher colMatcher = colPattern.matcher(columnsSql);
+//                while (colMatcher.find()) {
+//                    String fieldName = colMatcher.group("fieldName");
+//                    String fieldType = colMatcher.group("fieldType");
+//                    String fieldComment = colMatcher.group("fieldComment");
+//                    if (!"key".equalsIgnoreCase(fieldType)) {
+//                        System.out.println(fieldName + "\t\t" + fieldType + "\t\t" + fieldComment);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-        Pattern ddlPattern = Pattern.compile(ddlReg, Pattern.CASE_INSENSITIVE);
-        Pattern colPattern = Pattern.compile(colReg, Pattern.CASE_INSENSITIVE);
-        String sql = FileUtils.readFileToString(new File("src/main/resources/myddl"), "UTF-8");
-
-        Matcher matcher = ddlPattern.matcher(sql);
-        if (matcher.find()) {
-            String tableName = matcher.group("tableName");
-            String tableComment = matcher.group("tableComment");
-
-            System.out.println(tableName + "\t\t" + tableComment);
-            System.out.println("--------------------");
-
-            String columnsSql = matcher.group("columnsSQL");
-
-            if (columnsSql != null && columnsSql.length() > 0) {
-                Matcher colMatcher = colPattern.matcher(columnsSql);
-                while (colMatcher.find()) {
-                    String fieldName = colMatcher.group("fieldName");
-                    String fieldType = colMatcher.group("fieldType");
-                    String fieldComment = colMatcher.group("fieldComment");
-                    if (!"key".equalsIgnoreCase(fieldType)) {
-                        System.out.println(fieldName + "\t\t" + fieldType + "\t\t" + fieldComment);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * 移除html标签的指定属性, 能够移除不带双引号的属性
-     */
-    @Test
-    public void matchAppendReplace() {
-        String text = "sdfsdfsdf<p align=\"center\" width=100 style=width:100px;height:152px;> fdsfdsfsd <a class=\"center\" width=100 style=width:100px;height:152px; width=100> saaa </a> sdfasd";
-//        String text = "aaaaa<tr powered-by=xiumi.us opera-tn-ra-comp=_$.pages:0.layers:0.comps:27.col1:0.classicTable1:0>bbbbbbbbbbbb";
-        final Matcher matcher = Pattern.compile("(?i)<[^>]*?>").matcher(text);
-
-        String[] rmAttrs = {"style", "class"};
-
-        StringBuffer resultStringBuffer = new StringBuffer();
-        while (matcher.find()) {
-            //截取到一个html标签
-            String rawText = matcher.group();
-            String[] attrs = StringUtils.split(rawText, " ");
-
-            StringBuilder attrStringBuilder = new StringBuilder();
-
-            for (String attr : attrs) {
-                boolean noneMatch = Stream.of(rmAttrs).noneMatch(e -> attr.startsWith(e) || attr.contains("$"));
-                if (noneMatch) {
-                    attrStringBuilder.append(attr).append(" ");
-                }
-            }
-
-            if (attrStringBuilder.indexOf(">") == -1) {
-                attrStringBuilder.append(">");
-            }
-            String cleanText = attrStringBuilder.toString();
-            System.out.println(String.format("html标签 [%s] 替换为 [%s]", rawText, cleanText));
-            matcher.appendReplacement(resultStringBuffer, cleanText);
-        }
-        matcher.appendTail(resultStringBuffer);
-
-        System.out.println(String.format("result [%s]", resultStringBuffer.toString()));
-    }
+//    /**
+//     * 移除html标签的指定属性, 能够移除不带双引号的属性
+//     */
+//    @Test
+//    public void matchAppendReplace() {
+//        String text = "sdfsdfsdf<p align=\"center\" width=100 style=width:100px;height:152px;> fdsfdsfsd <a class=\"center\" width=100 style=width:100px;height:152px; width=100> saaa </a> sdfasd";
+////        String text = "aaaaa<tr powered-by=xiumi.us opera-tn-ra-comp=_$.pages:0.layers:0.comps:27.col1:0.classicTable1:0>bbbbbbbbbbbb";
+//        final Matcher matcher = Pattern.compile("(?i)<[^>]*?>").matcher(text);
+//
+//        String[] rmAttrs = {"style", "class"};
+//
+//        StringBuffer resultStringBuffer = new StringBuffer();
+//        while (matcher.find()) {
+//            //截取到一个html标签
+//            String rawText = matcher.group();
+//            String[] attrs = StringUtils.split(rawText, " ");
+//
+//            StringBuilder attrStringBuilder = new StringBuilder();
+//
+//            for (String attr : attrs) {
+//                boolean noneMatch = Stream.of(rmAttrs).noneMatch(e -> attr.startsWith(e) || attr.contains("$"));
+//                if (noneMatch) {
+//                    attrStringBuilder.append(attr).append(" ");
+//                }
+//            }
+//
+//            if (attrStringBuilder.indexOf(">") == -1) {
+//                attrStringBuilder.append(">");
+//            }
+//            String cleanText = attrStringBuilder.toString();
+//            System.out.println(String.format("html标签 [%s] 替换为 [%s]", rawText, cleanText));
+//            matcher.appendReplacement(resultStringBuffer, cleanText);
+//        }
+//        matcher.appendTail(resultStringBuffer);
+//
+//        System.out.println(String.format("result [%s]", resultStringBuffer.toString()));
+//    }
 }

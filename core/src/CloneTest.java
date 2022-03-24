@@ -1,17 +1,23 @@
-package com.cat;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.junit.Test;
 
 import java.io.*;
 
 public class CloneTest {
-    @Data
-    @AllArgsConstructor
     static class Student implements Cloneable {
         public Address address;
+
+        public Address getAddress() {
+            return address;
+        }
+
+        public void setAddress(Address address) {
+            this.address = address;
+        }
+
+        public Student(Address address) {
+            this.address = address;
+        }
 
         @Override
         public Object clone() throws CloneNotSupportedException {
@@ -20,9 +26,6 @@ public class CloneTest {
         }
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
     static class User implements Serializable {
         private static final long serialVersionUID = -3307269962764425802L;
         private Integer id;
@@ -34,17 +37,62 @@ public class CloneTest {
             this.name = name;
         }
 
+        public User(Integer id, String name, Address address) {
+            this.id = id;
+            this.name = name;
+            this.address = address;
+        }
+
+        public User() {
+        }
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Address getAddress() {
+            return address;
+        }
+
+        public void setAddress(Address address) {
+            this.address = address;
+        }
+
         public User(Address ad) {
             this.address = ad;
         }
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
     static class Address implements Serializable {
         private static final long serialVersionUID = -4537716904357183030L;
         public String stress;
+
+        public Address() {
+        }
+
+        public Address(String stress) {
+            this.stress = stress;
+        }
+
+        public String getStress() {
+            return stress;
+        }
+
+        public void setStress(String stress) {
+            this.stress = stress;
+        }
     }
 
     /**

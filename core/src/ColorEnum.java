@@ -1,10 +1,4 @@
-package com.cat;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
 public enum ColorEnum {
     /**
      * Color(name, value)
@@ -16,6 +10,19 @@ public enum ColorEnum {
      */
     private final String code;
     private final String chinese;
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getChinese() {
+        return chinese;
+    }
+
+    ColorEnum(String code, String chinese) {
+        this.code = code;
+        this.chinese = chinese;
+    }
 
     public static void main(String[] args) {
         for (ColorEnum value : ColorEnum.values()) {

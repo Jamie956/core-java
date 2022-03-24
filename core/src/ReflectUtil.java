@@ -1,15 +1,10 @@
-package com.cat.util;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
 public class ReflectUtil {
-    @Data
-    @AllArgsConstructor
     static class Person implements Serializable {
         private static final long serialVersionUID = -2687432631518129972L;
 
@@ -18,6 +13,27 @@ public class ReflectUtil {
 
         public Person() {
             this.name = "tom";
+        }
+
+        public Person(String name, Double length) {
+            this.name = name;
+            this.length = length;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Double getLength() {
+            return length;
+        }
+
+        public void setLength(Double length) {
+            this.length = length;
         }
 
         public Person(String name) {

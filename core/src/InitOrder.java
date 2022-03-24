@@ -1,5 +1,3 @@
-package com.cat;
-
 import org.junit.Test;
 
 public class InitOrder {

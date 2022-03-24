@@ -1,0 +1,39 @@
+package com.leetcode;
+
+public class No88 {
+    public static void merge(int[] nums1, int m, int[] nums2, int n) {
+        int[] arr = new int[m + n];
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        while (i < m && j < n) {
+            if (nums1[i] > nums2[j]) {
+                arr[k++] = nums2[j++];
+            } else {
+                arr[k++] = nums1[i++];
+            }
+        }
+
+        while (i < m) {
+            arr[k++] = nums1[i++];
+        }
+
+        while (j < n) {
+            arr[k++] = nums2[j++];
+        }
+
+        for (int l = 0; l < arr.length; l++) {
+            nums1[l] = arr[l];
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] nums1 = new int[]{1, 2, 3, 0, 0, 0};
+        merge(nums1, 3, new int[]{2, 5, 6}, 3);
+
+        for (int i : nums1) {
+            System.out.println(i);
+        }
+    }
+}

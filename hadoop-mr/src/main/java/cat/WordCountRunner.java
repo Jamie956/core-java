@@ -33,7 +33,7 @@ public class WordCountRunner implements Tool {
     v	1
      */
     public static void main(String[] args) {
-        args = new String[]{"bigdata/src/main/resources/words", "bigdata/src/main/resources/out"};
+        args = new String[]{"src/main/resources/words", "bigdata/src/main/resources/out"};
 
         try {
             int code = ToolRunner.run(new WordCountRunner(), args);

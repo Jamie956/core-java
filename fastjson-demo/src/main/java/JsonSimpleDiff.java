@@ -1,5 +1,3 @@
-package com.cat.json;
-
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 

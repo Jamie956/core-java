@@ -1,5 +1,3 @@
-package jvmlab;
-
 /**
  * -Xss128k
  * 栈帧内存不足抛栈溢出

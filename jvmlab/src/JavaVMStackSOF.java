@@ -1,5 +1,3 @@
-package jvmlab;
-
 /**
  * -Xss128k
  * 方法栈过深抛出栈溢出

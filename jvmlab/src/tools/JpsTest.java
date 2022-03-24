@@ -1,4 +1,4 @@
-package jvmlab.tools;
+package tools;
 
 /**
  * 运行后，jps命令查看进程ID

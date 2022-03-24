@@ -1,4 +1,4 @@
-package jvmlab.gc;
+package gc;
 
 /**
  * 大对象直接进入老年代

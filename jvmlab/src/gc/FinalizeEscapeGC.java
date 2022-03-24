@@ -1,4 +1,4 @@
-package jvmlab.gc;
+package gc;
 
 /**
  * 测试 finalize 调用次数，对象的自救

@@ -1,4 +1,4 @@
-package jvmlab.gc;
+package gc;
 
 /**
  * 测试新生代 Minor GC

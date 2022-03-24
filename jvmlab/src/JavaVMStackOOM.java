@@ -1,5 +1,3 @@
-package jvmlab;
-
 /**
  * -Xss2M
  * 不断创建线程导致内存溢出异常

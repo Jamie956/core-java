@@ -1,10 +1,11 @@
-package jvmlab.tools;
+package tools;
 
 /**
- * 堆栈跟踪工具：jstack [ option ] vmid
- * jstack -l 9628
+ * 内存映像工具：jmap [ option ] vmid
+ * jmap -dump:format=b,file=eclipse.bin 8888
+ * 导出堆快照后，使用 jhat 命令分析：jhat eclipse.bin
  */
-public class JstackTest {
+public class JmapTest {
     public static void main(String[] args) throws InterruptedException {
         int _1MB = 1024 * 1024;
         while (true) {

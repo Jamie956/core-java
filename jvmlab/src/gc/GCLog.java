@@ -1,4 +1,4 @@
-package jvmlab.gc;
+package gc;
 
 /**
  * 打印GC日志的参数

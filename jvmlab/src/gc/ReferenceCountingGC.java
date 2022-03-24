@@ -1,4 +1,4 @@
-package jvmlab.gc;
+package gc;
 
 /**
  * 测试对象回收是否使用引用计数法

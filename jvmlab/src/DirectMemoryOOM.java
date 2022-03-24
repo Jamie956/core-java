@@ -1,9 +1,6 @@
-package jvmlab;
-
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
-
 
 /**
  * 直接内存溢出，抛出OOM

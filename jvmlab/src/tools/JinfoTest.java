@@ -1,4 +1,4 @@
-package jvmlab.tools;
+package tools;
 
 /**
  * 查看配置信息：jinfo [option] pid

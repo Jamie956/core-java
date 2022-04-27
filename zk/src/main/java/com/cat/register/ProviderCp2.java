@@ -1,4 +1,4 @@
-package com.cat;
+package com.cat.register;
 
 import org.apache.zookeeper.*;
 

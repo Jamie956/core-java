@@ -7,7 +7,10 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 
-public class Producer {
+/**
+ * 开启事务
+ */
+public class ProducerTransaction {
     public static void main(String[] args) {
 
         Properties p = new Properties();
@@ -18,14 +21,27 @@ public class Producer {
         p.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         p.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
+        //事务必须配置 transaction id
+        p.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "transaction_id_01");
+
         //生产者实例
         KafkaProducer<String, String> producer = new KafkaProducer<>(p);
 
-        for (int i = 0; i < 5; i++) {
-            //异步发送
-            producer.send(new ProducerRecord<>("first-topic", "value"+i));
-        }
+        producer.initTransactions();
+        producer.beginTransaction();
 
-        producer.close();
+        try {
+            for (int i = 0; i < 5; i++) {
+                producer.send(new ProducerRecord<>("first-topic", "value" + i));
+            }
+            //模拟异常
+//            int i = 1 / 0;
+            producer.commitTransaction();
+        } catch (Exception e) {
+            producer.abortTransaction();
+            e.printStackTrace();
+        } finally {
+            producer.close();
+        }
     }
 }

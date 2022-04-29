@@ -7,7 +7,10 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 
-public class Producer {
+/**
+ * 配置ack
+ */
+public class ProducerAck {
     public static void main(String[] args) {
 
         Properties p = new Properties();
@@ -17,6 +20,11 @@ public class Producer {
         //key value 序列化方式
         p.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         p.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+
+        //ack
+        p.put(ProducerConfig.ACKS_CONFIG, "1");
+        //重试次数
+        p.put(ProducerConfig.RETRIES_CONFIG, 3);
 
         //生产者实例
         KafkaProducer<String, String> producer = new KafkaProducer<>(p);

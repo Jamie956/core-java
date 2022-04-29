@@ -6,9 +6,13 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
-public class Producer {
-    public static void main(String[] args) {
+/**
+ * 同步等待
+ */
+public class ProducerSync {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         Properties p = new Properties();
         //连接kafka 集群
@@ -22,8 +26,8 @@ public class Producer {
         KafkaProducer<String, String> producer = new KafkaProducer<>(p);
 
         for (int i = 0; i < 5; i++) {
-            //异步发送
-            producer.send(new ProducerRecord<>("first-topic", "value"+i));
+            //同步发送
+            producer.send(new ProducerRecord<>("first-topic", "value"+i)).get();
         }
 
         producer.close();

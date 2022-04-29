@@ -1,13 +1,14 @@
 package com.cat;
 
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 
-public class Producer {
+/**
+ * 回调信息
+ */
+public class ProducerCallback {
     public static void main(String[] args) {
 
         Properties p = new Properties();
@@ -22,8 +23,13 @@ public class Producer {
         KafkaProducer<String, String> producer = new KafkaProducer<>(p);
 
         for (int i = 0; i < 5; i++) {
-            //异步发送
-            producer.send(new ProducerRecord<>("first-topic", "value"+i));
+            //异步发送，带回调
+            producer.send(new ProducerRecord<>("first-topic", "value" + i), new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+                    System.out.println(recordMetadata);
+                }
+            });
         }
 
         producer.close();

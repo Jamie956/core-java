@@ -27,6 +27,7 @@ public class NettyServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
+                            //接受各个客户端的channel
                             ch.pipeline().addLast(new NettyServerHandler());
                         }
                     });

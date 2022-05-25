@@ -46,6 +46,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     /**
      * 用户自定义定时任务 -> 该任务提交到 scheduleTaskQueue
      */
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ctx.channel().eventLoop().schedule(new Runnable() {
             @Override

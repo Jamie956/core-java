@@ -19,6 +19,7 @@ public class NettyServer {
         try{
             ServerBootstrap boot = new ServerBootstrap();
 
+            //(parentGroup, childGroup)
             boot.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     //线程队列连接数
@@ -28,6 +29,7 @@ public class NettyServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             //接受各个客户端的channel
+                            //socket channel pipeline to self-definition handler
                             ch.pipeline().addLast(new NettyServerHandler());
                         }
                     });

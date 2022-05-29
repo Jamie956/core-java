@@ -1,4 +1,4 @@
-package com.cat;
+package com.example.simple;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -19,7 +19,6 @@ public class NettyServer {
         try{
             ServerBootstrap boot = new ServerBootstrap();
 
-            //(parentGroup, childGroup)
             boot.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     //线程队列连接数

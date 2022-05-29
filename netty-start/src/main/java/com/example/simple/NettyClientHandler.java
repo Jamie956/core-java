@@ -1,4 +1,4 @@
-package com.cat;
+package com.example.simple;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

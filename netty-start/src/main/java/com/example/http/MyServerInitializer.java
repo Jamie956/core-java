@@ -1,4 +1,4 @@
-package com.cat.http;
+package com.example.http;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -9,7 +9,7 @@ public class MyServerInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
-        //http 协议
+        //http encode decode
         pipeline.addLast("MyHttpServerCodec", new HttpServerCodec());
         pipeline.addLast("MyHttpServerHandler", new MyHttpServerHandler());
 

@@ -23,7 +23,9 @@ public class NettyServer {
                     .channel(NioServerSocketChannel.class)
                     //线程队列连接数
                     .option(ChannelOption.SO_BACKLOG,128)
-                    //通道
+                    //bossGroup channel
+//                    .handler(null)
+                    //workerGroup 通道
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {

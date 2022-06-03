@@ -8,43 +8,30 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-public class NettyServer {
-
+public class SimpleServer {
     public static void main(String[] args) throws InterruptedException {
-        //分配线程数运行
-//        NioEventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        NioEventLoopGroup bossGroup = new NioEventLoopGroup();
-        NioEventLoopGroup workerGroup = new NioEventLoopGroup();
-
-        try{
+        NioEventLoopGroup parentGroup = new NioEventLoopGroup(1);
+        NioEventLoopGroup childGroup = new NioEventLoopGroup();
+        try {
             ServerBootstrap boot = new ServerBootstrap();
-
-            boot.group(bossGroup, workerGroup)
+            boot.group(parentGroup, childGroup)
+                    //The Class which is used to create Channel instances from.
                     .channel(NioServerSocketChannel.class)
-                    //线程队列连接数
-                    .option(ChannelOption.SO_BACKLOG,128)
-                    //bossGroup channel
-//                    .handler(null)
-                    //workerGroup 通道
+                    //连接队列
+                    .option(ChannelOption.SO_BACKLOG, 128)
+                    //child group handler
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            //接受各个客户端的channel
                             //socket channel pipeline to self-definition handler
-                            ch.pipeline().addLast(new NettyServerHandler());
+                            ch.pipeline().addLast(new SimpleServerHandler2());
                         }
                     });
-
-            System.out.println("Server is ready!");
-
-            //启动服务
             ChannelFuture cf = boot.bind(6668).sync();
-            //监听关闭通道
             cf.channel().closeFuture().sync();
         } finally {
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
+            parentGroup.shutdownGracefully();
+            childGroup.shutdownGracefully();
         }
     }
-
 }

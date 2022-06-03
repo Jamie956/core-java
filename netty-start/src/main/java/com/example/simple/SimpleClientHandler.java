@@ -6,17 +6,17 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
 
-public class NettyClientHandler extends ChannelInboundHandlerAdapter {
+public class SimpleClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ctx.writeAndFlush(Unpooled.copiedBuffer("hello server", CharsetUtil.UTF_8));
+        ctx.writeAndFlush(Unpooled.copiedBuffer("client message", CharsetUtil.UTF_8));
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf buf = (ByteBuf) msg;
-        System.out.println("Receive server message: " + buf.toString(CharsetUtil.UTF_8));
-        System.out.println("Server address: " + ctx.channel().remoteAddress());
+        System.out.println(String.format("[%s] [%s] read: %s", Thread.currentThread().getName(), ctx.channel().remoteAddress(), buf.toString(CharsetUtil.UTF_8)));
+
     }
 
     @Override

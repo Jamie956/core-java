@@ -12,6 +12,5 @@ public class MyServerInitializer extends ChannelInitializer<SocketChannel> {
         //http encode decode
         pipeline.addLast("MyHttpServerCodec", new HttpServerCodec());
         pipeline.addLast("MyHttpServerHandler", new MyHttpServerHandler());
-
     }
 }

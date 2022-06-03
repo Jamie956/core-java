@@ -19,20 +19,18 @@ public class MyHttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
             HttpRequest httpRequest = (HttpRequest) msg;
             URI uri = new URI(httpRequest.uri());
             if ("/favicon.ico".equals(uri.getPath())) {
-                System.out.println("favicon...");
                 return;
             }
 
             //context metadata
-            System.out.println("address: " + ctx.channel().remoteAddress());
-            System.out.println("pipeline hashcode" + ctx.hashCode());
+            String result = String.format("[%s] [%s] [%s]: server response", Thread.currentThread().getName(), ctx.hashCode(), ctx.channel().remoteAddress());
+            System.out.println(result);
 
             //http respond
-            ByteBuf content = Unpooled.copiedBuffer("hi", CharsetUtil.UTF_8);
+            ByteBuf content = Unpooled.copiedBuffer(result, CharsetUtil.UTF_8);
             DefaultHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_0, HttpResponseStatus.OK, content);
             response.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
             ctx.writeAndFlush(response);
-
         }
     }
 }

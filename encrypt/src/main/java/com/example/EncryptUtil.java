@@ -1,4 +1,4 @@
-package com.cat.util;
+package com.example;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * 加密解密
  */
-public class encryptUtil {
+public class EncryptUtil {
     /**
      * 生成AES DES 密钥
      *

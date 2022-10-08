@@ -1,9 +1,8 @@
-package com.cat.util;
+package com.cat;
 
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.Objects;
@@ -30,22 +29,4 @@ public class ResourceUtil {
         System.out.println(properties.getProperty("user.name"));
     }
 
-    /**
-     * 读取资源文件
-     * 用ClassPathResource 读取
-     */
-    public static Properties load2(String fileName) throws IOException {
-        ClassPathResource resource = new ClassPathResource(fileName);
-        InputStream in = resource.getInputStream();
-
-        Properties p = new Properties();
-        p.load(in);
-        return p;
-    }
-
-    @Test
-    public void test1() throws IOException {
-        Properties properties = load2("test.properties");
-        System.out.println(properties.getProperty("user.name"));
-    }
 }

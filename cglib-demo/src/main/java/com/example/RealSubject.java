@@ -1,4 +1,4 @@
-package com.cat.proxy.cglib;
+package com.example;
 
 public class RealSubject{
     public void request() {

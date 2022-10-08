@@ -1,4 +1,4 @@
-package com.cat.util;
+package com.example;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;

@@ -1,4 +1,4 @@
-package com.cat.util;
+package com.cat;
 
 import lombok.Data;
 import org.junit.Test;

@@ -10,26 +10,26 @@
 
 - excel：excel operation test demo
 
-- fastjson-demo
+- fastjson-demo：fastjson demo
 
-- freemarker-demo
+- freemarker-demo：as name
 
-- hadoop-mr
+- hadoop-mr：as name
 
-- hive-udf
+- hive-udf：hive user defined function generate snow ID, compile in one jar by maven
 
-- jvmlab
+- jvmlab： JVM GC, Stack and Memory test
 
-- kafka
+- kafka：kafka client demo 
 
-- maven
+- maven：maven plugin test
 
-- mybatis
+- mybatis：mybatis test demo
 
-- netty-start
+- netty-start：as name
 
-- utils
+- utils：一些小工具，待拆分
 
-- word-pdf
+- word-pdf：office word convert to pdf, office word convert to html
 
-- zk
+- zk：zookeeper demo

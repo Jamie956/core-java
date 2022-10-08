@@ -1,8 +1,8 @@
 /**
- * 测试命令
- * javac -encoding UTF-8 NameChecker.java
- * javac -encoding UTF-8 NameCheckProcessor.java
- * javac -processor NameCheckProcessor -encoding UTF-8 BADLY_NAMED_CODE.java
+ * 测试步骤
+ * 编译检测编译类的核心代码：javac -encoding UTF-8 NameChecker.java
+ * 编译检测编译类的入口代码：javac -encoding UTF-8 NameCheckProcessor.java
+ * 使用代码检测插件检测测试代码：javac -processor NameCheckProcessor -encoding UTF-8 BADLY_NAMED_CODE.java
  */
 public class BADLY_NAMED_CODE {
     enum colors {

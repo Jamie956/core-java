@@ -1,4 +1,4 @@
-package com.cat.task;
+package com.example;
 
 import java.util.Arrays;
 import java.util.List;

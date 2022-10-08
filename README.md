@@ -14,7 +14,7 @@
 - multi-task：模拟多线程处理任务
 - mybatis：mybatis test demo
 - netty-start：as name
-- utils：一些小工具，待拆分
+- utils：date, string.. utils
 - word-pdf：office word convert to pdf, office word convert to html
 - zk：zookeeper demo
 - encrypt：java 加密

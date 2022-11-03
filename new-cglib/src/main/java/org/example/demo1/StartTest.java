@@ -4,6 +4,7 @@ import net.sf.cglib.beans.BeanGenerator;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.FixedValue;
 import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.NoOp;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,6 +13,15 @@ import java.lang.reflect.Method;
 import static org.junit.Assert.assertEquals;
 
 public class StartTest{
+    @Test
+    public void simpleTest() {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(PersonService.class);
+        enhancer.setCallback(NoOp.INSTANCE);
+        PersonService p = (PersonService) enhancer.create();
+        String tim = p.sayHello("Tim");
+    }
+
     @Test
     public void fixedValueTest() {
         Enhancer enhancer = new Enhancer();

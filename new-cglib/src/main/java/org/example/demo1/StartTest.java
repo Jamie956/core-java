@@ -1,6 +1,7 @@
 package org.example.demo1;
 
 import net.sf.cglib.beans.BeanGenerator;
+import net.sf.cglib.core.DebuggingClassWriter;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.FixedValue;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -19,6 +20,18 @@ import static org.junit.Assert.assertEquals;
 public class StartTest{
     @Test
     public void simpleTest() {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(PersonService.class);
+        enhancer.setCallback(NoOp.INSTANCE);
+        PersonService p = (PersonService) enhancer.create();
+        String tim = p.sayHello("Tim");
+    }
+
+    @Test
+    public void debugTest() {
+        String location = StartTest.class.getResource("").getPath().replaceAll("%20"," ") + "debugging/";
+
+        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, location);
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(PersonService.class);
         enhancer.setCallback(NoOp.INSTANCE);

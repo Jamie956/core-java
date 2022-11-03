@@ -12,6 +12,10 @@ import java.lang.reflect.Method;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * // The class file of agent class is stored in the local disk, which can be decompiled to view the source code
+ * System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "/Users/zzs/temp");
+ */
 public class StartTest{
     @Test
     public void simpleTest() {

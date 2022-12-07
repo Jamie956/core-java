@@ -2,6 +2,7 @@ package factory.abstracting;
 
 /**
  * 抽象工厂模式
+ * https://www.runoob.com/design-pattern/abstract-factory-pattern.html
  */
 public class Client {
     public static void main(String[] args) {

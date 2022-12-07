@@ -1,9 +1,8 @@
 package composite;
 
-import composite.Employee;
-
 /**
  * 组合模式 / 部分整体模式
+ * https://www.runoob.com/design-pattern/composite-pattern.html
  */
 public class Client {
     public static void main(String[] args) {

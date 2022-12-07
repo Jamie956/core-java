@@ -1,17 +1,18 @@
 package facacde;
 
 public class ShapeMaker {
-    private Shape circle;
-    private Shape rectangle;
+    private final Shape circle;
+    private final Shape rectangle;
 
     /**
-     * 实例化时把代理对象创建好
+     * 构造时创建代理对象
      */
     public ShapeMaker() {
         circle = new Circle();
         rectangle = new Rectangle();
     }
 
+    //代理执行对象的行为
     public void drawCircle() {
         circle.draw();
     }

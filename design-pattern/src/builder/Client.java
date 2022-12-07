@@ -2,6 +2,7 @@ package builder;
 
 /**
  * 建造者模式
+ * https://www.runoob.com/design-pattern/builder-pattern.html
  */
 public class Client {
     public static void main(String[] args) {

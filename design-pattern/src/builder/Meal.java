@@ -13,9 +13,8 @@ public class Meal {
         items.add(item);
     }
 
-    /**
-     * 计算总价格
-     */
+
+    //计算总结
     public float getCost() {
         float cost = 0.0f;
         for (Item item : items) {
@@ -24,9 +23,7 @@ public class Meal {
         return cost;
     }
 
-    /**
-     * 打印套餐信息
-     */
+    //打印套餐信息
     public void showItems() {
         for (Item item : items) {
             System.out.println(String.format("%s (%s) -------- %s ", item.name(), item.packing().pack(), item.price()));

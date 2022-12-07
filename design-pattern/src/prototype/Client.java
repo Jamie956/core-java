@@ -2,6 +2,7 @@ package prototype;
 
 /**
  * 原型模式（Prototype Pattern）：创建重复的对象
+ * https://www.runoob.com/design-pattern/prototype-pattern.html
  */
 public class Client {
     public static void main(String[] args) {

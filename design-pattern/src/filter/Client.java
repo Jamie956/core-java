@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * 过滤器模式（Filter Pattern）
  * 使用不同的标准来过滤一组对象，通过逻辑运算以解耦的方式把它们连接起来。
+ * https://www.runoob.com/design-pattern/filter-pattern.html
  */
 public class Client {
     public static void main(String[] args) {

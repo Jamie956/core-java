@@ -6,7 +6,7 @@ package factory.method;
 public class Client {
     public static void main(String[] args) {
         Factory f = new Factory();
-        Shape s = f.createInstance("circle", "ccc");
+        Shape s = f.createInstance("circle", "instance name");
         System.out.println(s.getName());
     }
 }

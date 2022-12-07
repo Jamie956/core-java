@@ -4,9 +4,7 @@ package factory.method;
  * 工厂
  */
 public class Factory extends AbstractFactory {
-    /**
-     * 重写父类方法
-     */
+
     @Override
     protected Shape createRawInstance(String key) {
         if ("circle".equalsIgnoreCase(key)) {

@@ -17,6 +17,7 @@ public class Factory {
      */
     public Shape cache(String key) {
         for (Shape share : list) {
+            //对象预先定义好了key
             if (share.getKey().equalsIgnoreCase(key)) {
                 return share;
             }

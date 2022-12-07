@@ -1,14 +1,11 @@
 package adapter;
 
 /**
- * 适配器，实现共同的接口，行为保持一致
+ * 适配器, is player，实现共同的接口，行为保持一致
  */
 public class MediaAdapter implements MediaPlayer {
     AdvanceMediaPlayer play;
 
-    /**
-     * 在实例化时确定 play
-     */
     public MediaAdapter(String audioType) {
         switch (audioType) {
             case "vlc":

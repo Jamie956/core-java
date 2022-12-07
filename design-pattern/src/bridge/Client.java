@@ -2,10 +2,11 @@ package bridge;
 
 /**
  * 桥接
+ * https://www.runoob.com/design-pattern/bridge-pattern.html
  */
 public class Client {
     public static void main(String[] args) {
-        //client 决定桥接哪个类行使行为
+        //Drawer 的行为 draw 交给 Circle 执行
         Circle d1 = new Circle(100, new DrawerA());
         d1.draw();
 

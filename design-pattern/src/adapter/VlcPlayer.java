@@ -1,8 +1,5 @@
 package adapter;
 
-/**
- * 子类支持多种行为
- */
 public class VlcPlayer implements AdvanceMediaPlayer {
     @Override
     public void playVlc(String fileName) {

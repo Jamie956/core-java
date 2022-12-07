@@ -8,9 +8,9 @@ public class Circle extends Shape {
         this.x = x;
     }
 
+    //代理执行目标对象的行为
     @Override
     void draw() {
-        //执行代理类的行为
         target.draw(x);
     }
 }

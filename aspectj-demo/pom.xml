@@ -11,6 +11,7 @@
     <modules>
         <module>first-demo</module>
         <module>pointcut-test</module>
+        <module>advice-test</module>
     </modules>
 
     <properties>

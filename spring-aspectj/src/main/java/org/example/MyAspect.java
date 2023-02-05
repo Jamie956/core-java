@@ -1,4 +1,4 @@
-package com.cat;
+package org.example;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -9,44 +9,25 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-/**
- * Aspect 切面
- * Order 执行顺序
- * Component spring bean
- * @author zjm
- */
+// Aspect 切面
 @Aspect
+// 执行顺序
 @Order(5)
+// spring bean register
 @Component
-public class AspectIntercept {
+public class MyAspect {
 
     /**
      * 方法切点
      */
-    @Pointcut("execution(public void com.cat.ProxyTarget.hi())")
-    public void pointcut() {
-    }
-
-    /**
-     * 注解切点
-     */
-    @Pointcut("@annotation(CheckUser)")
-    public void CheckUserPointCut(){
-
-    }
-
-    /**
-     * 注解切点的前置处理
-     */
-    @Before("CheckUserPointCut()")
-    public void checkBefore(JoinPoint joinPoint) {
-        System.out.println("annotation pointcut before");
+    @Pointcut("execution(public void ProxyTarget.hi())")
+    public void hi1Pointcut() {
     }
 
     /**
      * 方法切点的前置处理
      */
-    @Before("pointcut()")
+    @Before("hi1Pointcut()")
     public void doBefore(JoinPoint joinPoint) {
         System.out.println("doBefore");
     }
@@ -54,12 +35,28 @@ public class AspectIntercept {
     /**
      * 方法切点的环绕处理
      */
-    @Around("pointcut()")
+    @Around("hi1Pointcut()")
     public Object filterModelInterceptor(ProceedingJoinPoint joinPoint) throws Throwable {
-        System.out.println("around 前");
+        System.out.println("around 1");
         Object proceed = joinPoint.proceed();
-        System.out.println("around 后");
+        System.out.println("around 2");
         return proceed;
     }
 
+
+    /**
+     * 注解切点
+     */
+    @Pointcut("@annotation(CustomTest)")
+    public void hi2PointCut(){
+
+    }
+
+    /**
+     * 注解切点的前置处理
+     */
+    @Before("hi2PointCut()")
+    public void hi2Before(JoinPoint joinPoint) {
+        System.out.println("hi2 before");
+    }
 }

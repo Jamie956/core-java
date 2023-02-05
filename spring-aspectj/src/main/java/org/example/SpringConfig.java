@@ -1,10 +1,10 @@
-package com.cat;
+package org.example;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
- * EnableAspectJAutoProxy：开启aspectj 代理
+ * EnableAspectJAutoProxy：enable aspectj
  */
 @EnableAspectJAutoProxy
 @Configuration

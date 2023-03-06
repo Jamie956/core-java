@@ -1,4 +1,4 @@
-package com.example.keyword;
+package com.example;
 
 public class KeywordStatic {
     public static void main(String[] args) {

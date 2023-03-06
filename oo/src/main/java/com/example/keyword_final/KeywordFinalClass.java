@@ -1,4 +1,4 @@
-package com.example.keyword;
+package com.example.keyword_final;
 
 public final class KeywordFinalClass {
     // not final var

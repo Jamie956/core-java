@@ -1,4 +1,4 @@
-package com.example.keyword;
+package com.example.keyword_final;
 
 public class KeywordFinalClassTest {
     public static void main(String[] args) {

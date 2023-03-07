@@ -3,6 +3,7 @@ package com.example.lock;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+// 读写锁
 public class ReadWriteLock {
     public static void main(String[] args) {
         //Suspend Thread

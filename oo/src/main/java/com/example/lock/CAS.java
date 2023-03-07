@@ -4,6 +4,7 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 
+// 乐观锁底层实现CAS
 public class CAS {
     int i = 0;
 

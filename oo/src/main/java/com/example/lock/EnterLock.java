@@ -2,6 +2,7 @@ package com.example.lock;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+// 重入锁
 public class EnterLock {
     public static void main(String[] args) throws InterruptedException {
         ReentrantLock lock = new ReentrantLock();

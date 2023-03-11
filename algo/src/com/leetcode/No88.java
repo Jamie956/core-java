@@ -1,5 +1,11 @@
 package com.leetcode;
 
+/*
+读题：给出两个升序的整数数组，合并这个两个数组，合并后仍然是有序数组
+
+思路：分配两个指针读取两个数组，比较读取数字，小的数字写入一个新数组，
+最后这个数组就是合并后的数组
+ */
 public class No88 {
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
         int[] arr = new int[m + n];

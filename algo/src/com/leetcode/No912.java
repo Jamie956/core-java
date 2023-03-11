@@ -1,5 +1,14 @@
 package com.leetcode;
 
+/*
+读题：整数数组升序排序
+
+解题思路：
+
+● 快速排序：找最后一个元素做支点，从左开始i指针遍历，判断小于支点的元素在左区间，
+判断大于支点的元素放在中间区间，未遍历元素放在右区间，由j指针记录中区间左边界，再递归子区间。
+
+ */
 public class No912 {
     public static int[] sortArray(int[] nums) {
         quickSort(nums, 0, nums.length-1);

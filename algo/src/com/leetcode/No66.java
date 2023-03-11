@@ -8,7 +8,9 @@ You may assume the integer does not contain any leading zero, except the number 
 */
 public class No66 {
     /*
-    输入数组为非空数组，元素为非负整数，每个元素共同组成一个整数，给这个整数加1，数组每个元素都是单个数字
+    输入数组为非空数组，元素为非负整数，
+    每个元素共同组成一个整数，给这个整数加1，
+    数组每个元素都是单个数字
 
     加1后是否需要进位
     1.不需要进位，返回结果

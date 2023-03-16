@@ -2,7 +2,7 @@
 
 | NAME              | DESC                                                         | TODO                        |
 | ----------------- | ------------------------------------------------------------ | --------------------------- |
-| algo              | Sort, Data struct, LeetCode                                  | to maven                    |
+| algo              | Sort, Data struct, LeetCode                                  | /to maven                   |
 | aspectj-demo      | native aspectj                                               | Review                      |
 | cglib-demo        | cglib demo                                                   | integrate aspectj and cglib |
 | compile-processor | 编译java时检测代码的插件                                     | Documentation hows using    |

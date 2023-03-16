@@ -17,7 +17,6 @@ public class AccountTest {
 
     @Test
     public void test1() {
-        account.withdraw(5);
+        System.out.println(account.withdraw(5));
     }
-
 }

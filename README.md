@@ -1,33 +1,20 @@
 
 
-- ： 
-- ：
-- ：
-- ：
-- ：
-- ：as name
-- ：
-- ：
-- ：
-- ：
-
-
-
 | NAME              | DESC                                                         | TODO                        |
 | ----------------- | ------------------------------------------------------------ | --------------------------- |
-| algo              | Sort, Data struct, LeetCode                                  | to maven, restruct          |
-| aspectj-demo      | native aspectj                                               | /                           |
+| algo              | Sort, Data struct, LeetCode                                  | to maven                    |
+| aspectj-demo      | native aspectj                                               | Review                      |
 | cglib-demo        | cglib demo                                                   | integrate aspectj and cglib |
 | compile-processor | 编译java时检测代码的插件                                     | Documentation hows using    |
 | design-pattern    | 设计模式                                                     | /                           |
 | elastic           | elastic client api test                                      | /                           |
-| encrypt           | java 加密                                                    | testing                     |
-| excel             | excel operation test demo                                    |                             |
-| fastjson-demo     |                                                              |                             |
-| freemarker-demo   |                                                              |                             |
-| hadoop-mr         |                                                              |                             |
-| hive-udf          | hive user defined function generate snow ID, compile in one jar by maven |                             |
-| jackson           |                                                              |                             |
+| encrypt           | java 加密                                                    | new test class              |
+| excel             | apach poi excel api demo                                     | /                           |
+| fastjson-demo     |                                                              | new test class              |
+| freemarker-demo   |                                                              | new test class              |
+| hadoop-mr         |                                                              | /                           |
+| hive-udf          | hive user defined function generate snow ID, compile in one jar by maven | /                           |
+| jackson           |                                                              | /                           |
 | jvmlab            | JVM GC, Stack and Memory test                                |                             |
 | kafka             | kafka client demo                                            |                             |
 | maven             | maven plugin test                                            |                             |
@@ -41,4 +28,12 @@
 | zk                | zookeeper demo                                               |                             |
 |                   |                                                              |                             |
 |                   |                                                              |                             |
+
+
+
+
+
+# algo
+
+Sort, Data struct, LeetCode
 

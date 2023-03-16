@@ -16,7 +16,7 @@ public class AccountTest {
     }
 
     @Test
-    public void given20AndMin10_whenWithdraw5_thenSuccess() {
+    public void test1() {
         assertTrue(account.withdraw(5));
     }
 }

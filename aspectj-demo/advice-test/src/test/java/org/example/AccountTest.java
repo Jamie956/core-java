@@ -16,12 +16,12 @@ public class AccountTest {
     }
 
     @Test
-    public void given20AndMin10_whenWithdraw5_thenSuccess() {
+    public void test1() {
         assertTrue(account.withdraw(5));
     }
 
     @Test
-    public void given20AndMin10_whenWithdraw100_thenFail() {
+    public void test2() {
         assertFalse(account.withdraw(100));
     }
 }

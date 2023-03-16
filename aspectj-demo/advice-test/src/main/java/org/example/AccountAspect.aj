@@ -1,7 +1,6 @@
 package org.example;
 
 public aspect AccountAspect {
-    final int MIN_BALANCE = 10;
 
     pointcut callWithDraw(int amount, Account acc):
             call(boolean Account.withdraw(int)) && args(amount) && target(acc);

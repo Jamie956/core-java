@@ -2,33 +2,33 @@
 
 # 概览
 
-| NAME              | DESC                                                         | TODO                         |
-| ----------------- | ------------------------------------------------------------ | ---------------------------- |
-| algo              | Sort, Data struct, LeetCode                                  | /to maven                    |
-| aspectj-demo      | native aspectj                                               | /Review                      |
-| cglib-demo        | cglib demo                                                   | /integrate aspectj and cglib |
-| compile-processor | 编译java时检测代码的插件                                     | /Documentation hows using    |
-| design-pattern    | 设计模式                                                     | /                            |
-| elastic           | elastic client api test                                      | /                            |
-| encrypt           | JDK自带的加密/对称加密/非对称加密/数字摘要                   | /new test class              |
-| excel             | apach poi excel api demo                                     | /                            |
-| fastjson-demo     |                                                              | new test class               |
-| freemarker-demo   |                                                              | new test class               |
-| hadoop-mr         |                                                              | /                            |
-| hive-udf          | hive user defined function generate snow ID, compile in one jar by maven | /                            |
-| jackson           |                                                              | /                            |
-| jvmlab            | JVM GC, Stack and Memory test                                |                              |
-| kafka             | kafka client demo                                            |                              |
-| maven             | maven plugin test                                            |                              |
-| multi-task        | 模拟多线程处理任务                                           |                              |
-| mybatis           | mybatis test demo                                            |                              |
-| netty-start       |                                                              |                              |
-| oo                | 面向对象特性                                                 |                              |
-| utils             | date, string.. utils                                         |                              |
-| word-pdf          | office word convert to pdf, office word convert to html      |                              |
-| zk                | zookeeper demo                                               |                              |
-|                   |                                                              |                              |
-|                   |                                                              |                              |
+| NAME              | DESC                                                         | TODO                      |
+| ----------------- | ------------------------------------------------------------ | ------------------------- |
+| algo              | Sort, Data struct, LeetCode                                  | /to maven                 |
+| aspectj-demo      | native aspectj                                               | /Review                   |
+| cglib-demo        | cglib demo                                                   | /integrate new cglib      |
+| compile-processor | 编译java时检测代码的插件                                     | /Documentation hows using |
+| design-pattern    | 设计模式                                                     | /                         |
+| elastic           | elastic client api test                                      | /                         |
+| encrypt           | JDK自带的加密/对称加密/非对称加密/数字摘要                   | /new test class           |
+| excel             | apach poi excel api demo                                     | /                         |
+| fastjson-demo     |                                                              | /                         |
+| freemarker-demo   |                                                              | /                         |
+| hadoop-mr         |                                                              | /                         |
+| hive-udf          | hive user defined function generate snow ID, compile in one jar by maven | /                         |
+| jackson           |                                                              | /                         |
+| jvmlab            | JVM GC, Stack and Memory test                                |                           |
+| kafka             | kafka client demo                                            |                           |
+| maven             | maven plugin test                                            |                           |
+| multi-task        | 模拟多线程处理任务                                           |                           |
+| mybatis           | mybatis test demo                                            |                           |
+| netty-start       |                                                              |                           |
+| oo                | 面向对象特性                                                 |                           |
+| utils             | date, string.. utils                                         |                           |
+| word-pdf          | office word convert to pdf, office word convert to html      |                           |
+| zk                | zookeeper demo                                               |                           |
+|                   |                                                              |                           |
+|                   |                                                              |                           |
 
 
 
@@ -199,6 +199,24 @@ public void desTest() throws NoSuchPaddingException, NoSuchAlgorithmException, I
   String decryptStr = new String(decryptBytes, StandardCharsets.UTF_8);
 
   Assert.assertEquals(rawData, decryptStr);
+}
+```
+
+
+
+# jvmlab
+
+
+
+测试方法栈溢出
+
+```java
+private int stackLength = 1;
+
+// 方法递归不断压栈
+public void stackLeak() {
+  stackLength++;
+  stackLeak();
 }
 ```
 

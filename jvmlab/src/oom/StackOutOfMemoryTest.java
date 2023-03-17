@@ -1,8 +1,10 @@
+package oom;
+
 /**
- * -Xss2M
  * 不断创建线程导致内存溢出异常
+ * java -Xss2M StackOutOfMemoryTest
  */
-public class JavaVMStackOOM {
+public class StackOutOfMemoryTest {
     private void dontStop() {
         while (true) {
         }
@@ -15,7 +17,7 @@ public class JavaVMStackOOM {
     }
 
     public static void main(String[] args) {
-        JavaVMStackOOM oom = new JavaVMStackOOM();
+        StackOutOfMemoryTest oom = new StackOutOfMemoryTest();
         oom.stackLeafByThread();
     }
 }

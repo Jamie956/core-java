@@ -1,12 +1,14 @@
+package oom;
+
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 
 /**
- * 直接内存溢出，抛出OOM
- * -XX:+HeapDumpOnOutOfMemoryError -Xmx20M -XX:MaxDirectMemorySize=10M
+ * 不断申请直接内存导致溢出
+ * java -XX:+HeapDumpOnOutOfMemoryError -Xmx20M -XX:MaxDirectMemorySize=10M DirectMemoryOutOfMemoryTest
  */
-public class DirectMemoryOOM {
+public class DirectMemoryOutOfMemoryTest {
     public static void main(String[] args) throws IllegalAccessException {
         Field unsafeField = Unsafe.class.getDeclaredFields()[0];
         unsafeField.setAccessible(true);

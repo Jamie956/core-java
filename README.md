@@ -220,3 +220,43 @@ public void stackLeak() {
 }
 ```
 
+
+
+不断创建线程导致内存溢出异常
+
+```java
+public void stackLeafByThread() {
+  while (true) {
+    new Thread(() -> dontStop()).start();
+  }
+}
+```
+
+
+
+不断创建新实例导致堆空间不足
+
+```java
+static class OOMObject{}
+public static void main(String[] args) {
+  List<OOMObject> list = new ArrayList<>();
+  while (true) {
+    list.add(new OOMObject());
+  }
+}
+```
+
+
+
+不断申请直接内存导致溢出
+
+```java
+Field unsafeField = Unsafe.class.getDeclaredFields()[0];
+unsafeField.setAccessible(true);
+
+Unsafe unsafe = (Unsafe) unsafeField.get(null);
+while (true) {
+  unsafe.allocateMemory(1024 * 1024);
+}
+```
+

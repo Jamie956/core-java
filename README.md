@@ -1,5 +1,7 @@
 
 
+# 概览
+
 | NAME              | DESC                                                         | TODO                         |
 | ----------------- | ------------------------------------------------------------ | ---------------------------- |
 | algo              | Sort, Data struct, LeetCode                                  | /to maven                    |
@@ -8,7 +10,7 @@
 | compile-processor | 编译java时检测代码的插件                                     | /Documentation hows using    |
 | design-pattern    | 设计模式                                                     | /                            |
 | elastic           | elastic client api test                                      | /                            |
-| encrypt           | java 加密                                                    | new test class               |
+| encrypt           | JDK自带的加密/对称加密/非对称加密/数字摘要                   | /new test class              |
 | excel             | apach poi excel api demo                                     | /                            |
 | fastjson-demo     |                                                              | new test class               |
 | freemarker-demo   |                                                              | new test class               |
@@ -147,9 +149,6 @@ public class NameCheckProcessor extends AbstractProcessor {
              */
             @Override
             public Void visitType(TypeElement e, Void p) {
-                scan(e.getTypeParameters(), p);
-                checkCamelCase(e, true);
-                super.visitType(e, p);
                 return null;
             }
 
@@ -158,13 +157,6 @@ public class NameCheckProcessor extends AbstractProcessor {
              */
             @Override
             public Void visitExecutable(ExecutableElement e, Void p) {
-                if (e.getKind() == METHOD) {
-                    Name name = e.getSimpleName();
-                    if (name.contentEquals(e.getEnclosingElement().getSimpleName())) {
-                        messager.printMessage(WARNING, "一个普通方法 “" + name + "”不应当与类名重复", e);
-                    }
-                    checkCamelCase(e, false);
-                }
                 super.visitExecutable(e, p);
                 return null;
             }
@@ -174,11 +166,6 @@ public class NameCheckProcessor extends AbstractProcessor {
              */
             @Override
             public Void visitVariable(VariableElement e, Void p) {
-                if (e.getKind() == ENUM_CONSTANT || e.getConstantValue() != null || heuristicallyConstant(e)) {
-                    checkAllCaps(e);
-                } else {
-                    checkCamelCase(e, false);
-                }
                 return null;
             }
         }
@@ -187,4 +174,31 @@ public class NameCheckProcessor extends AbstractProcessor {
 ```
 
 
+
+# encrypt
+
+JDK自带的加密/对称加密/非对称加密/数字摘要
+
+
+
+```java
+public void desTest() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+  String rawData = "tomcat";
+  String key = "njkasdgh";
+  // 算法
+  String algorithm = "DES";
+  String transformation = "DES";
+
+  SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), algorithm);
+  Cipher cipher = Cipher.getInstance(transformation);
+  cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+  byte[] encryptBytes = cipher.doFinal(rawData.getBytes(StandardCharsets.UTF_8));
+
+  cipher.init(Cipher.DECRYPT_MODE, keySpec);
+  byte[] decryptBytes = cipher.doFinal(encryptBytes);
+  String decryptStr = new String(decryptBytes, StandardCharsets.UTF_8);
+
+  Assert.assertEquals(rawData, decryptStr);
+}
+```
 

@@ -1,13 +1,17 @@
 package classloader;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 类加载器与instanceof关键字演示
+ * 重写类加载方法，自定义 load class 逻辑
  */
-public class ClassLoaderTest {
-    public static void main(String[] args) throws Exception {
+public class CustomClassLoaderTest {
+    @Test
+    public void test() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         ClassLoader myLoader = new ClassLoader() {
             @Override
             public Class<?> loadClass(String name) throws ClassNotFoundException {
@@ -25,8 +29,8 @@ public class ClassLoaderTest {
                 }
             }
         };
-        Object obj = myLoader.loadClass("classloader.ClassLoaderTest").newInstance();
-        System.out.println(obj.getClass());
-        System.out.println(obj instanceof classloader.ClassLoaderTest);
+        Object obj = myLoader.loadClass("classloader.ObjectC").newInstance();
+        Assert.assertEquals("ObjectC", obj.getClass().getSimpleName());
+        Assert.assertTrue(obj instanceof classloader.ObjectC);
     }
 }

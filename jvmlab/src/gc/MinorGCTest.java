@@ -21,7 +21,7 @@ package gc;
  *   class space    used 280K, capacity 386K, committed 512K, reserved 1048576K
  *
  */
-public class MinorGC {
+public class MinorGCTest {
     private static final int _1MB = 1024 * 1024;
 
     public static void main(String[] args) {

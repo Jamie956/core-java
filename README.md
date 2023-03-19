@@ -17,8 +17,8 @@
 | hadoop-mr         |                                                              | /                         |
 | hive-udf          | hive user defined function generate snow ID, compile in one jar by maven | /                         |
 | jackson           |                                                              | /                         |
-| jvmlab            | JVM GC, Stack and Memory test                                |                           |
-| kafka             | kafka client demo                                            |                           |
+| jvmlab            | JVM GC, Stack and Memory test                                | /                         |
+| kafka             | kafka client demo                                            | /                         |
 | maven             | maven plugin test                                            |                           |
 | multi-task        | 模拟多线程处理任务                                           |                           |
 | mybatis           | mybatis test demo                                            |                           |
@@ -259,4 +259,26 @@ while (true) {
   unsafe.allocateMemory(1024 * 1024);
 }
 ```
+
+
+
+# maven
+
+
+
+打包依赖 jar
+
+```xml
+<plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <version>3.3.0</version>
+    <configuration>
+        <descriptors>
+            <descriptor>src/assembly/distribution.xml</descriptor>
+        </descriptors>
+    </configuration>
+</plugin>
+```
+
+
 

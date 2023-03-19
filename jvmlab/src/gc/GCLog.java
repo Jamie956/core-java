@@ -17,6 +17,12 @@ package gc;
  *      查看GC过程中用户线程并发时间以及停顿的时间：-Xlog:safepoint
  *      查看收集器 Ergonomics 机制自动调节的相关信息：-Xlog:gc+ergo*=trace
  *      查看熬过收集后剩余对象的年龄分布信息：-Xlog:gc+age=trace
+ *
+ * cd path/to/src
+ * javac -encoding UTF-8 gc/GCLog.java
+ *
+ * java -XX:+PrintCGC gc.GCLog
+ * java -XX:+PrintGCDetails gc.GCLog
  */
 public class GCLog {
     private static final int _1MB = 1024 * 1024;

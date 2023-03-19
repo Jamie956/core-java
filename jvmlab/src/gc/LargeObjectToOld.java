@@ -5,6 +5,7 @@ package gc;
  *
  * 测试VM参数：-verbose:gc -Xms20M -Xmx20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8 -XX:PretenureSizeThreshold=3145728
  *
+ * java -verbose:gc -Xms20M -Xmx20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8 -XX:PretenureSizeThreshold=3145728 LargeObjectToOld
  * VM参数解释：
  *
  *
@@ -20,10 +21,10 @@ package gc;
  *   class space    used 328K, capacity 388K, committed 512K, reserved 1048576K
  */
 public class LargeObjectToOld {
-    private static final int _1MB = 1024 * 1024;
+//    private static final int _1MB = 1024 * 1024;
 
     public static void main(String[] args) {
-        byte[] allocation;
-        allocation = new byte[4 * _1MB]; //直接分配在老年代中
+        //直接分配在老年代中
+//        byte[] allocation = new byte[4 * _1MB];
     }
 }

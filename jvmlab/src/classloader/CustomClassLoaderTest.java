@@ -31,6 +31,6 @@ public class CustomClassLoaderTest {
         };
         Object obj = myLoader.loadClass("classloader.ObjectC").newInstance();
         Assert.assertEquals("ObjectC", obj.getClass().getSimpleName());
-        Assert.assertTrue(obj instanceof classloader.ObjectC);
+        Assert.assertFalse(obj instanceof classloader.ObjectC);
     }
 }

@@ -21,8 +21,6 @@
         <plugins>
             <!-- 打包依赖到jar-->
             <plugin>
-                <!-- NOTE: We don't need a groupId specification because the group is
-             org.apache.maven.plugins ...which is assumed by default. -->
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
@@ -30,6 +28,9 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <!-- 打包可执行应用指定入口 -->
+                    <!-- java -jar target/assembly-jar-with-dep-1.0-SNAPSHOT-jar-with-dependencies.jar
+                    java -jar target/assembly-jar-with-dep-1.0-SNAPSHOT.jar
+                    报错：target/assembly-jar-with-dep-1.0-SNAPSHOT.jar中没有主清单属性 -->
                     <archive>
                         <manifest>
                             <mainClass>com.cat.Application</mainClass>
@@ -38,8 +39,10 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <!-- this is used for inheritance merges -->
+                        <id>make-assembly</id>
+                        <!-- bind to the packaging phase -->
+                        <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>

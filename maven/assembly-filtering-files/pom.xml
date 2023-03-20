@@ -10,12 +10,13 @@
 
     <build>
         <plugins>
-            <!-- 按照distribution.xml，将文件打包到jar；打包命令 mvn clean assembly:single -->
+            <!-- 可以用命令执行 mvn clean assembly:single -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
                     <descriptors>
+                        <!-- 指定 assembly 描述文件的位置 -->
                         <descriptor>src/assembly/distribution.xml</descriptor>
                     </descriptors>
                 </configuration>

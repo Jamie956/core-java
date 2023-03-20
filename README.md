@@ -266,9 +266,8 @@ while (true) {
 
 
 
-打包依赖 jar
-
 ```xml
+<!-- pom.xml -->
 <plugin>
     <artifactId>maven-assembly-plugin</artifactId>
     <version>3.3.0</version>
@@ -278,7 +277,137 @@ while (true) {
         </descriptors>
     </configuration>
 </plugin>
+
+<!-- distribution.xml -->
+<dependencySets>
+    <dependencySet>
+        <useProjectArtifact>false</useProjectArtifact>
+        <outputDirectory>/libs</outputDirectory>
+        <scope>runtime</scope>
+    </dependencySet>
+</dependencySets>
+
 ```
+
+
+
+```xml
+
+<!-- pom.xml -->
+<!-- 可以用命令执行 mvn clean assembly:single -->
+<plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <version>3.3.0</version>
+    <configuration>
+        <descriptors>
+            <!-- 指定 assembly 描述文件的位置 -->
+            <descriptor>src/assembly/distribution.xml</descriptor>
+        </descriptors>
+    </configuration>
+</plugin>
+
+
+<!-- distribution.xml -->
+<!-- 文件 README.txt、LICENSE.txt和 NOTICE.txt 打包到jar -->
+<files>
+    <file>
+        <source>README.txt</source>
+        <outputDirectory></outputDirectory>
+        <filtered>true</filtered>
+    </file>
+    <file>
+        <source>LICENSE.txt</source>
+        <outputDirectory></outputDirectory>
+    </file>
+    <file>
+        <source>NOTICE.txt</source>
+        <outputDirectory></outputDirectory>
+        <filtered>false</filtered>
+    </file>
+</files>
+
+```
+
+
+
+```xml
+<!-- pom.xml -->            
+<plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <version>3.3.0</version>
+    <configuration>
+        <descriptors>
+            <descriptor>src/assembly/distribution.xml</descriptor>
+        </descriptors>
+    </configuration>
+</plugin>
+
+<!-- distribution.xml -->
+<formats>
+    <format>jar</format>
+</formats>
+
+<!-- *.txt扩展名的文件打包到jar，排除README.txt和NOTICE.txt -->
+<fileSets>
+    <fileSet>
+        <directory>${basedir}</directory>
+        <includes>
+            <include>*.txt</include>
+        </includes>
+        <excludes>
+            <exclude>README.txt</exclude>
+            <exclude>NOTICE.txt</exclude>
+        </excludes>
+    </fileSet>
+</fileSets>
+
+```
+
+
+
+```xml
+<!-- 打包依赖到jar-->
+<plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <version>3.3.0</version>
+    <configuration>
+        <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+        <!-- 打包可执行应用指定入口 -->
+        <!-- java -jar target/assembly-jar-with-dep-1.0-SNAPSHOT-jar-with-dependencies.jar
+                    java -jar target/assembly-jar-with-dep-1.0-SNAPSHOT.jar
+                    报错：target/assembly-jar-with-dep-1.0-SNAPSHOT.jar中没有主清单属性 -->
+        <archive>
+            <manifest>
+                <mainClass>com.cat.Application</mainClass>
+            </manifest>
+        </archive>
+    </configuration>
+    <executions>
+        <execution>
+            <!-- this is used for inheritance merges -->
+            <id>make-assembly</id>
+            <!-- bind to the packaging phase -->
+            <phase>package</phase>
+            <goals>
+                <goal>single</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -19,7 +19,6 @@
 
     <build>
         <plugins>
-            <!-- 按照distribution.xml，将文件打包到jar；打包命令 mvn clean assembly:single -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>

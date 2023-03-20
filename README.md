@@ -19,11 +19,11 @@
 | jackson           |                                                              | /                         |
 | jvmlab            | JVM GC, Stack and Memory test                                | /                         |
 | kafka             | kafka client demo                                            | /                         |
-| maven             | maven plugin test                                            |                           |
-| multi-task        | 模拟多线程处理任务                                           |                           |
-| mybatis           | mybatis test demo                                            |                           |
-| netty-start       |                                                              |                           |
-| oo                | 面向对象特性                                                 |                           |
+| maven             | maven plugin test                                            | /checked                  |
+| multi-task        | 模拟多线程处理任务                                           | /                         |
+| mybatis           | mybatis test demo                                            | /                         |
+| netty-start       |                                                              | /                         |
+| oo                | 面向对象特性                                                 | /                         |
 | utils             | date, string.. utils                                         |                           |
 | word-pdf          | office word convert to pdf, office word convert to html      |                           |
 | zk                | zookeeper demo                                               |                           |

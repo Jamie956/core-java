@@ -1,15 +1,20 @@
 package com.example.exception;
 
 /*
-常见 RuntimeException
+RuntimeException:
 IllegalArgumentException
 NullPointerException
 ArrayIndexOutOfBoundsException
 NoSuchFieldException
  */
 public class UncheckedException {
-    public static void main(String[] args) {
-        // throw 用在方法体内
+    public void foo() {
+
+
+        // Exception class: IllegalArgumentException -> RuntimeException -> Exception -> Throwable
+
+        // happened in runtime with unknown condition, parameters and ...
+
         throw new IllegalArgumentException();
     }
 }

@@ -1,6 +1,6 @@
 
 
-# 概览
+# Overview
 
 | NAME              | DESC                                                         | TODO                      |
 | ----------------- | ------------------------------------------------------------ | ------------------------- |
@@ -401,13 +401,157 @@ while (true) {
 
 
 
+# oo
+
+面向对象特性
 
 
 
+## Exception
+
+checked exception
+
+```java
+public class CheckedException {
+    public static void main(String[] args) {
+        File file = new File("");
+        try {
+            // invoke chains: createNewFile() -> createFileExclusively()
+            // -> native createFileExclusively() throws IOException
+
+            // Exception class: IOException -> Exception -> Throwable
+
+            // IOException checked exception: must try catch or throws
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
+
+```
 
 
 
+unchecked exception
+
+```java
+public class UncheckedException {
+    public void foo() {
+
+
+        // Exception class: IllegalArgumentException -> RuntimeException -> Exception -> Throwable
+
+        // happened in runtime with unknown condition, parameters and ...
+
+        throw new IllegalArgumentException();
+    }
+}
+```
 
 
 
+throws
+
+```java
+public class KeywordThrows {
+    // throws: able to throw multiple checked exception and unchecked exception on method name
+    public void foo() throws NoSuchFieldException, FileNotFoundException, IllegalArgumentException {
+    }
+}
+
+```
+
+
+
+throw
+
+```java
+public class KeywordThrow {
+    // throw: throw checked exception and unchecked exception on method body
+
+    public void foo() {
+        throw new IllegalArgumentException();
+    }
+    public void foo2() throws FileNotFoundException {
+        throw new FileNotFoundException();
+    }
+}
+
+```
+
+
+
+## Generic
+
+类使用泛型
+
+```java
+// 类中出现的泛型T都保持同一个类型
+public class GenericClass<T> {
+    private T x;
+
+    public void foo(T value) {}
+    public T getX() {
+        return x;
+    }
+
+    public void setX(T x) {
+        this.x = x;
+    }
+}
+```
+
+
+
+接口使用泛型
+
+```java
+// 定义泛形型接口
+public interface GenericInterface<T> {
+    T next();
+}
+```
+
+
+
+方法使用泛型
+
+```java
+public class GenericMethod {
+    // 定义泛型方法
+    public <T> void foo(T x) {
+
+    }
+}
+```
+
+
+
+泛型的继承关系
+
+```java
+public class GenericExtends {
+
+    public static void main(String[] args) {
+        GenericExtends o = new GenericExtends();
+        o.fromArrayToList(new Integer("1"));
+
+        List<Number> dest = new ArrayList<>();
+        List<Integer> src = new ArrayList<>();
+        // Number super G; Integer extends G
+        copy(dest, src);
+    }
+
+    // 参数类型T，决定了返回类型 List<T>；参数泛型T 必须是Number 的子类
+    public <T extends Number> List<T> fromArrayToList(T a) {
+        return null;
+    }
+
+    // 参数 dest的泛型 是G 的超类，参数 src 的泛型是G 的子类，所以 dest 的泛型是 src泛型的父类
+    public static <G> void copy(List<? super G> dest, List<? extends G> src) {
+    }
+}
+```
 

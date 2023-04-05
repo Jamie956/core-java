@@ -1,17 +1,12 @@
 package com.example.keyword_final;
 
-public class KeywordFinalMethod {
-
+// 父类 final 方法
+public class KeywordFinalMethod extends KeywordFinalMethodParent{
+    // 父类 final 方法不能被重写
+//    public void foo() {}
 }
 
-class ParentF {
+class KeywordFinalMethodParent {
     public final void foo() {
     }
-}
-
-class ChildF extends ParentF {
-    // final 修饰的类不能被继承
-    // 'foo()' cannot override 'foo()' in 'com.example.keyword.ParentF'; overridden method is final
-//    public void foo() {
-//    }
 }

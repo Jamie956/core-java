@@ -1,7 +1,8 @@
 package com.example.keyword_interface;
 
-public class Accept implements Dualist {
-    // 要实现接口方法
+// implements 接口需要实现接口的全部方法
+public class implementInterface implements InterfaceDefined {
+
     @Override
     public void foo() {
 

@@ -2,33 +2,33 @@
 
 # Overview
 
-| NAME              | DESC                                                         | TODO                      |
-| ----------------- | ------------------------------------------------------------ | ------------------------- |
-| algo              | Sort, Data struct, LeetCode                                  | /to maven                 |
-| aspectj-demo      | native aspectj                                               | /Review                   |
-| cglib-demo        | cglib demo                                                   | /integrate new cglib      |
-| compile-processor | 编译java时检测代码的插件                                     | /Documentation hows using |
-| design-pattern    | 设计模式                                                     | /                         |
-| elastic           | elastic client api test                                      | /                         |
-| encrypt           | JDK自带的加密/对称加密/非对称加密/数字摘要                   | /new test class           |
-| excel             | apach poi excel api demo                                     | /                         |
-| fastjson-demo     |                                                              | /                         |
-| freemarker-demo   |                                                              | /                         |
-| hadoop-mr         |                                                              | /                         |
-| hive-udf          | hive user defined function generate snow ID, compile in one jar by maven | /                         |
-| jackson           |                                                              | /                         |
-| jvmlab            | JVM GC, Stack and Memory test                                | /                         |
-| kafka             | kafka client demo                                            | /                         |
-| maven             | maven plugin test                                            | /checked                  |
-| multi-task        | 模拟多线程处理任务                                           | /                         |
-| mybatis           | mybatis test demo                                            | /                         |
-| netty-start       |                                                              | /                         |
-| oo                | 面向对象特性                                                 | /                         |
-| utils             | date, string.. utils                                         |                           |
-| word-pdf          | office word convert to pdf, office word convert to html      |                           |
-| zk                | zookeeper demo                                               |                           |
-|                   |                                                              |                           |
-|                   |                                                              |                           |
+| NAME              | DESC                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| algo              | Sort, Data struct, LeetCode                                  |
+| aspectj-demo      | native aspectj                                               |
+| cglib-demo        | cglib demo                                                   |
+| compile-processor | 编译java时检测代码的插件                                     |
+| design-pattern    | 设计模式                                                     |
+| elastic           | elastic client api test                                      |
+| encrypt           | JDK自带的加密/对称加密/非对称加密/数字摘要                   |
+| excel             | apach poi excel api demo                                     |
+| fastjson-demo     |                                                              |
+| freemarker-demo   |                                                              |
+| hadoop-mr         |                                                              |
+| hive-udf          | hive user defined function generate snow ID, compile in one jar by maven |
+| jackson           |                                                              |
+| jvmlab            | JVM GC, Stack and Memory test                                |
+| kafka             | kafka client demo                                            |
+| maven             | maven plugin test                                            |
+| multi-task        | 模拟多线程处理任务                                           |
+| mybatis           | mybatis test demo                                            |
+| netty-start       |                                                              |
+| oo                | 面向对象特性                                                 |
+| utils             | date, string.. utils                                         |
+| word-pdf          | office word convert to pdf, office word convert to html      |
+| zk                | zookeeper demo                                               |
+|                   |                                                              |
+|                   |                                                              |
 
 
 
@@ -554,4 +554,265 @@ public class GenericExtends {
     }
 }
 ```
+
+
+
+## Abstract
+
+```java
+public abstract class KeywordAbstract {
+    // abstract class 可以定义变量
+    private String s;
+    // abstract class 可以定义静态变量
+    private static String b;
+
+    // abstract class 可以定义构造方法
+    KeywordAbstract() {}
+
+    // abstract class 可以定义抽象方法
+    // 如果一个类有抽象方法，就一定是抽象类
+    abstract void foo();
+
+    // abstract class 可以定义具体方法
+    public void concrete() {}
+
+    // abstract class 可以定义静态方法
+    public static void concreteS() {}
+
+    public static void main(String[] args) {
+        // abstract class 不能实例化
+//        KeywordAbstract o = new KeywordAbstract();
+    }
+}
+```
+
+
+
+## Final
+
+不能继承 final 修饰的类
+
+```java
+// 不能继承 final 修饰的类
+public class ExtendFinalClass
+//        extends KeywordFinalClass
+{ }
+```
+
+
+
+final 修饰的类
+
+```java
+// final 修饰的类
+public final class KeywordFinalClass {
+    // final 类的非final 全局变量可以修改，没有被隐式修饰为final
+    public String s = "aa";
+
+    // final 类的非final 方法 隐式指定为 final
+    public void foo() {}
+
+    public static void main(String[] args) {
+        KeywordFinalClass o = new KeywordFinalClass();
+        o.s = "update";
+        System.out.println(o.s);
+    }
+}
+```
+
+
+
+父类 final 方法
+
+```java
+// 父类 final 方法
+public class KeywordFinalMethod extends KeywordFinalMethodParent{
+    // 父类 final 方法不能被重写
+//    public void foo() {}
+}
+
+class KeywordFinalMethodParent {
+    public final void foo() {
+    }
+}
+```
+
+
+
+final 修饰变量
+
+```java
+// final 修饰变量
+public class KeywordFinalVar {
+    public final String a = "a";
+    public final Object[] arr = {1,2};
+
+    public static void main(String[] args) {
+        KeywordFinalVar o = new KeywordFinalVar();
+        // final 修饰的基本数据类型不可修改
+//        o.a = "aaa";
+
+        // final 修饰的引用类型，对象堆内存的值可变
+        o.arr[0] = 3;
+        System.out.println(o.arr[0]);
+
+        // final 修饰的引用类型，地址不可变
+        Object[] arr2 = {5,6};
+//        o.arr = arr2;
+    }
+}
+```
+
+
+
+## Interface
+
+接口
+
+```java
+public interface InterfaceDefined {
+    // 接口不能实例化，没有构造方法
+//    InterfaceDefined ();
+
+    void foo();
+
+    // public 方法没有方法体
+//    void bar() {};
+
+    public void foo1();
+
+    // default 同一个包的类可访问
+    default void foo3() {}
+
+}
+```
+
+
+
+实现接口
+
+```java
+// implements 接口需要实现接口的全部方法
+public class implementInterface implements InterfaceDefined {
+
+    @Override
+    public void foo() {
+
+    }
+
+    @Override
+    public void foo1() {
+
+    }
+
+    @Override
+    public void foo3() {
+
+    }
+}
+```
+
+
+
+## Lock
+
+
+
+CAS
+
+```java
+// CAS 模拟乐观锁
+public class CAS {
+    int count = 0;
+
+    // unsafe CAS 在多线程下同时修变量count，只有内存值与 expected 值相等的线程能成功修改 count，即取得了锁
+    public boolean cas(int expected, int x) {
+        try {
+            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+            theUnsafe.setAccessible(true);
+            Unsafe unsafe = (Unsafe) theUnsafe.get(Unsafe.class);
+            long offset = unsafe.objectFieldOffset(this.getClass().getDeclaredField("count"));
+            // expected: 当前值的预期值，如果内存的值不是预期值，说明被其他线程修改了，就返回 false
+            // x: 要修改成的值
+            return unsafe.compareAndSwapInt(this, offset, expected, x);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean lock() {
+        return cas(0, 1);
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public boolean isLock() {
+        return count != 0;
+    }
+
+    public boolean release() {
+        return cas(1, 0);
+    }
+
+    public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
+        CAS o = new CAS();
+
+        Runnable runnable = () -> {
+            boolean success = o.lock();
+            System.out.printf("thread=%s, count=%s, success=%s%n", Thread.currentThread().getName(), o.getCount(), success);
+        };
+
+        // 多线程修改共享资源，cas判断资源是否被修改过
+        for (int i = 0; i < 100; i++) {
+            new Thread(runnable).start();
+        }
+
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

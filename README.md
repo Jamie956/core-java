@@ -401,7 +401,7 @@ while (true) {
 
 
 
-# oo
+# object-oriented
 
 面向对象特性
 

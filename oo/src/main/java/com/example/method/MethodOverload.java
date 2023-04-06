@@ -1,5 +1,6 @@
-package com.example;
+package com.example.method;
 
+// 方法重载
 public class MethodOverload {
     // 方法参数类型不同，可重载
     public void foo(int i) {}

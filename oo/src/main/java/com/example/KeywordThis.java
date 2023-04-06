@@ -1,6 +1,6 @@
 package com.example;
 
-public class ThisObject {
+public class KeywordThis {
     private String s = "str";
 
     public void foo() {
@@ -14,6 +14,6 @@ public class ThisObject {
     }
 
     public static void main(String[] args) {
-        new ThisObject().bar();
+        new KeywordThis().bar();
     }
 }

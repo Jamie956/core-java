@@ -1,13 +1,14 @@
 package com.example;
 
-public class SuperObject {
+// keyword Super
+public class keywordSuper {
     public static void main(String[] args) {
         new ChildS().bar();
     }
 }
 
 class ParentS {
-    public String s = "str";
+    public String s = "parent string";
     public void foo() {
         System.out.println("parent");
     }

@@ -1037,6 +1037,8 @@ public class SpinLock {
 
 
 
+## Inner Class
+
 非静态内部类特性
 
 ```java
@@ -1130,4 +1132,353 @@ public class MethodInnerClass {
 
 
 
-todo ColorEnum
+## Enum
+
+```java
+public enum ColorEnum {
+    // 定义枚举对象
+    RED("1", "红色"), GREEN("2", "绿色"), BLANK("3", "白色"), YELLOW("4", "黄色");
+
+    private final String code;
+    private final String chinese;
+
+    ColorEnum(String code, String chinese) {
+        this.code = code;
+        this.chinese = chinese;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getChinese() {
+        return chinese;
+    }
+
+    public static void main(String[] args) {
+        // 获取全部枚举对象
+        ColorEnum[] values = ColorEnum.values();
+
+        // 根据名字获取枚举对象
+        ColorEnum red1 = ColorEnum.valueOf("RED");
+        ColorEnum red2 = ColorEnum.RED;
+
+        // 获取枚举索引
+        int index = red1.ordinal();
+    }
+
+}
+```
+
+
+
+## Construct
+
+```java
+public class ConstructDefined {
+    private int i;
+    private int j;
+
+    public ConstructDefined(int i) {
+        this.i = i;
+    }
+
+    public ConstructDefined(int i, int j) {
+        this.i = i;
+        this.j = j;
+    }
+
+    public static void main(String[] args) {
+        // 报错，定义了有参构造方法时，不提供无参构造方法
+//        new ConstructDefined();
+    }
+}
+```
+
+
+
+```java
+public class ConstructNotDefined {
+    public static void main(String[] args) {
+        // 未定义构造方法时，提供无参构造方法
+        new ConstructNotDefined();
+    }
+}
+```
+
+
+
+## static
+
+```java
+public class KeywordStatic {
+    public static void main(String[] args) {
+        DefinedStaticMethodAndValue o = new DefinedStaticMethodAndValue();
+        System.out.println(DefinedStaticMethodAndValue.s);
+        DefinedStaticMethodAndValue.foo();
+    }
+}
+
+class DefinedStaticMethodAndValue {
+    // 修饰代码块，可用于类的初始化操作，提升程序的性能
+    static {
+        System.out.println("static block");
+    }
+
+    // static 修饰的成员变量为静态成员变量，生命周期和类相同，在整个程序执行期间都有效
+    public static String s = "str";
+
+    // static 修饰的方法为静态方法，能直接调用；静态方法不依赖任何对象就可以直接访问
+    public static void foo() {
+        System.out.println("foo");
+    }
+}
+```
+
+
+
+## Orders
+
+
+
+代码块的加载顺序
+
+```java
+// orders: static block -> not static block -> construct
+public class BlockOrders {
+    private static String staticValue = "a";
+    private String notStaticValue = "a";
+
+    static {
+        System.out.println("static block");
+        // 静态代码块能访问静态变量
+        String s1 = staticValue;
+        // 静态代码块不能访问非静态变量
+//        String s2 = notStaticValue;
+    }
+
+    {
+        System.out.println("not static block");
+        // 非静态代码块能访问静态变量
+        String s1 = staticValue;
+        // 非静态代码块能访问非静态变量
+        String s2 = notStaticValue;
+    }
+
+    public BlockOrders() {
+        System.out.println("construct");
+    }
+
+    public static void main(String[] args) {
+        new BlockOrders();
+    }
+}
+```
+
+
+
+## Method
+
+方法定义
+
+```java
+public class MethodDefined {
+    /*
+    public      访问修饰符
+    static      静态方法
+    void        返回值类型
+    main        方法名
+    String[]    参数类型
+    args        参数
+    {}          方法体
+     */
+    public static void main(String[] args) {
+
+    }
+}
+```
+
+
+
+方法重载
+
+```java
+// 方法重载
+public class MethodOverload {
+    // 方法参数类型不同，可重载
+    public void foo(int i) {}
+    public void foo(String s) {}
+
+    // 方法参数个数不同，可重载
+
+    // 方法参数排序不同，可重载
+    public void foo(int i, String s) {}
+    public void foo(String s, int i) {}
+
+}
+```
+
+
+
+方法重写
+
+```java
+// 方法重写
+public class MethodOverride {
+    public static void main(String[] args) {
+        System.out.println(new Child().bar(""));
+    }
+}
+
+class Parent {
+    public String bar(String s) {
+        return "parent";
+    }
+}
+
+class Child extends Parent{
+    // 方法重写
+    // 返回值类型、方法名和参数列表 与父类方法保持一致
+    // @Override 表示重写
+    // 访问修饰符权限 public 不能小于父类
+    @Override
+    public String bar(String s) {
+        return "child";
+    }
+}
+```
+
+
+
+## Polymorphism
+
+```java
+// 多态
+public class Polymorphism {
+    public static void main(String[] args) {
+        Fruit fruit = new Apple();
+        // 多态，父类引用指向子类对象
+        fruit.eat();
+    }
+}
+
+class Fruit {
+    int num;
+    public void eat() {
+        System.out.println("eat fruit");
+    }
+}
+
+class Apple extends Fruit {
+    @Override
+    public void eat() {
+        super.num = 10;
+        System.out.println("eat " + num + " apple");
+    }
+}
+```
+
+
+
+## Class
+
+```java
+// Class 对象的构成
+public class DefinedClass {
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException, ClassNotFoundException, NoSuchFieldException {
+        Class clz = getClassByInstance();
+        
+        Field[] fields = clz.getFields();
+        Method[] methods = clz.getMethods();
+        Annotation[] annotations = clz.getAnnotations();
+        ClassLoader classLoader = clz.getClassLoader();
+    }
+
+    // 获取 Class 对象 1
+    private static Class getClassByInstance() {
+        DefinedClass o = new DefinedClass();
+        Class<? extends DefinedClass> clz = o.getClass();
+        return clz;
+    }
+    // 获取 Class 对象 2
+    private static Class<DefinedClass> getClassByClass() {
+        Class<DefinedClass> clz = DefinedClass.class;
+        return clz;
+    }
+    // 获取 Class 对象 3
+    private static Class<?> getClassbyName () throws ClassNotFoundException {
+        Class<?> clz = Class.forName("com.example.ReflectClass");
+        return clz;
+    }
+}
+```
+
+
+
+## Super
+
+```java
+// keyword Super
+public class keywordSuper {
+    public static void main(String[] args) {
+        new ChildS().bar();
+    }
+}
+
+class ParentS {
+    public String s = "parent string";
+    public void foo() {
+        System.out.println("parent");
+    }
+}
+
+class ChildS extends ParentS{
+    public ChildS() {
+        // 实例化父类
+        super();
+    }
+
+    public void bar() {
+        // super 表示父类对象，可以调父类属性和方法
+        System.out.println(super.s);
+        super.foo();
+    }
+}
+```
+
+
+
+## this
+
+```java
+public class KeywordThis {
+    private String s = "str";
+
+    public void foo() {
+        System.out.println("foo");
+    }
+
+    public void bar() {
+        // this 表示当前对象，可以调用方法、调用全局变量
+        this.foo();
+        System.out.println(this.s);
+    }
+
+    public static void main(String[] args) {
+        new KeywordThis().bar();
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

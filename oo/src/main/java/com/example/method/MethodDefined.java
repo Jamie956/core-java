@@ -1,5 +1,6 @@
-package com.example;
+package com.example.method;
 
+// 方法定义
 public class MethodDefined {
     /*
     public      访问修饰符

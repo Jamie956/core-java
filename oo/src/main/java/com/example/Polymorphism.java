@@ -1,9 +1,10 @@
 package com.example;
 
+// 多态
 public class Polymorphism {
     public static void main(String[] args) {
         Fruit fruit = new Apple();
-        // fruit.eat() 就是多态的表现，父类引用指向子类对象
+        // 多态，父类引用指向子类对象
         fruit.eat();
     }
 }

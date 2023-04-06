@@ -1,4 +1,4 @@
-package com.example;
+package com.example.construct;
 
 public class ConstructNotDefined {
     public static void main(String[] args) {

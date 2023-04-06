@@ -1083,25 +1083,33 @@ public class DefinedInnerStaticClass {
     public static void main(String[] args) {
         // 可以直接创建静态内部类，不需要先创建外部类
         InnerStaticClass o = new InnerStaticClass();
-        String b = o.b;
+        // 先实例化静态内部类再访问内部类非静态变量
+        int a = new InnerStaticClass().innerNonStaticVar;
+        // 访问静态内部类静态变量不需要实例化
+        int b = InnerStaticClass.innerStaticVar;
     }
 
-    public int i = 1;
-    public void ofoo() {}
+    public int outerNonStaticVar = 1;
+    public static int outerStaticVar = 1;
+    public void outerNonStaticMethod() {}
+    public static void outerStaticMethod() {}
 
     static class InnerStaticClass {
-        // 静态内部类可以有静态全局变量
-        public static String a = "a";
-        public String b = "b";
-        // 静态内部类不能使用任何外部类的非静态变量
-//        public int d = i;
+        // 静态内部类定义静态全局变量和非静态全局变量
+        private int innerNonStaticVar = 3;
+        private static int innerStaticVar = 4;
+        // 静态内部类不能使用外部类的非静态变量
+//        public int a = outerNonStaticVar;
+        // 静态内部类不能使用外部类的静态变量
+        public int b = outerStaticVar;
 
-        // 静态内部类可以有静态方法
-        public static void foo1(){
+        // 静态内部类可以定义静态方法
+        public static void innerStaticMethod(){
         }
-
-        // 静态内部类可以有非静态方法
-        public void foo2(){}
+        // 静态内部类可以定义非静态方法
+        public void innerNonStaticMethod(){
+            outerStaticMethod();
+        }
     }
 }
 ```
@@ -1271,6 +1279,50 @@ public class BlockOrders {
 
     public static void main(String[] args) {
         new BlockOrders();
+    }
+}
+```
+
+
+
+父子类代码块和构造函数的执行顺序
+
+```java
+// 父子类代码块和构造函数的执行顺序
+public class ExtendsOrders {
+    public static void main(String[] args) {
+        //静态代码块只加载一次
+        new ChildOrders();
+        System.out.println("-----------------再次创建子类-----------------");
+        new ChildOrders();
+    }
+}
+
+class ParentOrders {
+    static {
+        System.out.println("父类静态代码块");
+    }
+
+    {
+        System.out.println("父类代码块");
+    }
+
+    ParentOrders() {
+        System.out.println("父类构造函数");
+    }
+}
+
+class ChildOrders extends ParentOrders {
+    static {
+        System.out.println("子类静态代码块");
+    }
+
+    {
+        System.out.println("子类代码块");
+    }
+
+    public ChildOrders() {
+        System.out.println("子类构造函数");
     }
 }
 ```
@@ -1471,6 +1523,243 @@ public class KeywordThis {
 ```
 
 
+
+## Annotation
+
+```java
+/**
+ * 定义一个注解
+ * Target ElementType
+ *      TYPE 作用对象：类、接口、枚举类
+ *      METHOD 作用对象：方法
+ *
+ * Retention RetentionPolicy
+ *      RUNTIME 编译时写到 class，虚拟机运行时创建
+ *      SOURCE 编译时移除
+ *      CLASS 编译时写到 class，虚拟机运行时不创建
+ */
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface DefinedAnnotation {
+    String value();
+}
+```
+
+
+
+```java
+@DefinedAnnotation(value = "aaa")
+public class UsingAnnotation {
+}
+```
+
+
+
+```java
+public class TestDemo {
+    public static void main(String[] args) {
+        String value = UsingAnnotation.class.getAnnotation(DefinedAnnotation.class).value();
+        System.out.println(value);
+    }
+}
+```
+
+
+
+## Clone
+
+浅克隆，不克隆引用类型的变量
+
+```java
+// 浅克隆，不克隆引用类型的变量
+public class ShallowClone {
+    public static void main(String[] args) {
+        try {
+            ShallowCloneObject obj = new ShallowCloneObject();
+            ShallowCloneObject clone = (ShallowCloneObject) obj.clone();
+
+            System.out.println(obj == clone);
+            System.out.println(obj.sub == clone.sub);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// 对象实现 Cloneable，重写clone()
+class ShallowCloneObject implements Cloneable {
+    public ShallowCloneSubObject sub;
+
+    public ShallowCloneObject() {
+        this.sub = new ShallowCloneSubObject("a");
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        // TODO Auto-generated method stub
+        return super.clone();
+    }
+}
+
+class ShallowCloneSubObject implements Serializable {
+    private static final long serialVersionUID = -4537716904357183030L;
+    public String s;
+
+    public ShallowCloneSubObject(String s) {
+        this.s = s;
+    }
+}
+```
+
+深克隆，克隆对象的引用类型变量也被克隆
+
+```java
+/**
+ * 深克隆，克隆对象的引用类型变量也被克隆
+ * 对象 -> 对象流输出 -> 数组输出流 -> 数组输入流 -> 对象输出流
+ */
+public class DeepClone {
+    public static void main(String[] args) throws IOException {
+        DeepCloneObject user = new DeepCloneObject();
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+            objectOutputStream.writeObject(user);
+            byteArrayOutputStream.flush();
+            byte[] bytes = byteArrayOutputStream.toByteArray();
+
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+                 ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+                DeepCloneObject clone = (DeepCloneObject) objectInputStream.readObject();
+                System.out.println(user == clone);
+                // 克隆对象的引用类型变量也被克隆
+                System.out.println(user.address == clone.address);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+class DeepCloneObject implements Serializable {
+    private static final long serialVersionUID = -3307269962764425802L;
+    public DeepCloneSubObject address;
+
+    public DeepCloneObject() {
+        this.address = new DeepCloneSubObject("ss");
+    }
+}
+
+
+class DeepCloneSubObject implements Serializable {
+    private static final long serialVersionUID = -4537716904357183030L;
+    public String s;
+
+    public DeepCloneSubObject(String s) {
+        this.s = s;
+    }
+}
+```
+
+
+
+## IO
+
+```java
+public class IOTest {
+    /**
+     * 文件输入流写 -> 字节数组输出流
+     */
+    @Test
+    public void fileStream2ByteStream() {
+        try (FileInputStream inputStream = new FileInputStream("src/main/resources/source");
+             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            while (true) {
+                int readLength = inputStream.read(buffer);
+                if (readLength != -1) {
+                    byteArrayOutputStream.write(buffer, 0, readLength);
+                } else {
+                    break;
+                }
+            }
+            String str = byteArrayOutputStream.toString();
+            System.out.println(str);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 文件 Reader 输入流 -> 字符数组输出流
+     */
+    @Test
+    public void fileChar2CharArray() {
+        try (FileReader fileReader = new FileReader("src/main/resources/source");
+             CharArrayWriter charArrayWriter = new CharArrayWriter()) {
+            char[] buffer = new char[1024];
+            while (true) {
+                int readLength = fileReader.read(buffer);
+                if (readLength != -1) {
+                    charArrayWriter.write(buffer, 0, readLength);
+                } else {
+                    break;
+                }
+            }
+            System.out.println(charArrayWriter.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 文件 Writer 输出流
+     */
+    @Test
+    public void fileChar() {
+        try (Writer out = new FileWriter("src/main/resources/output")) {
+            out.write("长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串");
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 文件输入流 -> 文件输出流
+     */
+    @Test
+    public void fileStream() {
+        try (InputStream in = new FileInputStream("src/main/resources/source");
+             OutputStream out = new FileOutputStream("src/main/resources/source_cp")) {
+            byte[] b = new byte[1024];
+            while (true) {
+                int len = in.read(b);
+                if (len != -1) {
+                    out.write(b, 0, len);
+                } else {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 字节数组 -> 文件输出流
+     */
+    @Test
+    public void fileOutputStream() {
+        try (OutputStream out = new FileOutputStream("src/main/resources/output")) {
+            out.write(new byte[]{65, 66});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+}
+```
 
 
 

@@ -1,5 +1,6 @@
 package com.example.lock;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 // 简单自旋锁
@@ -14,10 +15,10 @@ public class SpinLock {
      */
     public void lock() throws InterruptedException {
         Thread t = Thread.currentThread();
-        // spin 自旋
+        // 自旋
         while (!sign.compareAndSet(null, t)) {
-            System.out.println(t.getName() + " spin..");
-            Thread.sleep(100);
+            System.out.println(t.getName() + " spin");
+            Thread.sleep(1000);
         }
     }
 
@@ -31,11 +32,13 @@ public class SpinLock {
 
         Runnable runnable = () -> {
             String name = Thread.currentThread().getName();
-            System.out.println(name + " call");
             try {
                 lock.lock();
                 System.out.println(name + " obtain lock");
-                Thread.sleep(1000);
+                for (int i = 1; i < 5; i++) {
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(name + " doing task " + i);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

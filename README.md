@@ -776,43 +776,358 @@ public class CAS {
 
 
 
+ReentrantLock 测试锁重入
+
+```java
+// ReentrantLock 测试锁重入
+public class EnterLock {
+    public static void main(String[] args) throws InterruptedException {
+        ReentrantLock lock = new ReentrantLock();
+
+        Runnable runnable = () -> {
+            String name = Thread.currentThread().getName();
+            System.out.println(name + " call");
+            try {
+                lock.lock();
+                System.out.printf("1 tread=%s, holdCount=%s%n", name, lock.getHoldCount());
+                // 一个线程获取某个对象的锁，可再次获取此对象的锁
+                lock.lock();
+                System.out.printf("2 tread=%s, holdCount=%s%n", name, lock.getHoldCount());
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
+                lock.unlock();
+            }
+        };
+
+        new Thread(runnable).start();
+    }
+}
+```
 
 
 
+ReentrantLock 测试独占锁/悲观锁
+
+```java
+// ReentrantLock 测试独占锁/悲观锁
+public class ExcludeLock {
+    public static void main(String[] args) throws InterruptedException {
+        ReentrantLock lock = new ReentrantLock();
+
+        Runnable runnable = () -> {
+            String name = Thread.currentThread().getName();
+            System.out.printf("thread=%s, before get lock%n", name);
+            try {
+                lock.lock();
+                System.out.printf("thread=%s, get lock%n", name);
+
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
+                System.out.printf("thread=%s, release lock%n", name);
+
+            }
+        };
+
+        // 线程独占资源，其他线程访问这个资源时阻塞，直到资源被线程释放其他线程才能竞争资源
+        new Thread(runnable).start();
+        new Thread(runnable).start();
+    }
+}
+```
 
 
 
+公平锁按先后获取锁
+
+```java
+// 公平锁按先后获取锁
+public class FairLock {
+    public static void main(String[] args) {
+        ReentrantLock lock = new ReentrantLock(true);
+        for (int i = 0; i < 10; i++) {
+            int finalI = i;
+            new Thread(() -> {
+                try {
+                    System.out.println(finalI + " before get lock");
+                    lock.lock();
+                    System.out.println(finalI + " get lock");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    lock.unlock();
+                }
+            }).start();
+        }
+    }
+}
+```
 
 
 
+非公平锁，先来的未必先抢到锁
+
+```java
+// 非公平锁，先来的未必先抢到锁
+public class NonFairLock {
+    public static void main(String[] args) {
+        ReentrantLock lock = new ReentrantLock(false);
+        for (int i = 0; i < 10; i++) {
+            int finalI = i;
+            new Thread(() -> {
+                try {
+                    System.out.println(finalI + " before get lock");
+                    lock.lock();
+                    System.out.println(finalI + " get lock");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    lock.unlock();
+                }
+            }).start();
+        }
+    }
+}
+```
 
 
 
+测试读写锁，多线程可以同时获取读锁，写锁只能被线程独占
+
+```java
+// 测试读写锁，多线程可以同时获取读锁，写锁只能被线程独占
+public class ReadWriteLock {
+    public static void main(String[] args) {
+        //Suspend Thread
+        ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+
+        Runnable readTask = () -> {
+            //Suspend Thread
+            ReentrantReadWriteLock.ReadLock readLock = lock.readLock();
+            //Suspend Thread
+            readLock.lock();
+            try {
+                for (int i = 1; i < 11; i++) {
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(Thread.currentThread().getName() + " read " + i + "s");
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                readLock.unlock();
+            }
+        };
+
+        Runnable writeTask = () -> {
+            ReentrantReadWriteLock.WriteLock writeLock = lock.writeLock();
+            //Suspend Thread
+            writeLock.lock();
+            try {
+                for (int i = 1; i < 11; i++) {
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(Thread.currentThread().getName() + " write " + i + "s");
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                writeLock.unlock();
+            }
+        };
+        
+        new Thread(readTask).start();
+        new Thread(readTask).start();
+        new Thread(readTask).start();
+
+        new Thread(writeTask).start();
+        new Thread(writeTask).start();
+        new Thread(writeTask).start();
+    }
+}
+```
 
 
 
+共享锁，多个线程可以同时获取锁
+
+```java
+// 共享锁，多个线程可以同时获取锁
+public class ShareLock {
+    public static void main(String[] args) {
+        Semaphore semaphore = new Semaphore(3);
+
+        Runnable runnable = () -> {
+            try {
+                semaphore.acquire();
+                for (int i = 1; i < 5; i++) {
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(Thread.currentThread().getName() + " read " + i + "s");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                semaphore.release();
+            }
+        };
+
+        new Thread(runnable).start();
+        new Thread(runnable).start();
+        new Thread(runnable).start();
+    }
+}
+```
 
 
 
+简单自旋锁
+
+```java
+// 简单自旋锁
+public class SpinLock {
+    /**
+     * 使用Owner Thread作为同步状态
+     */
+    private AtomicReference<Thread> sign = new AtomicReference<>();
+
+    /**
+     * reentrant count of a thread, no need to be volatile
+     */
+    public void lock() throws InterruptedException {
+        Thread t = Thread.currentThread();
+        // 自旋
+        while (!sign.compareAndSet(null, t)) {
+            System.out.println(t.getName() + " spin");
+            Thread.sleep(1000);
+        }
+    }
+
+    public void unlock() {
+        Thread t = Thread.currentThread();
+        sign.compareAndSet(t, null);
+    }
+
+    public static void main(String[] args) {
+        SpinLock lock = new SpinLock();
+
+        Runnable runnable = () -> {
+            String name = Thread.currentThread().getName();
+            try {
+                lock.lock();
+                System.out.println(name + " obtain lock");
+                for (int i = 1; i < 5; i++) {
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(name + " doing task " + i);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
+                System.out.println(name + " unlock");
+            }
+        };
+
+        new Thread(runnable).start();
+        new Thread(runnable).start();
+    }
+}
+```
 
 
 
+非静态内部类特性
+
+```java
+public class DefinedInnerNonStaticClass {
+    public static void main(String[] args) {
+        // 外部类访问内部类
+        InnerNonStaticClass n = new DefinedInnerNonStaticClass().new InnerNonStaticClass();
+    }
+
+    public int i = 1;
+    public void ofoo() {}
+
+    class InnerNonStaticClass {
+        // 非静态内部类不能有静态变量
+//        public static String a = "a";
+        public String b = "b";
+        // 非静态内部类可以定义 final static，放常量池
+        public final static String c = "c";
+
+        // 非静态内部类不能有静态方法
+//        public static void foo1(){}
+
+        // 非静态内部类访问外部类的非静态变量
+        public int df = i;
+
+        public void foo2(){
+            // 非静态内部类访问外部类非静态方法
+            ofoo();
+        }
+    }
+}
+```
 
 
 
+静态内部类特性
+
+```java
+// 静态内部类特性
+public class DefinedInnerStaticClass {
+
+    public static void main(String[] args) {
+        // 可以直接创建静态内部类，不需要先创建外部类
+        InnerStaticClass o = new InnerStaticClass();
+        String b = o.b;
+    }
+
+    public int i = 1;
+    public void ofoo() {}
+
+    static class InnerStaticClass {
+        // 静态内部类可以有静态全局变量
+        public static String a = "a";
+        public String b = "b";
+        // 静态内部类不能使用任何外部类的非静态变量
+//        public int d = i;
+
+        // 静态内部类可以有静态方法
+        public static void foo1(){
+        }
+
+        // 静态内部类可以有非静态方法
+        public void foo2(){}
+    }
+}
+```
 
 
 
+局部内部类
+
+```java
+public class MethodInnerClass {
+    public void test() {
+        // 局部内部类
+        class InnerClass {
+            private String name;
+            final static String test = "1";
+            public InnerClass(String name) {
+                super();
+                this.name = name;
+            }
+            public void say(String str) {
+                System.out.println(name+":"+str);
+            }
+        }
+        new InnerClass("test").say("hello");
+    }
+}
+```
 
 
 
-
-
-
-
-
-
-
-
-
-
+todo ColorEnum

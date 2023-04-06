@@ -3,7 +3,7 @@ package com.example.lock;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-// 读写锁
+// 测试读写锁，多线程可以同时获取读锁，写锁只能被线程独占
 public class ReadWriteLock {
     public static void main(String[] args) {
         //Suspend Thread
@@ -42,7 +42,6 @@ public class ReadWriteLock {
             }
         };
 
-        // 读锁可以多线程同时进行，写锁让一个个线程执行
         new Thread(readTask).start();
         new Thread(readTask).start();
         new Thread(readTask).start();

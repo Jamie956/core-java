@@ -1,24 +1,24 @@
 package com.example.lock;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
-// 共享锁
+// 共享锁，多个线程可以同时获取锁
 public class ShareLock {
     public static void main(String[] args) {
         Semaphore semaphore = new Semaphore(3);
 
         Runnable runnable = () -> {
-            String name = Thread.currentThread().getName();
-            System.out.println(name + " call");
             try {
                 semaphore.acquire();
-                System.out.println(name + " obtain lock");
-                Thread.sleep(10000);
+                for (int i = 1; i < 5; i++) {
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(Thread.currentThread().getName() + " read " + i + "s");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 semaphore.release();
-                System.out.println(name + " release lock");
             }
         };
 

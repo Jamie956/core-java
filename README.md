@@ -4,7 +4,7 @@
 
 | NAME              | DESC                                                         |
 | ----------------- | ------------------------------------------------------------ |
-| algo              | Sort, Data struct, LeetCode                                  |
+| leetcode          | leetcode answer                                              |
 | aspectj-demo      | native aspectj                                               |
 | cglib-demo        | cglib demo                                                   |
 | compile-processor | 编译java时检测代码的插件                                     |
@@ -23,7 +23,7 @@
 | multi-task        | 模拟多线程处理任务                                           |
 | mybatis           | mybatis test demo                                            |
 | netty-start       |                                                              |
-| oo                | 面向对象特性                                                 |
+| object-oriented   | 面向对象特性                                                 |
 | utils             | date, string.. utils                                         |
 | word-pdf          | office word convert to pdf, office word convert to html      |
 | zk                | zookeeper demo                                               |

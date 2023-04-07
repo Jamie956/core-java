@@ -2,9 +2,9 @@ package bridge;
 
 public abstract class Shape {
     //目标对象
-    protected Drawer target;
+    protected DrawAPI target;
 
-    protected Shape(Drawer target) {
+    protected Shape(DrawAPI target) {
         this.target = target;
     }
 

@@ -1,5 +1,5 @@
 package bridge;
 
-interface Drawer {
+interface DrawAPI {
     void draw(int x);
 }

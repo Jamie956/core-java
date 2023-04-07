@@ -1,9 +1,7 @@
 package adapter;
 
-/**
- * 适配器模式
- * https://www.runoob.com/design-pattern/adapter-pattern.html
- */
+// 适配器模式
+// https://www.runoob.com/design-pattern/adapter-pattern.html
 public class Client {
     public static void main(String[] args) {
         AudioPlayer audioPlayer = new AudioPlayer();

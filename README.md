@@ -8,7 +8,7 @@
 |                   |                                                              |
 |                   |                                                              |
 |                   |                                                              |
-| compile-processor | 编译java时检测代码的插件                                     |
+| compile-processor | java编译插件                                                 |
 | design-pattern    | 设计模式                                                     |
 | elastic           | elastic client api test                                      |
 | encrypt           | JDK自带的加密/对称加密/非对称加密/数字摘要                   |
@@ -39,7 +39,7 @@ leetcode 题解
 
 
 
-# aspectj native
+# aspectj
 
 maven denpencies
 
@@ -129,7 +129,7 @@ public class AccountTest {
 
 
 
-# cglib proxy
+# cglib
 
 maven dependency
 
@@ -1910,3 +1910,194 @@ public class ExcelAPITest {
 
 
 
+# design-pattern
+
+## 适配器模式
+
+```java
+// 适配器模式
+// https://www.runoob.com/design-pattern/adapter-pattern.html
+public class Client {
+    public static void main(String[] args) {
+        AudioPlayer audioPlayer = new AudioPlayer();
+        audioPlayer.play("mp3", "beyond the horizon.mp3");
+        audioPlayer.play("mp4", "alone.mp4");
+        audioPlayer.play("vlc", "far far away.vlc");
+        audioPlayer.play("avi", "mind me.avi");
+    }
+}
+```
+
+适配器路由
+
+```java
+public class AudioPlayer implements MediaPlayer {
+    // 适配器路由
+    @Override
+    public void play(String audioType, String fileName) {
+        switch (audioType) {
+            case "mp3":
+                System.out.println("mp3 play " + fileName);
+                break;
+            case "vlc":
+            case "mp4":
+                new MediaAdapter(audioType).play(audioType, fileName);
+                break;
+            default:
+                System.out.println("Not support " + audioType);
+        }
+    }
+}
+```
+
+适配器分配具体对象
+
+```java
+public class MediaAdapter implements MediaPlayer {
+    AdvanceMediaPlayer play;
+
+    public MediaAdapter(String audioType) {
+        switch (audioType) {
+            case "vlc":
+                play = new VlcPlayer();
+                break;
+            case "mp4":
+                play = new Mp4Player();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void play(String audioType, String fileName) {
+        switch (audioType) {
+            case "vlc":
+                play.playByVlc(fileName);
+                break;
+            case "mp4":
+                play.playByMp4(fileName);
+                break;
+            default:
+                break;
+        }
+    }
+}
+```
+
+适配器共同规范接口
+
+```java
+interface MediaPlayer {
+    void play(String audioType, String fileName);
+}
+```
+
+具体播放器以及接口
+
+```java
+interface AdvanceMediaPlayer {
+    void playByVlc(String fileName);
+    void playByMp4(String fileName);
+}
+public class Mp4Player implements AdvanceMediaPlayer {
+    @Override
+    public void playByVlc(String fileName) {
+    }
+
+    @Override
+    public void playByMp4(String fileName) {
+        System.out.println("mp4 play " + fileName);
+    }
+}
+public class VlcPlayer implements AdvanceMediaPlayer {
+    @Override
+    public void playByVlc(String fileName) {
+        System.out.println("vlc play " + fileName);
+    }
+
+    @Override
+    public void playByMp4(String fileName) {
+    }
+}
+
+```
+
+
+
+## 桥接
+
+调用者决定参数和代理对象，决定执行时机
+
+```java
+// 桥接
+// https://www.runoob.com/design-pattern/bridge-pattern.html
+public class Client {
+    public static void main(String[] args) {
+        new Circle(100, new RedCircle()).draw();
+        new Circle(101, new RedCircle()).draw();
+        new Circle(100, new GreenCircle()).draw();
+        new Circle(101, new GreenCircle()).draw();
+    }
+}
+```
+
+充当代理执行
+
+```java
+public class Circle extends Shape {
+    private final int r;
+
+    protected Circle(int r, DrawAPI target) {
+        super(target);
+        this.r = r;
+    }
+
+    //代理执行目标对象的行为
+    @Override
+    void draw() {
+        target.draw(r);
+    }
+}
+```
+
+代理的抽象
+
+```java
+public abstract class Shape {
+    //目标对象
+    protected DrawAPI target;
+
+    protected Shape(DrawAPI target) {
+        this.target = target;
+    }
+
+    //目标对象行为
+    abstract void draw();
+}
+```
+
+被代理的对象
+
+```java
+public class GreenCircle implements DrawAPI {
+    @Override
+    public void draw(int r) {
+        System.out.println("Draw Green Circle r=" + r);
+    }
+}
+public class RedCircle implements DrawAPI {
+    @Override
+    public void draw(int r) {
+        System.out.println("Draw Red Circle r=" + r);
+    }
+}
+interface DrawAPI {
+    void draw(int x);
+}
+
+```
+
+
+
+## 待完善

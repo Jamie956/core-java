@@ -5,14 +5,14 @@
 
 | NAME              | DESC                                                         |
 | ----------------- | ------------------------------------------------------------ |
-| leetcode          | leetcode answer                                              |
-| aspectj-demo      | native aspectj                                               |
-| cglib-demo        | cglib demo                                                   |
+|                   |                                                              |
+| aspectj-demo      |                                                              |
+| cglib-demo        |                                                              |
 | compile-processor | 编译java时检测代码的插件                                     |
 | design-pattern    | 设计模式                                                     |
 | elastic           | elastic client api test                                      |
 | encrypt           | JDK自带的加密/对称加密/非对称加密/数字摘要                   |
-| excel             | apach poi excel api demo                                     |
+|                   |                                                              |
 | fastjson-demo     |                                                              |
 | freemarker-demo   |                                                              |
 | hadoop-mr         |                                                              |
@@ -20,25 +20,22 @@
 | jackson           |                                                              |
 | jvmlab            | JVM GC, Stack and Memory test                                |
 | kafka             | kafka client demo                                            |
+| leetcode          |                                                              |
 | maven             | maven plugin test                                            |
-| multi-task        | 模拟多线程处理任务                                           |
+|                   |                                                              |
 | mybatis           | mybatis test demo                                            |
 | netty-start       |                                                              |
 | object-oriented   | 面向对象特性                                                 |
 | utils             | date, string.. utils                                         |
-| word-pdf          | office word convert to pdf, office word convert to html      |
+|                   |                                                              |
 | zk                | zookeeper demo                                               |
 
 
 
 
-# algo
+# leetcode
 
-包含
-
-- Sort：排序
-- Data struct：树数据结构
-- LeetCode
+leetcode 题解
 
 
 
@@ -1761,11 +1758,87 @@ public class IOTest {
 
 
 
+# Apache poi - Excel
 
+maven dependencies
 
+```xml
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>4.1.2</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>4.1.2</version>
+</dependency>
+```
 
+ poi Excel Api usage
 
+```java
+public class ExcelAPITest {
+    public static void main(String[] args) throws IOException {
+        FileOutputStream out = new FileOutputStream("D:/test.xlsx");
+        XSSFWorkbook workbook = new XSSFWorkbook();
 
+        //创建sheet
+        Sheet sheet = workbook.createSheet("sheetName");
+        //创建行
+        Row row = sheet.createRow(0);
+        //创建列
+        Cell cell = row.createCell(1);
+        //设置cell样式
+        XSSFCellStyle cellStyle = workbook.createCellStyle();
+        cell.setCellStyle(cellStyle);
+        //设置cell内容
+        cell.setCellValue("aa123");
+
+        //设置字体
+        XSSFFont font = workbook.createFont();
+        font.setBold(true);
+        font.setFontName("Verdana");
+//        font.setColor(HSSFFont.COLOR_RED);
+        //自定义颜色
+        java.awt.Color rgb = translate("#ff9900");
+        XSSFColor xssfColor = new XSSFColor(rgb, new DefaultIndexedColorMap());
+        font.setColor(xssfColor);
+        cellStyle.setFont(font);
+
+        //设置背景颜色
+//        cellStyle.setFillForegroundColor(HSSFColor.HSSFColorPredefined.BLUE.getIndex());
+        cellStyle.setFillForegroundColor(xssfColor);
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        //边框样式
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+
+        //设置列宽
+        sheet.setColumnWidth(1, 10000);
+
+        workbook.write(out);
+        workbook.close();
+        out.close();
+    }
+
+    public static java.awt.Color translate(String rgbStr) {
+        if (rgbStr.startsWith("rgb")){
+            Pattern c = Pattern.compile("rgb *\\( *([0-9]+), *([0-9]+), *([0-9]+) *\\)");
+            Matcher m = c.matcher(rgbStr);
+
+            if (m.matches()) {
+                return new java.awt.Color(Integer.parseInt(m.group(1)),
+                        Integer.parseInt(m.group(2)),
+                        Integer.parseInt(m.group(3)));
+            }
+        } else if(rgbStr.startsWith("#")) {
+            return Color.decode(rgbStr);
+        }
+        return null;
+    }
+}
+```
 
 
 

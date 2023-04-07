@@ -6,8 +6,8 @@
 | NAME              | DESC                                                         |
 | ----------------- | ------------------------------------------------------------ |
 |                   |                                                              |
-| aspectj-demo      |                                                              |
-| cglib-demo        |                                                              |
+|                   |                                                              |
+|                   |                                                              |
 | compile-processor | 编译java时检测代码的插件                                     |
 | design-pattern    | 设计模式                                                     |
 | elastic           | elastic client api test                                      |
@@ -39,71 +39,146 @@ leetcode 题解
 
 
 
-# aspectj-demo
+# aspectj native
 
-native aspectj api demo
+maven denpencies
 
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>1.8.9</version>
+    </dependency>
+    <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjweaver</artifactId>
+        <version>1.8.9</version>
+    </dependency>
+</dependencies>
+```
 
+maven plugin
+
+```xml
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>aspectj-maven-plugin</artifactId>
+    <version>1.7</version>
+    <configuration>
+        <complianceLevel>1.8</complianceLevel>
+        <source>1.8</source>
+        <target>1.8</target>
+        <showWeaveInfo>true</showWeaveInfo>
+        <verbose>true</verbose>
+        <Xlint>ignore</Xlint>
+        <encoding>UTF-8 </encoding>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <!-- use this goal to weave all your main classes -->
+                <goal>compile</goal>
+                <!-- use this goal to weave all your test classes -->
+                <goal>test-compile</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
+
+target object
+
+```java
+public class Account {
+
+    public void withdraw() {
+        System.out.println("withdraw");
+    }
+}
+
+```
+
+aspect
 
 ```java
 public aspect AccountAspect {
-    /*
-    defined pointcut
-    callWithDraw123: pointcut name, custom defined
-    call(): 参数可以是目标方法 或者是 表达式
-    args(): ?
-    target(): ?
-     */
-    pointcut callWithDraw123(int amount, Account acc):
-            call(boolean withdraw(int)) && args(amount) && target(acc);
 
-    // before advice, call if pointcut true
-    before(int amount, Account acc): callWithDraw123(amount, acc) {
+    // pointcut name: custom defined
+    // call(): match target method
+    pointcut callWithDraw123(Account account): call(void withdraw()) && target(account);
+
+    // before() ??
+    // advice works if match pointcut
+    before(Account account): callWithDraw123(account) {
         System.out.println("before");
     }
+}
+```
 
-    // around advice, call if pointcut true
-    boolean around(int amount, Account acc): callWithDraw123(amount, acc) {
-        System.out.println("around");
-        return proceed(amount, acc);
-    }
+test aspect
 
-    // after advice, call if pointcut true
-    after(int amount, Account balance): callWithDraw123(amount, balance) {
-        System.out.println("after");
+```java
+public class AccountTest {
+    @Test
+    public void test1() {
+        new Account().withdraw();
     }
 }
 ```
 
 
 
-# cglib-demo
+# cglib proxy
 
-cglib api demo
+maven dependency
 
+```
+<dependency>
+    <groupId>cglib</groupId>
+    <artifactId>cglib</artifactId>
+    <version>3.2.5</version>
+</dependency>
+```
 
+proxy target object
 
 ```java
-Enhancer enhancer = new Enhancer();
-enhancer.setSuperclass(TargetObject.class);
-enhancer.setCallback(new MyInterceptor());
+public class TargetObject{
+    public void request() {
+        System.out.println("do request");
+    }
+}
+```
 
-TargetObject o = (TargetObject) enhancer.create();
-o.request();
+cglib interceptor
+
+```java
+public class MyInterceptor implements MethodInterceptor {
+    @Override
+    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+        System.out.println("before");
+        Object object = proxy.invokeSuper(obj, args);
+        System.out.println("after");
+        return object;
+    }
+}
 ```
 
 
 
 # compile-processor
 
+java 编译插件
+
 ```java
-/**
- * 编译 Class 时作为插件检查 Java 代码
- */
-// 可以用"*"表示支持所有Annotations
+// java 编译插件
+
+// 测试步骤
+//1.编译检测编译类：javac -encoding UTF-8 NameCheckProcessor.java
+//2.使用代码检测插件编译目标类：javac -processor NameCheckProcessor -encoding UTF-8 BADLY_NAMED_CODE.java
 @SupportedAnnotationTypes("*")
-// 只支持JDK 6的Java代码
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class NameCheckProcessor extends AbstractProcessor {
     private NameChecker nameChecker;
 
@@ -123,9 +198,6 @@ public class NameCheckProcessor extends AbstractProcessor {
         return false;
     }
 
-    /**
-     * 检查代码规范
-     */
     static class NameChecker {
         private final Messager messager;
         NameCheckScanner nameCheckScanner = new NameCheckScanner();
@@ -139,28 +211,16 @@ public class NameCheckProcessor extends AbstractProcessor {
         }
 
         private class NameCheckScanner extends ElementScanner6<Void, Void> {
-            /**
-             * 检查Java类
-             */
-            @Override
-            public Void visitType(TypeElement e, Void p) {
-                return null;
-            }
-
-            /**
-             * 检查方法命名
-             */
+            // 检查方法命名
             @Override
             public Void visitExecutable(ExecutableElement e, Void p) {
+                if (e.getKind() == METHOD) {
+                    Name name = e.getSimpleName();
+                    if (name.contentEquals(e.getEnclosingElement().getSimpleName())) {
+                        messager.printMessage(WARNING, "一个普通方法 “" + name + "”不应当与类名重复", e);
+                    }
+                }
                 super.visitExecutable(e, p);
-                return null;
-            }
-
-            /**
-             * 检查变量命名
-             */
-            @Override
-            public Void visitVariable(VariableElement e, Void p) {
                 return null;
             }
         }
@@ -168,7 +228,15 @@ public class NameCheckProcessor extends AbstractProcessor {
 }
 ```
 
+被检测类
 
+```java
+public class BADLY_NAMED_CODE {
+    protected void BADLY_NAMED_CODE() {
+        return;
+    }
+}
+```
 
 # encrypt
 

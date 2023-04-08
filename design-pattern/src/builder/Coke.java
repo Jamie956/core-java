@@ -1,8 +1,5 @@
 package builder;
 
-/**
- * 子类定义属性
- */
 public class Coke extends ColdDrink {
     @Override
     public String name() {

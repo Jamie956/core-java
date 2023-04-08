@@ -1,8 +1,5 @@
 package builder;
 
-/**
- * 子类定义属性
- */
 public class VegBurger extends Burger {
     @Override
     public String name() {

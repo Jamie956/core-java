@@ -1,18 +1,16 @@
-面向对象特性Demo/常用工具Demo/算法与数据结构/虚拟机学习
+面向对象特性/常用工具/算法与数据结构/虚拟机学习
+
+
 
 
 # Overview
 
 | NAME              | DESC                                                         |
 | ----------------- | ------------------------------------------------------------ |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
 | compile-processor | java编译插件                                                 |
 | design-pattern    | 设计模式                                                     |
 | elastic           | elastic client api test                                      |
 | encrypt           | JDK自带的加密/对称加密/非对称加密/数字摘要                   |
-|                   |                                                              |
 | fastjson-demo     |                                                              |
 | freemarker-demo   |                                                              |
 | hadoop-mr         |                                                              |
@@ -20,22 +18,15 @@
 | jackson           |                                                              |
 | jvmlab            | JVM GC, Stack and Memory test                                |
 | kafka             | kafka client demo                                            |
-| leetcode          |                                                              |
+| leetcode          | leetcode 题解                                                |
 | maven             | maven plugin test                                            |
-|                   |                                                              |
 | mybatis           | mybatis test demo                                            |
 | netty-start       |                                                              |
 | object-oriented   | 面向对象特性                                                 |
 | utils             | date, string.. utils                                         |
-|                   |                                                              |
 | zk                | zookeeper demo                                               |
 
 
-
-
-# leetcode
-
-leetcode 题解
 
 
 
@@ -2267,6 +2258,155 @@ public class Wrapper implements Packing {
 }
 
 ```
+
+
+
+## 装饰器模式
+
+```java
+/**
+ * 装饰器模式：向一个现有对象添加新的功能，但是不改变其结构
+ * https://www.runoob.com/design-pattern/decorator-pattern.html
+ */
+public class Client {
+    public static void main(String[] args) {
+        Circle circle = new Circle();
+        ConcreteDecorator circleWithDecorate = new ConcreteDecorator(circle);
+        circleWithDecorate.draw();
+    }
+}
+```
+
+
+
+```java
+/**
+ * 装饰器，代理目标类执行
+ */
+public class ConcreteDecorator extends AbstractDecorator {
+    ConcreteDecorator(Shape target) {
+        super(target);
+    }
+
+    @Override
+    public void draw() {
+        target.draw();
+        System.out.println("do decorate...");
+    }
+}
+
+/**
+ * 抽象装饰器，与目标对象实现相同的接口
+ */
+public abstract class AbstractDecorator implements Shape {
+    protected Shape target;
+
+    AbstractDecorator(Shape target) {
+        this.target = target;
+    }
+
+    @Override
+    public void draw() {
+        target.draw();
+    }
+}
+```
+
+
+
+```java
+public class Circle implements Shape {
+    public Circle() {
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("draw circle");
+    }
+}
+
+interface Shape {
+    void draw();
+}
+
+```
+
+
+
+## 外观模式
+
+
+
+```java
+/**
+ * 外观模式（Facade Pattern）
+ * https://www.runoob.com/design-pattern/facade-pattern.html
+ */
+public class Client {
+    public static void main(String[] args) {
+        ShapeMaker s = new ShapeMaker();
+        s.drawCircle();
+        s.drawRectangle();
+    }
+}
+
+```
+
+
+
+```java
+public class ShapeMaker {
+    private final Shape circle;
+    private final Shape rectangle;
+
+    /**
+     * 构造时创建代理对象
+     */
+    public ShapeMaker() {
+        circle = new Circle();
+        rectangle = new Rectangle();
+    }
+
+    //代理执行对象的行为
+    public void drawCircle() {
+        circle.draw();
+    }
+
+    public void drawRectangle() {
+        rectangle.draw();
+    }
+}
+```
+
+
+
+```java
+public class Rectangle implements Shape {
+    public Rectangle() {
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Draw Rectangle");
+    }
+}
+
+public class Circle implements Shape {
+    public Circle() {
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Draw Circle");
+    }
+}
+
+interface Shape {
+    void draw();
+}
+```
+
+
 
 
 

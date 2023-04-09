@@ -6,12 +6,8 @@ package decorator;
  */
 public class Client {
     public static void main(String[] args) {
-        Circle c = new Circle();
-        c.draw();
-
-        System.out.println("-----------");
-
-        ConcreteDecorator circle = new ConcreteDecorator(c);
-        circle.draw();
+        Circle circle = new Circle();
+        ConcreteDecorator circleWithDecorate = new ConcreteDecorator(circle);
+        circleWithDecorate.draw();
     }
 }

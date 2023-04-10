@@ -22,7 +22,7 @@ public class Factory {
     /**
      * 根据key 反射构造Class的实例
      */
-    public static Shape cache(String key) throws IllegalAccessException, InstantiationException {
+    public static Shape get(String key) throws IllegalAccessException, InstantiationException {
         Class<?> clazz = CACHE.get(key);
         return (Shape) clazz.newInstance();
     }

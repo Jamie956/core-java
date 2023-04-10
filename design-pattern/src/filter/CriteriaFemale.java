@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CriteriaFemale implements Criteria {
-    /**
-     * 过滤非FEMALE
-     */
     @Override
     public List<Person> meetCriteria(List<Person> items) {
         List<Person> result = new ArrayList<>();

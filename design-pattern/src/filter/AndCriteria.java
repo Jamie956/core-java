@@ -2,9 +2,6 @@ package filter;
 
 import java.util.List;
 
-/**
- * 实现接口，and 过滤
- */
 public class AndCriteria implements Criteria {
     private Criteria c1;
     private Criteria c2;

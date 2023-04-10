@@ -2408,11 +2408,365 @@ interface Shape {
 
 
 
+## 工厂
+
+```java
+/**
+ * 工厂模式-静态
+ * https://www.runoob.com/design-pattern/factory-pattern.html
+ */
+public class Client {
+    public static void main(String[] args) {
+        Factory factory = new Factory();
+
+        Shape square = factory.get("Square");
+        square.draw();
+
+        Shape circle = factory.get("Circle");
+        circle.draw();
+    }
+}
+```
+
+
+
+```java
+public class Factory {
+    // 根据 key 创建实例
+    public Shape get(String key) {
+        switch (key) {
+            case "Square":
+                return new Square();
+            case "Circle":
+                return new Circle();
+            default:
+                break;
+        }
+        return null;
+    }
+}
+```
+
+
+
+```java
+interface Shape {
+    void draw();
+}
+public class Square implements Shape {
+    public Square() {
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Draw Square");
+    }
+}
+public class Circle implements Shape {
+    public Circle() {
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Draw Circle");
+    }
+}
+```
+
+
+
+## 过滤器模式
+
+```java
+/**
+ * 过滤器模式（Filter Pattern）
+ * 使用不同的标准来过滤一组对象，通过逻辑运算以解耦的方式把它们连接起来。
+ * https://www.runoob.com/design-pattern/filter-pattern.html
+ */
+public class Client {
+    public static void main(String[] args) {
+        List<Person> persons = new ArrayList<>();
+        persons.add(new Person("Robert", "Male", "Single"));
+        persons.add(new Person("John", "Male", "Married"));
+        persons.add(new Person("Laura", "Female", "Married"));
+        persons.add(new Person("Diana", "Female", "Single"));
+        persons.add(new Person("Mike", "Male", "Single"));
+        persons.add(new Person("Bobby", "Male", "Single"));
+
+        Criteria male = new CriteriaMale();
+        Criteria female = new CriteriaFemale();
+        Criteria single = new CriteriaSingle();
+        Criteria singleAndMale = new AndCriteria(single, male);
+        Criteria singleOrFemale = new OrCriteria(single, female);
+
+        System.out.println(male.meetCriteria(persons));
+        System.out.println(female.meetCriteria(persons));
+        System.out.println(singleAndMale.meetCriteria(persons));
+        System.out.println(singleOrFemale.meetCriteria(persons));
+    }
+}
+```
+
+
+
+```java
+interface Criteria {
+    List<Person> meetCriteria(List<Person> persons);
+}
+public class CriteriaFemale implements Criteria {
+    @Override
+    public List<Person> meetCriteria(List<Person> items) {
+        List<Person> result = new ArrayList<>();
+        for (Person item : items) {
+            if ("FEMALE".equalsIgnoreCase(item.getGender())) {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+}
+public class CriteriaMale implements Criteria {
+    @Override
+    public List<Person> meetCriteria(List<Person> items) {
+        List<Person> result = new ArrayList<>();
+        for (Person item : items) {
+            if ("MALE".equalsIgnoreCase(item.getGender())) {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+}
+public class CriteriaSingle implements Criteria {
+    @Override
+    public List<Person> meetCriteria(List<Person> items) {
+        List<Person> result = new ArrayList<>();
+        for (Person item : items) {
+            if ("SINGLE".equalsIgnoreCase(item.getMaritalStatus())) {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+}
+public class AndCriteria implements Criteria {
+    private Criteria c1;
+    private Criteria c2;
+
+    public AndCriteria(Criteria c1, Criteria c2) {
+        this.c1 = c1;
+        this.c2 = c2;
+    }
+
+    @Override
+    public List<Person> meetCriteria(List<Person> persons) {
+        return c2.meetCriteria(c1.meetCriteria(persons));
+    }
+}
+public class OrCriteria implements Criteria {
+    private Criteria c1;
+    private Criteria c2;
+
+    public OrCriteria(Criteria c1, Criteria c2) {
+        this.c1 = c1;
+        this.c2 = c2;
+    }
+
+    // 求并集
+    @Override
+    public List<Person> meetCriteria(List<Person> persons) {
+        List<Person> l1 = c1.meetCriteria(persons);
+        List<Person> l2 = c2.meetCriteria(l1);
+        for (Person e : l2) {
+            if (!l1.contains(e)) {
+                l1.add(e);
+            }
+        }
+        return l1;
+    }
+}
+```
+
+
+
+## 享元模式
+
+```java
+/**
+ * 享元模式（Flyweight Pattern）：减少创建对象的数量，减少内存占用，提高性能
+ * https://www.runoob.com/design-pattern/flyweight-pattern.html
+ */
+public class Client {
+    public static void main(String[] args) {
+        Shape c1 = Factory.get("Red");
+        Shape c2 = Factory.get("Red");
+        Shape c3 = Factory.get("Black");
+
+        System.out.println(c1);
+        System.out.println(c2);
+        System.out.println(c3);
+    }
+}
+```
+
+
+
+```java
+public class Factory {
+    // 缓存的实例
+    private static final HashMap<String, Shape> MAP = new HashMap<>();
+
+    public static Shape get(String key) {
+        Shape target = MAP.get(key);
+        if (target == null) {
+            target = new Circle();
+            MAP.put(key, target);
+        }
+        return target;
+    }
+}
+```
+
+
+
+```java
+interface Shape {
+    void draw();
+}
+public class Circle implements Shape {
+    public Circle() {}
+
+    @Override
+    public void draw() {
+        System.out.println("draw");
+    }
+}
+```
+
+
+
+## 原型模式
+
+```java
+/**
+ * 原型模式（Prototype Pattern）：创建重复的对象
+ * https://www.runoob.com/design-pattern/prototype-pattern.html
+ */
+public class Client {
+    public static void main(String[] args) {
+        Prototype.load();
+
+        Shape s1 = Prototype.copy("rectangle");
+        Shape s2 = Prototype.copy("rectangle");
+
+        Shape s3 = Prototype.copy("circle");
+        Shape s4 = Prototype.copy("circle");
+    }
+}
+```
+
+
+
+```java
+public class Prototype {
+    private static Hashtable<String, Shape> SHAPE_MAP = new Hashtable<>();
+
+    //克隆缓存对象
+    public static Shape copy(String shapeId) {
+        Shape cacheShape = SHAPE_MAP.get(shapeId);
+        return (Shape)cacheShape.clone();
+    }
+
+    public static void load() {
+        SHAPE_MAP.put("rectangle", new Rectangle());
+        SHAPE_MAP.put("circle", new Circle());
+    }
+}
+```
+
+
+
+```java
+public abstract class Shape implements Cloneable {
+    abstract void draw();
+
+    // 实现克隆方法
+    @Override
+    public Object clone() {
+        Object clone = null;
+        try {
+            clone = super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return clone;
+    }
+}
+public class Circle extends Shape {
+    public Circle() {
+    }
+
+    @Override
+    void draw() {
+        System.out.println("draw Circle");
+    }
+}
+public class Rectangle extends Shape {
+    public Rectangle() {
+    }
+
+    @Override
+    void draw() {
+        System.out.println("draw Rectangle");
+    }
+}
+```
+
+
+
+## 单例
+
+```java
+// 饿汉式，线程安全
+public class EagerSingleton {
+    // 静态变量，创建实例时就实例化对象
+    private final static Single INSTANCE = new Single();
+    // 私有构造，外部类无法创建实例
+    private EagerSingleton() {
+    }
+    // 静态方法，返回实例对象
+    public static Single getInstance() {
+        return INSTANCE;
+    }
+}
+```
+
+
+
+```java
+// 懒汉式-加锁，线程安全
+public class LazySingleton1 {
+    // 静态变量
+    private static Single INSTANCE;
+    // 私有构造，不允许外部实例化
+    private LazySingleton1() {
+    }
+    // 获取实例，实例不存在时创建
+    // 对象锁，不允许其他线程修改此对象
+    public static synchronized Single getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new Single();
+        }
+        return INSTANCE;
+    }
+}
+```
 
 
 
 
-## 待完善
+
+
 
 
 

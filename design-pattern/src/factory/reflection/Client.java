@@ -6,7 +6,7 @@ package factory.reflection;
 public class Client {
     public static void main(String[] args) throws InstantiationException, IllegalAccessException {
         Factory.register("rectangle", Rectangle.class);
-        Shape s = Factory.cache("rectangle");
+        Shape s = Factory.get("rectangle");
         s.draw();
     }
 }

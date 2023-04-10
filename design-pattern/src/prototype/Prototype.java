@@ -11,14 +11,8 @@ public class Prototype {
         return (Shape)cacheShape.clone();
     }
 
-    /**
-     * 初始化缓存
-     */
     public static void load() {
-        Rectangle rectangle = new Rectangle();
-        SHAPE_MAP.put("rectangle", rectangle);
-
-        Circle circle = new Circle();
-        SHAPE_MAP.put("circle", circle);
+        SHAPE_MAP.put("rectangle", new Rectangle());
+        SHAPE_MAP.put("circle", new Circle());
     }
 }

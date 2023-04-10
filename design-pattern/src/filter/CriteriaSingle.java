@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CriteriaSingle implements Criteria {
-    /**
-     * 过滤单身狗
-     */
     @Override
     public List<Person> meetCriteria(List<Person> items) {
         List<Person> result = new ArrayList<>();

@@ -6,9 +6,9 @@ package flyweight;
  */
 public class Client {
     public static void main(String[] args) {
-        Circle c1 = (Circle) Factory.getCircle("Red");
-        Circle c2 = (Circle) Factory.getCircle("Red");
-        Circle c3 = (Circle) Factory.getCircle("Black");
+        Shape c1 = Factory.get("Red");
+        Shape c2 = Factory.get("Red");
+        Shape c3 = Factory.get("Black");
 
         System.out.println(c1);
         System.out.println(c2);

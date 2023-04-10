@@ -8,10 +8,10 @@ public class Client {
     public static void main(String[] args) {
         Factory factory = new Factory();
 
-        Shape square = factory.createInstance("Square");
+        Shape square = factory.get("Square");
         square.draw();
 
-        Shape circle = factory.createInstance("Circle");
+        Shape circle = factory.get("Circle");
         circle.draw();
     }
 }

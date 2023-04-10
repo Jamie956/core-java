@@ -11,9 +11,7 @@ public class OrCriteria implements Criteria {
         this.c2 = c2;
     }
 
-    /**
-     * 并集
-     */
+    // 求并集
     @Override
     public List<Person> meetCriteria(List<Person> persons) {
         List<Person> l1 = c1.meetCriteria(persons);

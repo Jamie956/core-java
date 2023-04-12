@@ -1,3 +1,5 @@
+package com.example;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.junit.Assert;
@@ -12,7 +14,7 @@ import java.util.Map;
 public class FileTemplateDemo1 {
     public static void main(String[] args) throws ParseException {
         String dir = "src/main/java";
-        String file = "demo1.ftl";
+        String file = "com/example/template/demo1.ftl";
         Map<String, Object> dataMap = new HashMap<>(2);
         dataMap.put("name", "jamie");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

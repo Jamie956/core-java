@@ -1,4 +1,3 @@
-定义变量
 <#assign cname=r"特殊字符完成输出(http:\www.baidu.com)">
 ${cname}
 

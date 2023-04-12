@@ -1,8 +1,7 @@
-判断map是否为空
 <#if kindsMap3?size gt 0>
-    map size 大于0
+map size 大于0
 <#else>
-    map size 不大于0
+map size 不大于0
 </#if>
 
 <#list kindsMap?keys as mKey>

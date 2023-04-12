@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
 
-public class Demo2 {
+public class FunctionTest {
     @Test
     public void test5() throws IOException, TemplateException {
         String dir = "src/main/java";
-        String file = "com/example/template/four.ftl";
+        String file = "com/example/template/function.ftl";
 
         Configuration conf = new Configuration();
         conf.setDirectoryForTemplateLoading(new File(dir));

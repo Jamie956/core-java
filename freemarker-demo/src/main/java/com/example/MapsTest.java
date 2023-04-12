@@ -3,6 +3,7 @@ package com.example;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -36,6 +37,13 @@ public class MapsTest {
         Template template = conf.getTemplate(file);
         StringWriter writer = new StringWriter();
         template.process(dataMap, writer);
-        System.out.println(writer.toString());
+        Assert.assertEquals("map size 不大于0\n" +
+                "\n" +
+                "    a\n" +
+                "        a1\n" +
+                "        a2\n" +
+                "    b\n" +
+                "        b1\n" +
+                "        b2\n", writer.toString());
     }
 }

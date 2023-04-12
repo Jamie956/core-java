@@ -11,10 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FileTemplateDemo1 {
+public class StringTest {
     public static void main(String[] args) throws ParseException {
         String dir = "src/main/java";
-        String file = "com/example/template/demo1.ftl";
+        String file = "com/example/template/string.ftl";
         Map<String, Object> dataMap = new HashMap<>(2);
         dataMap.put("name", "jamie");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -28,7 +28,11 @@ public class FileTemplateDemo1 {
             StringWriter writer = new StringWriter();
             template.process(dataMap, writer);
             String result = writer.toString();
-            Assert.assertEquals("Hello jamie !\r\nHello jamie !\r\nm\r\njam\r\n2022-02-02", result);
+            Assert.assertEquals("Hello jamie !\n" +
+                    "Hello jamie !\n" +
+                    "m\n" +
+                    "jam\n" +
+                    "2022-02-02", result);
         } catch (Exception e) {
             e.printStackTrace();
         }

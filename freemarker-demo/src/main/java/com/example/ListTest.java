@@ -6,6 +6,7 @@ import freemarker.template.TemplateException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -17,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Demo3 {
+public class ListTest {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -33,11 +34,8 @@ public class Demo3 {
 
     }
 
-    /**
-     * 集合遍历？？？？
-     */
     @Test
-    public void test3() throws IOException, TemplateException {
+    public void tt() throws IOException, TemplateException {
         List<User> users = new ArrayList<>();
         users.add(new User(1, "tom"));
         users.add(new User(2, "tim"));
@@ -47,10 +45,7 @@ public class Demo3 {
         dataMap.put("users", users);
 
         String dir = "src/main/java";
-        String file = "com/example/template/sec.ftl";
-
-//        String ret = fileTemp(dir, file, dataMap);
-//        System.out.println(ret);
+        String file = "com/example/template/list.ftl";
 
         Configuration conf = new Configuration();
         conf.setDirectoryForTemplateLoading(new File(dir));
@@ -58,7 +53,9 @@ public class Demo3 {
 
         StringWriter writer = new StringWriter();
         template.process(dataMap, writer);
-        System.out.println(writer.toString());
-
+        Assert.assertEquals("3\n" +
+                "        ListTest.User(id=1, name=tom)\n" +
+                "        ListTest.User(id=2, name=tim)\n" +
+                "        ListTest.User(id=3, name=to)\n", writer.toString());
     }
 }

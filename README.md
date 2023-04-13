@@ -2895,6 +2895,61 @@ public class FastJsonApiTest {
 
 
 
+# freemarker
+
+```java
+public class StringTest {
+    public static void main(String[] args) throws ParseException {
+        String dir = "src/main/java";
+        String file = "com/example/template/string.ftl";
+        Map<String, Object> dataMap = new HashMap<>(2);
+        dataMap.put("name", "jamie");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        dataMap.put("dateTime", sdf.parse("2022-02-02"));
+
+        try {
+            Configuration conf = new Configuration();
+            conf.setDirectoryForTemplateLoading(new File(dir));
+
+            Template template = conf.getTemplate(file);
+            StringWriter writer = new StringWriter();
+            template.process(dataMap, writer);
+            String result = writer.toString();
+            Assert.assertEquals("Hello jamie !\n" +
+                    "Hello jamie !\n" +
+                    "m\n" +
+                    "jam\n" +
+                    "2022-02-02", result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+
+
+string.ftl
+
+```xml
+<#--字符串输出-->
+${"Hello ${name} !"}
+${"Hello " + name + " !"}
+<#--索引访问-->
+${name[2]}
+<#--截取字符串-->
+${name[0..2]}
+<#--时间格式化-->
+${dateTime?string("yyyy-MM-dd")}
+```
+
+
+
 # 1
 
-todo elasctyi
+todo
+
+jackson
+
+maven
+

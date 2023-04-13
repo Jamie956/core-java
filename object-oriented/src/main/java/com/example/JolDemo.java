@@ -1,4 +1,4 @@
-package com.cat;
+package com.example;
 
 import org.openjdk.jol.info.ClassLayout;
 

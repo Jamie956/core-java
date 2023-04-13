@@ -23,7 +23,6 @@
 | mybatis           | mybatis test demo                                            |
 | netty-start       |                                                              |
 | object-oriented   | 面向对象特性                                                 |
-| utils             | date, string.. utils                                         |
 | zk                | zookeeper demo                                               |
 
 
@@ -2945,11 +2944,31 @@ ${dateTime?string("yyyy-MM-dd")}
 
 
 
+# jackson
+
+```java
+public static class Object01 {
+   public String a;
+}
+// java 对象转 json string
+@Test
+public void javaObject2jsonStrTest() throws IOException {
+   Object01 o = new Object01();
+   o.a = "123";
+   String result = new ObjectMapper().writeValueAsString(o);
+   Assert.assertEquals("{\"a\":\"123\"}", result);
+}
+// json string 转 java object
+@Test
+public void jsonStr2javaObjectTest() throws IOException {
+   Object01 o = new ObjectMapper().readerFor(Object01.class).readValue("{\"a\":\"123\"}");
+   Assert.assertEquals("123", o.a);
+}
+```
+
+
+
 # 1
 
-todo
 
-jackson
-
-maven
 

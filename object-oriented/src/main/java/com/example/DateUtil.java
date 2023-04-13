@@ -1,4 +1,6 @@
-package com.cat;
+package com.example;
+
+import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -698,22 +700,28 @@ public class DateUtil {
         return localDateTimeToTimestamp(localDateTime);
     }
 
+    @Test
+    public void localDateTest() {
+        //当前 LocalDate
+        LocalDate now = LocalDate.now();
+        //LocalDate 格式化
+        String format = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        //LocalDate 偏移
+        LocalDate next = now.plusDays(1);
+    }
+
+    @Test
+    public void localTimeTest() {
+        //当前 LocalTime
+        LocalTime now = LocalTime.now();
+        //LocalTime 格式化
+        String format = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
     /**
      * api测试
      */
     public static void main(String[] args) {
-        //当前 LocalDate
-        LocalDate nowLocalDate = LocalDate.now();
-        //LocalDate 格式化
-        String formatLocalDate = nowLocalDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
-        //LocalDate 偏移
-        LocalDate nextLocalDate = nowLocalDate.plusDays(1);
-
-        //当前 LocalTime
-        LocalTime nowLocalTime = LocalTime.now();
-        //LocalTime 格式化
-        String FormatLocalTime = nowLocalTime.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
-
         //ts 转 Instant
         Instant tsInstant = Instant.ofEpochMilli(1634010328685L);
         //Instant 转 LocalDateTime

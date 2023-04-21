@@ -37,11 +37,17 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
 import java.util.Set;
 
-// java 编译插件
+/*
+java 编译插件
 
-// 测试步骤
-//1.编译检测编译类：javac -encoding UTF-8 NameCheckProcessor.java
-//2.使用代码检测插件编译目标类：javac -processor NameCheckProcessor -encoding UTF-8 BADLY_NAMED_CODE.java
+测试步骤:
+
+1.编译检测编译类：
+javac -encoding UTF-8 NameCheckProcessor.java
+
+2.使用代码检测插件编译目标类：
+javac -processor NameCheckProcessor -encoding UTF-8 BADLY_NAMED_CODE.java
+ */
 @SupportedAnnotationTypes("*")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class NameCheckProcessor extends AbstractProcessor {
@@ -50,8 +56,7 @@ public class NameCheckProcessor extends AbstractProcessor {
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        nameChecker = new NameCheckScanner();
-        nameChecker.setMessager(processingEnv.getMessager());
+        nameChecker = new NameCheckScanner(processingEnv.getMessager());
     }
 
     @Override
@@ -78,9 +83,9 @@ import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
 public class NameCheckScanner extends ElementScanner6<Void, Void> {
-    private Messager messager;
+    private final Messager messager;
 
-    public void setMessager(Messager messager) {
+    public NameCheckScanner(Messager messager) {
         this.messager = messager;
     }
 

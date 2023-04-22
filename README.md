@@ -7,7 +7,7 @@
 
 | NAME              | DESC                                                         |
 | ----------------- | ------------------------------------------------------------ |
-| compile-processor | java编译插件                                                 |
+| compile-processor | 自定义一个 processor，在编译 Java Class 时可以用来检测代码语法 |
 | design-pattern    | 设计模式                                                     |
 | elastic           | elastic client api test                                      |
 | encrypt           | JDK自带的加密/对称加密/非对称加密/数字摘要                   |
@@ -29,7 +29,9 @@
 
 # compile-processor
 
+自定义一个 processor，在编译 Java Class 时可以用来检测代码语法
 
+`javac -processor`
 
 ```java
 import javax.annotation.processing.*;
@@ -38,13 +40,11 @@ import javax.lang.model.element.*;
 import java.util.Set;
 
 /*
-java 编译插件
+自定义一个 processor，在编译 Java Class 时可以用来检测代码语法
 
 测试步骤:
-
 1.编译检测编译类：
 javac -encoding UTF-8 NameCheckProcessor.java
-
 2.使用代码检测插件编译目标类：
 javac -processor NameCheckProcessor -encoding UTF-8 BADLY_NAMED_CODE.java
  */
@@ -111,7 +111,7 @@ public class NameCheckScanner extends ElementScanner6<Void, Void> {
 ```java
 // 被检测的类
 public class BADLY_NAMED_CODE {
-    // 方法名与类名相同，使用插件检测
+    // 方法名与类名相同，会被 processor 检测
     protected void BADLY_NAMED_CODE() {
         return;
     }
@@ -120,9 +120,21 @@ public class BADLY_NAMED_CODE {
 
 
 
+测试结果
+
+```
+BADLY_NAMED_CODE.java:4: 警告: 一个普通方法 “BADLY_NAMED_CODE”不应当与类名重复
+    protected void BADLY_NAMED_CODE() {
+                   ^
+1 个警告
+
+```
+
 
 
 # design-pattern
+
+
 
 ## 适配器模式
 
@@ -140,7 +152,7 @@ public class Client {
 }
 ```
 
-适配器路由
+基于行为路由到适配器
 
 ```java
 public class AudioPlayer implements MediaPlayer {
@@ -162,7 +174,7 @@ public class AudioPlayer implements MediaPlayer {
 }
 ```
 
-适配器分配具体对象
+适配器路由目标对象和路由行为
 
 ```java
 public class MediaAdapter implements MediaPlayer {
@@ -197,7 +209,7 @@ public class MediaAdapter implements MediaPlayer {
 }
 ```
 
-适配器共同规范接口
+适配器有目标对象行为的能力
 
 ```java
 interface MediaPlayer {
@@ -205,13 +217,18 @@ interface MediaPlayer {
 }
 ```
 
-具体播放器以及接口
+具体行为接口
 
 ```java
 interface AdvanceMediaPlayer {
     void playByVlc(String fileName);
     void playByMp4(String fileName);
 }
+```
+
+
+
+```java
 public class Mp4Player implements AdvanceMediaPlayer {
     @Override
     public void playByVlc(String fileName) {
@@ -222,6 +239,11 @@ public class Mp4Player implements AdvanceMediaPlayer {
         System.out.println("mp4 play " + fileName);
     }
 }
+```
+
+
+
+```java
 public class VlcPlayer implements AdvanceMediaPlayer {
     @Override
     public void playByVlc(String fileName) {
@@ -232,14 +254,13 @@ public class VlcPlayer implements AdvanceMediaPlayer {
     public void playByMp4(String fileName) {
     }
 }
-
 ```
 
 
 
 ## 桥接
 
-调用者决定参数和代理对象，决定执行时机
+调用者决定代理目标对象/行为/目标对象变量
 
 ```java
 // 桥接
@@ -254,7 +275,7 @@ public class Client {
 }
 ```
 
-充当代理执行
+代理目标对象/行为/目标对象变量
 
 ```java
 public class Circle extends Shape {
@@ -304,10 +325,14 @@ public class RedCircle implements DrawAPI {
         System.out.println("Draw Red Circle r=" + r);
     }
 }
+```
+
+
+
+```java
 interface DrawAPI {
     void draw(int x);
 }
-
 ```
 
 

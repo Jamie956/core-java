@@ -5,25 +5,16 @@
 
 # Overview
 
-| NAME              | DESC                                                         |
-| ----------------- | ------------------------------------------------------------ |
-| compile-processor | 自定义一个 processor，在编译 Java Class 时可以用来检测代码语法 |
-| design-pattern    | 设计模式                                                     |
-| elastic           | elastic client api test                                      |
-| encrypt           | JDK自带的加密/对称加密/非对称加密/数字摘要                   |
-| fastjson-demo     |                                                              |
-| freemarker-demo   |                                                              |
-| hadoop-mr         |                                                              |
-| hive-udf          | hive user defined function generate snow ID, compile in one jar by maven |
-| jackson           |                                                              |
-| jvmlab            | JVM GC, Stack and Memory test                                |
-| kafka             | kafka client demo                                            |
-| leetcode          | leetcode 题解                                                |
-| maven             | maven plugin test                                            |
-| mybatis           | mybatis test demo                                            |
-| netty-start       |                                                              |
-| object-oriented   | 面向对象特性                                                 |
-| zk                | zookeeper demo                                               |
+| NAME            | DESC                                                         |
+| --------------- | ------------------------------------------------------------ |
+| hive-udf        | hive user defined function generate snow ID, compile in one jar by maven |
+| jvmlab          | JVM GC/Stack/Memory test                                     |
+| kafka           | kafka client demo                                            |
+| leetcode        | leetcode 题解                                                |
+| mybatis         | mybatis test demo                                            |
+| netty-start     |                                                              |
+| object-oriented | 面向对象特性                                                 |
+| zk              | zookeeper demo                                               |
 
 
 

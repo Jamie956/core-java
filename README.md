@@ -258,7 +258,7 @@ public class VlcPlayer implements AdvanceMediaPlayer {
 
 
 
-## 桥接
+## 桥接模式
 
 调用者决定代理目标对象/行为/目标对象变量
 
@@ -366,7 +366,7 @@ public class Client {
 
 
 
-建造者搭配组合好对象
+建造者搭配组合多个 Item 对象
 
 ```java
 // builder 组合对象构建
@@ -390,7 +390,7 @@ public class MealBuilder {
 
 
 ```java
-// 存储抽象 item list 的对象
+// Item 容器
 public class Meal {
     private final List<Item> items = new ArrayList<>();
 
@@ -511,7 +511,7 @@ public class Wrapper implements Packing {
 
 ```java
 /**
- * 装饰器模式：向一个现有对象添加新的功能，但是不改变其结构
+ * 装饰器模式：不改变结构，向一个现有对象添加新的功能
  * https://www.runoob.com/design-pattern/decorator-pattern.html
  */
 public class Client {
@@ -526,9 +526,7 @@ public class Client {
 
 
 ```java
-/**
- * 装饰器，代理目标类执行
- */
+// 装饰器代理目标类行为
 public class ConcreteDecorator extends AbstractDecorator {
     ConcreteDecorator(Shape target) {
         super(target);
@@ -541,9 +539,7 @@ public class ConcreteDecorator extends AbstractDecorator {
     }
 }
 
-/**
- * 抽象装饰器，与目标对象实现相同的接口
- */
+// 装饰器的抽象，与目标对象实现相同的接口，有相同的行为
 public abstract class AbstractDecorator implements Shape {
     protected Shape target;
 
@@ -598,33 +594,28 @@ public class Client {
 
 ```
 
-
+创建多个代理对象，代理对象行为
 
 ```java
+// 创建多个代理对象，代理对象行为
 public class ShapeMaker {
     private final Shape circle;
     private final Shape rectangle;
 
-    /**
-     * 构造时创建代理对象
-     */
     public ShapeMaker() {
         circle = new Circle();
         rectangle = new Rectangle();
     }
-
-    //代理执行对象的行为
     public void drawCircle() {
         circle.draw();
     }
-
     public void drawRectangle() {
         rectangle.draw();
     }
 }
 ```
 
-
+目标对象
 
 ```java
 public class Rectangle implements Shape {
@@ -654,11 +645,11 @@ interface Shape {
 
 
 
-## 工厂
+## 工厂模式
 
 ```java
 /**
- * 工厂模式-静态
+ * 工厂模式
  * https://www.runoob.com/design-pattern/factory-pattern.html
  */
 public class Client {
@@ -678,7 +669,7 @@ public class Client {
 
 ```java
 public class Factory {
-    // 根据 key 创建实例
+    // 根据 key 由工厂创建实例
     public Shape get(String key) {
         switch (key) {
             case "Square":
@@ -726,7 +717,7 @@ public class Circle implements Shape {
 ```java
 /**
  * 过滤器模式（Filter Pattern）
- * 使用不同的标准来过滤一组对象，通过逻辑运算以解耦的方式把它们连接起来。
+ * 使用不同的标准来过滤一组对象，通过逻辑运算以解耦的方式把它们连接起来
  * https://www.runoob.com/design-pattern/filter-pattern.html
  */
 public class Client {
@@ -859,7 +850,7 @@ public class Client {
 
 ```java
 public class Factory {
-    // 缓存的实例
+    // Map缓存实例
     private static final HashMap<String, Shape> MAP = new HashMap<>();
 
     public static Shape get(String key) {
@@ -970,7 +961,7 @@ public class Rectangle extends Shape {
 
 
 
-## 单例
+## 单例模式
 
 ```java
 // 饿汉式，线程安全
@@ -991,11 +982,11 @@ public class EagerSingleton {
 
 ```java
 // 懒汉式-加锁，线程安全
-public class LazySingleton1 {
+public class LazySingleton {
     // 静态变量
     private static Single INSTANCE;
     // 私有构造，不允许外部实例化
-    private LazySingleton1() {
+    private LazySingleton() {
     }
     // 获取实例，实例不存在时创建
     // 对象锁，不允许其他线程修改此对象
@@ -1007,8 +998,6 @@ public class LazySingleton1 {
     }
 }
 ```
-
-
 
 
 
@@ -1142,30 +1131,189 @@ public class MyInterceptor implements MethodInterceptor {
 
 # encrypt
 
-JDK自带的加密/对称加密/非对称加密/数字摘要
+对称加密/非对称加密
 
 
 
 ```java
-public void desTest() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-  String rawData = "tomcat";
-  String key = "njkasdgh";
-  // 算法
-  String algorithm = "DES";
-  String transformation = "DES";
+package com.example;
 
-  SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), algorithm);
-  Cipher cipher = Cipher.getInstance(transformation);
-  cipher.init(Cipher.ENCRYPT_MODE, keySpec);
-  byte[] encryptBytes = cipher.doFinal(rawData.getBytes(StandardCharsets.UTF_8));
+import org.junit.Assert;
+import org.junit.Test;
 
-  cipher.init(Cipher.DECRYPT_MODE, keySpec);
-  byte[] decryptBytes = cipher.doFinal(encryptBytes);
-  String decryptStr = new String(decryptBytes, StandardCharsets.UTF_8);
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
-  Assert.assertEquals(rawData, decryptStr);
+// 非对称加密 RSA，私钥加密，公钥解密
+public class AsymmetricEncryptionTest {
+
+    @Test
+    public void rsaTest() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        String input = "2121212sdfssa";
+
+        KeyPair keyPair = KeyPairGenerator.getInstance("RSA").generateKeyPair();
+        byte[] privateKeyBytes = keyPair.getPrivate().getEncoded();
+        byte[] publicKeyBytes = keyPair.getPublic().getEncoded();
+
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PKCS8EncodedKeySpec privateSpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+        X509EncodedKeySpec publicSpec = new X509EncodedKeySpec(publicKeyBytes);
+        PrivateKey privateKey = keyFactory.generatePrivate(privateSpec);
+        PublicKey publicKey = keyFactory.generatePublic(publicSpec);
+
+        Cipher cipher = Cipher.getInstance("RSA");
+
+        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+        byte[] encryptBytes = cipher.doFinal(input.getBytes());
+
+        cipher.init(Cipher.DECRYPT_MODE, publicKey);
+        byte[] decryptBytes = cipher.doFinal(encryptBytes);
+        String decryptStr = new String(decryptBytes, StandardCharsets.UTF_8);
+
+        Assert.assertEquals(input, decryptStr);
+    }
+
 }
+
 ```
+
+
+
+```java
+package com.example;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.util.Base64;
+
+// 对称加密，加密和解密都是同一个密钥
+public class SymmetricalEncryptionTest {
+
+    // DES 对称加密
+    @Test
+    public void desTest() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        String rawData = "tomcat";
+        String key = "njkasdgh";
+        String algorithm = "DES";
+        String transformation = "DES";
+
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), algorithm);
+        Cipher cipher = Cipher.getInstance(transformation);
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+        byte[] encryptBytes = cipher.doFinal(rawData.getBytes(StandardCharsets.UTF_8));
+
+        cipher.init(Cipher.DECRYPT_MODE, keySpec);
+        byte[] decryptBytes = cipher.doFinal(encryptBytes);
+        String decryptStr = new String(decryptBytes, StandardCharsets.UTF_8);
+
+        Assert.assertEquals(rawData, decryptStr);
+    }
+
+    // AES 对称加密
+    @Test
+    public void aesTest() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        String rawData = "tomcat";
+        String key = "NKvVyDwnIKSDRABpR7NO9w==";
+        // 算法
+        String algorithm = "AES";
+        String transformation = "AES";
+
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), algorithm);
+        Cipher cipher = Cipher.getInstance(transformation);
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+        byte[] encryptBytes = cipher.doFinal(rawData.getBytes(StandardCharsets.UTF_8));
+
+        cipher.init(Cipher.DECRYPT_MODE, keySpec);
+        byte[] decryptBytes = cipher.doFinal(encryptBytes);
+        String decryptStr = new String(decryptBytes, StandardCharsets.UTF_8);
+
+        Assert.assertEquals(rawData, decryptStr);
+    }
+
+    // AES-128-ECB 加密
+    @Test
+    public void aes128ecbTest() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        String rawData = "tomcat";
+        String key = "jkl;POIU1234++==";
+        // 算法
+        String algorithm = "AES";
+        // 算法/模式/补码方式
+        String transformation = "AES/ECB/PKCS5Padding";
+
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), algorithm);
+        Cipher cipher = Cipher.getInstance(transformation);
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+        byte[] encryptBytes = cipher.doFinal(rawData.getBytes(StandardCharsets.UTF_8));
+
+        cipher.init(Cipher.DECRYPT_MODE, keySpec);
+        byte[] decryptBytes = cipher.doFinal(encryptBytes);
+        String decryptStr = new String(decryptBytes, StandardCharsets.UTF_8);
+
+        Assert.assertEquals(rawData, decryptStr);
+    }
+
+    /**
+     * AES-128-CBC 加密
+     * CBC模式，需要一个向量iv，可增加加密算法的强度
+     */
+    @Test
+    public void aes128cbcTest() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        // 算法
+        String algorithm = "AES";
+        // 算法/模式/补码方式
+        String transformation = "AES/CBC/PKCS5Padding";
+        // 密钥
+        String key = "xl9YTgGf6jUk1EZE9Wohcg==";
+        // 向量
+        String iv = "IZ0Cl5x7MZba3DdG";
+        // 要加密的数据
+        String data = "{data:[{'name':'hi','age':20},{'name':'zd','age':18}]}";
+
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), algorithm);
+        IvParameterSpec ivSpec = new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8));
+        Cipher cipher = Cipher.getInstance(transformation);
+
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+        byte[] encryptBytes = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
+
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+        byte[] decryptBytes = cipher.doFinal(encryptBytes);
+        String decryptStr = new String(decryptBytes, StandardCharsets.UTF_8);
+
+        Assert.assertEquals(data, decryptStr);
+    }
+
+    // 生成AES DES 密钥
+    @Test
+    public void generateAesKeyTest() throws Exception {
+        int length = 128;
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        // 设置密钥长度
+        keyGenerator.init(length);
+        SecretKey key = keyGenerator.generateKey();
+        byte[] bytes = key.getEncoded();
+        String genKey = Base64.getEncoder().encodeToString(bytes);
+        Assert.assertNotNull(genKey);
+    }
+
+}
+
+```
+
+
 
 
 
@@ -1231,138 +1379,233 @@ while (true) {
 
 
 
+## 将文件打包到 jar
+
+maven pom 引入插件
+
 ```xml
-<!-- pom.xml -->
-<plugin>
-    <artifactId>maven-assembly-plugin</artifactId>
-    <version>3.3.0</version>
-    <configuration>
-        <descriptors>
-            <descriptor>src/assembly/distribution.xml</descriptor>
-        </descriptors>
-    </configuration>
-</plugin>
+<project>
+    ...
+    <build>
+        <plugins>
+            <!-- 命令执行 mvn clean assembly:single -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <descriptors>
+                        <!-- assembly 描述文件位置 -->
+                        <descriptor>distribution.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
 
-<!-- distribution.xml -->
-<dependencySets>
-    <dependencySet>
-        <useProjectArtifact>false</useProjectArtifact>
-        <outputDirectory>/libs</outputDirectory>
-        <scope>runtime</scope>
-    </dependencySet>
-</dependencySets>
+assembly 描述文件指定哪些文件需要打包到 jar
 
+```xml
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+    <id>distribution</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+
+    <!-- 文件打包到jar -->
+    <files>
+        <file>
+            <source>README.txt</source>
+            <outputDirectory>/libs</outputDirectory>
+            <filtered>true</filtered>
+        </file>
+        <file>
+            <source>LICENSE.txt</source>
+        </file>
+        <file>
+            <source>NOTICE.txt</source>
+            <filtered>false</filtered>
+        </file>
+    </files>
+
+</assembly>
+```
+
+测试文件
+
+README.txt
+
+LICENSE.txt
+
+NOTICE.txt
+
+
+
+assembly 描述文件模糊匹配的文件打包到 jar
+
+```xml
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+    <id>distribution</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    
+    <!-- *.txt 扩展名的文件打包到 jar，但是不包括 README.txt和NOTICE.txt -->
+    <fileSets>
+        <fileSet>
+            <directory>${basedir}</directory>
+            <includes>
+                <include>*.txt</include>
+            </includes>
+            <excludes>
+                <exclude>README.txt</exclude>
+                <exclude>NOTICE.txt</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+</assembly>
 ```
 
 
 
+## 将依赖打包到指定的文件夹
+
+maven 测试依赖，打包插件 assembly
+
 ```xml
+<dependencies>
+    <!-- 打包测试用 -->
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.8.0</version>
+    </dependency>
+</dependencies>
 
-<!-- pom.xml -->
-<!-- 可以用命令执行 mvn clean assembly:single -->
-<plugin>
-    <artifactId>maven-assembly-plugin</artifactId>
-    <version>3.3.0</version>
-    <configuration>
-        <descriptors>
-            <!-- 指定 assembly 描述文件的位置 -->
-            <descriptor>src/assembly/distribution.xml</descriptor>
-        </descriptors>
-    </configuration>
-</plugin>
+<build>
+    <plugins>
+        <!-- 命令执行 mvn clean assembly:single -->
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.3.0</version>
+            <configuration>
+                <descriptors>
+                    <descriptor>distribution.xml</descriptor>
+                </descriptors>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
 
+assembly 描述文件，将依赖打包到指定的文件夹
 
-<!-- distribution.xml -->
-<!-- 文件 README.txt、LICENSE.txt和 NOTICE.txt 打包到jar -->
-<files>
-    <file>
-        <source>README.txt</source>
-        <outputDirectory></outputDirectory>
-        <filtered>true</filtered>
-    </file>
-    <file>
-        <source>LICENSE.txt</source>
-        <outputDirectory></outputDirectory>
-    </file>
-    <file>
-        <source>NOTICE.txt</source>
-        <outputDirectory></outputDirectory>
-        <filtered>false</filtered>
-    </file>
-</files>
+```xml
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+    <id>distribution</id>
+    <formats>
+        <!-- 输出到文件夹 -->
+        <format>dir</format>
+    </formats>
 
+    <!-- 将依赖打包到指定的文件夹 -->
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>/libs</outputDirectory>
+            <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
+</assembly>
+```
+
+测试类生成 jar
+
+```java
+package org.cat;
+
+public class App {
+    public static void main(String[] args) {
+        System.out.println(1);
+    }
+}
 ```
 
 
 
-```xml
-<!-- pom.xml -->            
-<plugin>
-    <artifactId>maven-assembly-plugin</artifactId>
-    <version>3.3.0</version>
-    <configuration>
-        <descriptors>
-            <descriptor>src/assembly/distribution.xml</descriptor>
-        </descriptors>
-    </configuration>
-</plugin>
+## 将依赖打包到 jar
 
-<!-- distribution.xml -->
-<formats>
-    <format>jar</format>
-</formats>
-
-<!-- *.txt扩展名的文件打包到jar，排除README.txt和NOTICE.txt -->
-<fileSets>
-    <fileSet>
-        <directory>${basedir}</directory>
-        <includes>
-            <include>*.txt</include>
-        </includes>
-        <excludes>
-            <exclude>README.txt</exclude>
-            <exclude>NOTICE.txt</exclude>
-        </excludes>
-    </fileSet>
-</fileSets>
-
-```
-
-
+maven 依赖测试用，assembly 把依赖打包到 jar，定义可执行 jar 入口
 
 ```xml
-<!-- 打包依赖到jar-->
-<plugin>
-    <artifactId>maven-assembly-plugin</artifactId>
-    <version>3.3.0</version>
-    <configuration>
-        <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-        </descriptorRefs>
-        <!-- 打包可执行应用指定入口 -->
-        <!-- java -jar target/assembly-jar-with-dep-1.0-SNAPSHOT-jar-with-dependencies.jar
-                    java -jar target/assembly-jar-with-dep-1.0-SNAPSHOT.jar
-                    报错：target/assembly-jar-with-dep-1.0-SNAPSHOT.jar中没有主清单属性 -->
-        <archive>
-            <manifest>
-                <mainClass>com.cat.Application</mainClass>
-            </manifest>
-        </archive>
-    </configuration>
-    <executions>
-        <execution>
-            <!-- this is used for inheritance merges -->
-            <id>make-assembly</id>
-            <!-- bind to the packaging phase -->
-            <phase>package</phase>
-            <goals>
-                <goal>single</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
+<dependencies>
+    <!-- 打包测试用 -->
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.8.0</version>
+    </dependency>
+</dependencies>
 
+<build>
+    <plugins>
+        <!-- 打包依赖到jar-->
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.3.0</version>
+            <configuration>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+                <!-- 打包可执行应用指定入口 -->
+                <!-- java -jar target/assembly-jar-with-dep-1.0-SNAPSHOT-jar-with-dependencies.jar -->
+                <archive>
+                    <manifest>
+                        <mainClass>com.cat.Application</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+            <executions>
+                <execution>
+                    <!-- 名字任意 -->
+                    <id>make-assembly</id>
+                    <!-- 绑定到package生命周期阶段上 -->
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 ```
+
+测试类
+
+```java
+package com.cat;
+
+import com.google.gson.Gson;
+
+public class Application {
+    public static void main(String[] args) {
+        System.out.println("参数："+args);
+        new Gson();
+    }
+}
+```
+
+打包后执行可执行 jar
+
+`java -jar target/assembly-jar-with-dep-1.0-SNAPSHOT-jar-with-dependencies.jar`
 
 
 
@@ -3016,8 +3259,6 @@ public void jsonStr2javaObjectTest() throws IOException {
 ```
 
 
-
-# 1
 
 
 

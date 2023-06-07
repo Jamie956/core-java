@@ -1,8 +1,13 @@
 package com.example.annotation;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 public class TestDemo {
-    public static void main(String[] args) {
-        String value = UsingAnnotation.class.getAnnotation(DefinedAnnotation.class).value();
-        System.out.println(value);
+    @Test
+    public void test1() {
+        String value = UsingAnno.class.getAnnotation(TypeRuntimeAnnotation.class).value();
+        Assert.assertEquals("annotation test value", value);
     }
+
 }

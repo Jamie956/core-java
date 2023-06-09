@@ -1,9 +1,6 @@
 package com.example.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * 注解定义
@@ -18,6 +15,8 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TypeRuntimeAnnotation {
-    String value();
+public @interface ClassLevelAnnotation {
+    String name() default "default value";
+    String version() default "1.1.0";
 }
+

@@ -3,6 +3,8 @@ package com.example.annotation;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
+
 public class AnnotationTest {
     @Test
     public void classLevelAnnotationTest() {
@@ -12,4 +14,10 @@ public class AnnotationTest {
         Assert.assertEquals("2.0.0", version);
     }
 
+    @Test
+    public void fieldLevelAnnotationTest() throws NoSuchFieldException {
+        Field valField = UsingFieldAnnotation.class.getDeclaredField("val");
+        String name = valField.getAnnotation(FieldLevelAnnotation.class).name();
+        Assert.assertEquals("default value", name);
+    }
 }

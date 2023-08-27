@@ -1,11 +1,10 @@
 package oom;
 
 /**
- * 方法递归不断压栈，导致方法栈溢出
- * <p>
- * 设置参数限制栈空间，运行 class 的方式
- * 1）IDEA 设置 VM options：-Xss160k
- * 2）直接 java 命令执行：java -Xss160k StackOverFlowErrorTest
+ * VM参数 -Xss161k
+ * -Xss161k：限制栈内存空间
+ *
+ * Exception in thread "main" java.lang.StackOverflowError
  */
 public class StackOverFlowErrorTest {
     private int stackLength = 1;

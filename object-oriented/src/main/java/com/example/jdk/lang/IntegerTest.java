@@ -1,31 +1,64 @@
 package com.example.jdk.lang;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class IntegerTest {
     @Test
-    public void var() {
-        int a = Integer.MIN_VALUE;
-        int b = Integer.MAX_VALUE;
-        Class<Integer> c = Integer.TYPE;
-        String d = Integer.toString(12, 2);
-        String e = Integer.toString(-12, 2);
+    public void intMaxMin() {
+        // Integer size 4 byte(4*8 bit), positive number value range 0 ~ 2^31, negative number value range 2^31 ~ 2^32
+        // 1000 0000 0000 0000 0000 0000 0000 0000
+        Assert.assertEquals(0x80000000, Integer.MIN_VALUE);
+        // 0111 1111 1111 1111 1111 1111 1111 1111
+        Assert.assertEquals(0x7fffffff, Integer.MAX_VALUE);
+    }
+
+    @Test
+    public void toStringWithRadix() {
+        // Integer to string number as specific radix, return value may have minus sign
+        Assert.assertEquals("10", Integer.toString(16, 16));
+        Assert.assertEquals("-10", Integer.toString(-16, 16));
+        Assert.assertEquals("1000", Integer.toString(8, 2));
+        Assert.assertEquals("-1000", Integer.toString(-8, 2));
+        Assert.assertEquals("10", Integer.toString(10, 9999999));
     }
 
     @Test
     public void toUnsignedString() {
-        String s = Integer.toUnsignedString(12, 2);
-        String a = Integer.toUnsignedString(-12, 10);
+        // Integer to string number in the specific radix, return unsign value
+        Assert.assertEquals("1100", Integer.toUnsignedString(12, 2));
+        Assert.assertEquals("100", Integer.toUnsignedString(4, 2));
+        Assert.assertEquals("10", Integer.toUnsignedString(2, 2));
+        //1111 1111 1111 1111 1111 1111 1111 1111
+        Assert.assertEquals("11111111111111111111111111111111", Integer.toUnsignedString(-1, 2));
+        Assert.assertEquals("11111111111111111111111111111110", Integer.toUnsignedString(-2, 2));
+
+        Assert.assertEquals("c", Integer.toUnsignedString(12, 16));
+        Assert.assertEquals("ffffffff", Integer.toUnsignedString(-1, 16));
+        Assert.assertEquals("fffffffe", Integer.toUnsignedString(-2, 16));
     }
 
     @Test
     public void toHexString() {
-        String s = Integer.toHexString(15);
+        // Integer to unsigned number string in the 16 radix
+        Assert.assertEquals("f", Integer.toHexString(15));
+        Assert.assertEquals("fffffff1", Integer.toHexString(-15));
+        Assert.assertEquals(Integer.toUnsignedString(-15, 16), Integer.toHexString(-15));
     }
 
     @Test
     public void toOctalString() {
-        String s = Integer.toOctalString(15);
+        // Integer to unsigned number string in the 8 radix
+        Assert.assertEquals("1", Integer.toOctalString(1));
+        Assert.assertEquals("7", Integer.toOctalString(7));
+        Assert.assertEquals("10", Integer.toOctalString(8));
+        Assert.assertEquals("11", Integer.toOctalString(9));
+
+        // 11 111 111 111 111 111 111 111 111 111 111 (2 radix) == 37777777777 (8 radix)
+        Assert.assertEquals("37777777777", Integer.toOctalString(-1));
+        Assert.assertEquals("37777777771", Integer.toOctalString(-7));
+        Assert.assertEquals("37777777770", Integer.toOctalString(-8));
+        Assert.assertEquals("37777777767", Integer.toOctalString(-9));
     }
 
     @Test
@@ -33,11 +66,7 @@ public class IntegerTest {
         String s = Integer.toBinaryString(15);
     }
 
-    @Test
-    public void toString1() {
-        String s = Integer.toString(15);
-        String a = Integer.toString(-15);
-    }
+
 
     @Test
     public void toUnsignedString1() {

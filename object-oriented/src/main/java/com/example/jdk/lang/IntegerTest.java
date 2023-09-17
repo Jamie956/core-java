@@ -122,6 +122,7 @@ public class IntegerTest {
 
     @Test
     public void compareTo() {
+        // compare integer number, > -> 1, < -> -1
         Integer a = 1;
         Integer b = 2;
         Assert.assertEquals(-1, a.compareTo(b));
@@ -130,25 +131,26 @@ public class IntegerTest {
 
     @Test
     public void compareUnsigned() {
-        int a = Integer.compareUnsigned(-2, 1);
-        int b = Integer.compareUnsigned(2, 1);
+        // compare unsigned integer
+        // 1 compare -1 -> 1 compare to 1111 1111 1111 1111 1111 1111 1111 1111
+        Assert.assertEquals(1, Integer.compareUnsigned(-1, 1));
+        Assert.assertEquals(-1, Integer.compareUnsigned(1, -1));
     }
 
     @Test
     public void toUnsignedLong() {
-        long a = Integer.toUnsignedLong(-2);
+        // integer to unsigned long number
+        // 0000 0000 0000 0000 0000 0000 0000 0000 1111 1111 1111 1111 1111 1111 1111 1111
+        Assert.assertEquals(16*16*16*16*16*16*16*16L - 1, Integer.toUnsignedLong(-1));
     }
 
     @Test
     public void bitTwiddling() {
-        int a = Integer.SIZE;
-        int b = Integer.BYTES;
-        int c = Integer.highestOneBit(12);
-        int d = Integer.lowestOneBit(12);
-        int e = Integer.numberOfLeadingZeros(12);
-        int f = Integer.rotateLeft(-2, 2);
-
+        // 1100 -> 1000
+        Assert.assertEquals(8, Integer.highestOneBit(12));
+        // 1100 -> 100
+        Assert.assertEquals(4, Integer.lowestOneBit(12));
+        // 0000 0000 0000 0000 1111 1111 1111 1111
+        Assert.assertEquals(16, Integer.numberOfLeadingZeros(16*16*16*16 - 1));
     }
-
-
 }

@@ -11,16 +11,18 @@ public class GenericExtends {
 
         List<Number> dest = new ArrayList<>();
         List<Integer> src = new ArrayList<>();
-        // Number super G; Integer extends G
         copy(dest, src);
     }
 
-    // 参数类型T，决定了返回类型 List<T>；参数泛型T 必须是Number 的子类
+    // (T a) 表示参数类型 T 决定返回类型 List<T> 和 T 与 Number 的父子关系
+    // <T extends Number> List<T> 表示 T 类型必须是 Number 的子类
     public <T extends Number> List<T> fromArrayToList(T a) {
         return null;
     }
 
-    // 参数 dest的泛型 是G 的超类，参数 src 的泛型是G 的子类，所以 dest 的泛型是 src泛型的父类
+    // List<? super G> 表示参数类型是泛型 G 的超类 G -> dest
+    // List<? extends G> 表示参数类型是泛型 G 的子类 src -> G
+    // 组合起来就是 src -> G -> dest
     public static <G> void copy(List<? super G> dest, List<? extends G> src) {
     }
 }

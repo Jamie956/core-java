@@ -1,6 +1,5 @@
 package com.inner_class;
 
-// 静态内部类特性
 public class DefinedInnerStaticClass {
 
     public static void main(String[] args) {
@@ -17,20 +16,25 @@ public class DefinedInnerStaticClass {
     public void outerNonStaticMethod() {}
     public static void outerStaticMethod() {}
 
+    // 静态内部类
     static class InnerStaticClass {
-        // 静态内部类定义静态全局变量和非静态全局变量
-        private int innerNonStaticVar = 3;
-        private static int innerStaticVar = 4;
-        // 静态内部类不能使用外部类的非静态变量
+        // 可以定义非静态变量
+        private int innerNonStaticVar = 1;
+        // 可以定义静态变量
+        private static int innerStaticVar = 1;
+        // 不能使用外部类的非静态变量
 //        public int a = outerNonStaticVar;
-        // 静态内部类不能使用外部类的静态变量
+        // 可以使用外部类的静态变量
         public int b = outerStaticVar;
 
-        // 静态内部类可以定义静态方法
+        // 可以定义静态方法
         public static void innerStaticMethod(){
+            // 可以使用外部类静态方法
+            outerStaticMethod();
         }
-        // 静态内部类可以定义非静态方法
+        // 可以定义非静态方法
         public void innerNonStaticMethod(){
+            // 可以使用外部类静态方法
             outerStaticMethod();
         }
     }

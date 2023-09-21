@@ -1,31 +1,34 @@
 package com.inner_class;
 
-// 非静态内部类特性
+
 public class DefinedInnerNonStaticClass {
     public static void main(String[] args) {
         // 外部类访问内部类
         InnerNonStaticClass n = new DefinedInnerNonStaticClass().new InnerNonStaticClass();
     }
 
-    public int i = 1;
-    public void ofoo() {}
+    public int outerNonStaticVar = 1;
+    public static int outerStaticVar = 1;
+    public void outerNonStaticMethod() {}
+    public static void outerStaticMethod() {}
 
+    // 非静态内部类
     class InnerNonStaticClass {
-        // 非静态内部类不能有静态变量
-//        public static String a = "a";
-        public String b = "b";
-        // 非静态内部类可以定义 final static，放常量池
-        public final static String c = "c";
+        // 不能定义静态变量
+//        public static int innerStaticVar = 1;
+        public int innerNonStaticVar = 1;
+        // 可以定义 final static 变量，放常量池
+        public final static int innerFinalStaticVar = 1;
 
-        // 非静态内部类不能有静态方法
-//        public static void foo1(){}
+        // 可以访问外部类的非静态变量
+        public int innerVar = outerNonStaticVar;
 
-        // 非静态内部类访问外部类的非静态变量
-        public int df = i;
+        // 不能定义静态方法
+//        public static void innerStaticMethod(){}
 
-        public void foo2(){
-            // 非静态内部类访问外部类非静态方法
-            ofoo();
+        public void innerNonStaticMethod(){
+            // 可以访问外部类非静态方法
+            outerNonStaticMethod();
         }
     }
 }

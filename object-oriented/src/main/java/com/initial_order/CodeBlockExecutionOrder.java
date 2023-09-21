@@ -1,7 +1,7 @@
-package com.initial_orders;
+package com.initial_order;
 
-// orders: static block -> not static block -> construct
-public class BlockOrders {
+// execution order: static block -> not static block -> construct
+public class CodeBlockExecutionOrder {
     private static String staticValue = "a";
     private String notStaticValue = "a";
 
@@ -21,11 +21,11 @@ public class BlockOrders {
         String s2 = notStaticValue;
     }
 
-    public BlockOrders() {
+    public CodeBlockExecutionOrder() {
         System.out.println("construct");
     }
 
     public static void main(String[] args) {
-        new BlockOrders();
+        new CodeBlockExecutionOrder();
     }
 }

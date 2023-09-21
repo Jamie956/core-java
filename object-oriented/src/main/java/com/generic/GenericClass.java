@@ -1,6 +1,6 @@
 package com.generic;
 
-// 类中出现的泛型T都保持同一个类型
+// 对象创建限定了泛型类型 T，类中出现的 T（变量类型，方法参数类型，方法返回值类型） 都是同一个类型
 public class GenericClass<T> {
     private T x;
 

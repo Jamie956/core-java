@@ -14,7 +14,7 @@ public class ConstructDefined {
     }
 
     public static void main(String[] args) {
-        // 报错，定义了有参构造方法时，不提供无参构造方法
+        // 报错，定义了有参构造方法就不能使用无参构造方法
 //        new ConstructDefined();
     }
 }

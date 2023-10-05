@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -27,8 +28,6 @@ public class BlokingIOTest {
                 int length = in.read(bytes);
                 if (length != -1) {
                     System.out.println(new String(bytes, 0, length));
-                } else {
-                    break;
                 }
             }
         } catch (IOException e) {
@@ -37,11 +36,12 @@ public class BlokingIOTest {
     }
 
     @Test
-    public void client() throws IOException {
+    public void client() throws IOException, InterruptedException {
         Socket socket = new Socket("127.0.0.1", 6666);
-        while (true) {
-
-        }
+        OutputStream outputStream = socket.getOutputStream();
+        outputStream.write(new byte[]{56, 57});
+        Thread.sleep(10000);
+        outputStream.write(new byte[]{67, 68});
     }
 
 }

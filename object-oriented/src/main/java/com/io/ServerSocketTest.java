@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class BlokingIOTest {
+public class ServerSocketTest {
     /**
      * 阻塞IO，服务端
      * 终端连接服务端：telnet 127.0.0.1 6666
@@ -18,10 +18,11 @@ public class BlokingIOTest {
         ServerSocket serverSocket = new ServerSocket(6666);
 
         System.out.println("等待下一个客户端连接...");
-        //accept 阻塞监听，等待客户端连接
+        //accept 阻塞线程，监听客户端连接
         Socket socket = serverSocket.accept();
         System.out.println("连接成功!");
 
+        //等待客户端输入
         try (InputStream in = socket.getInputStream()) {
             byte[] bytes = new byte[1024];
             while (true) {

@@ -1,8 +1,10 @@
 package com.io;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -23,6 +25,8 @@ public class ByteArrayOutputStreamTest {
         o.write(97);
         o.write(97);
         o.write(97);
+
+        Assert.assertEquals("aaa", o.toString());
     }
 
     @Test
@@ -30,43 +34,44 @@ public class ByteArrayOutputStreamTest {
         ByteArrayOutputStream o = new ByteArrayOutputStream(2);
         byte[] bytes = new byte[]{97, 98, 99, 100};
         o.write(bytes, 1, 3);
+
+        Assert.assertEquals("bcd", o.toString());
     }
 
     @Test
     public void writeTo() throws IOException {
-        ByteArrayOutputStream o = new ByteArrayOutputStream(2);
-        FileOutputStream fo = new FileOutputStream("resources/source");
-        o.writeTo(fo);
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+        byteOut.write(98);
+        FileOutputStream fileOut = new FileOutputStream("src\\main\\resources\\source");
+        byteOut.writeTo(fileOut);
+
+        Assert.assertEquals(98, new FileInputStream("src\\main\\resources\\source").read());
     }
 
     @Test
     public void reset() {
-        ByteArrayOutputStream o = new ByteArrayOutputStream(2);
-        o.reset();
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream(2);
+        byteOut.write(98);
+        byteOut.write(98);
+
+        Assert.assertEquals(2, byteOut.size());
+        Assert.assertEquals("bb", byteOut.toString());
+
+        byteOut.reset();
+
+        Assert.assertEquals(0, byteOut.size());
+        Assert.assertEquals("", byteOut.toString());
     }
 
     @Test
     public void toByteArray() {
-        ByteArrayOutputStream o = new ByteArrayOutputStream(2);
-        o.write(97);
-        o.write(97);
-        byte[] bytes = o.toByteArray();
-    }
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream(2);
+        byteOut.write(97);
+        byteOut.write(97);
+        byte[] bytes = byteOut.toByteArray();
 
-    @Test
-    public void toString1() {
-        ByteArrayOutputStream o = new ByteArrayOutputStream(2);
-        o.write(97);
-        o.write(97);
-        o.toString();
-    }
-
-    @Test
-    public void toString2() throws IOException {
-        ByteArrayOutputStream o = new ByteArrayOutputStream(2);
-        o.write(97);
-        o.write(97);
-        o.toString("utf-8");
+        Assert.assertEquals(97, bytes[0]);
+        Assert.assertEquals(97, bytes[1]);
     }
 
 }

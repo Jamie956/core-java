@@ -42,10 +42,10 @@ public class ByteArrayOutputStreamTest {
     public void writeTo() throws IOException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         byteOut.write(98);
-        FileOutputStream fileOut = new FileOutputStream("src\\main\\resources\\source");
+        FileOutputStream fileOut = new FileOutputStream("src/main/resources/source");
         byteOut.writeTo(fileOut);
 
-        Assert.assertEquals(98, new FileInputStream("src\\main\\resources\\source").read());
+        Assert.assertEquals(98, new FileInputStream("src/main/resources/source").read());
     }
 
     @Test

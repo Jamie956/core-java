@@ -1,48 +1,65 @@
 package com.io;
 
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.Charset;
 
+import static java.nio.charset.Charset.defaultCharset;
+
 public class InputStreamReaderTest {
-    @Test
-    public void cons() throws FileNotFoundException {
-        FileInputStream fi = new FileInputStream("resources/source");
-        InputStreamReader isr = new InputStreamReader(fi);
+    @Before
+    public void initFile() throws IOException {
+        FileOutputStream fileOut = new FileOutputStream("src/main/resources/source");
+        fileOut.write(97);
+        fileOut.write(98);
+        fileOut.write(99);
+        fileOut.write(100);
+        fileOut.write("对唔海珠".getBytes());
     }
 
     @Test
-    public void cons2() throws FileNotFoundException {
-        FileInputStream fi = new FileInputStream("resources/source");
-        InputStreamReader isr = new InputStreamReader(fi, Charset.defaultCharset());
+    public void cons() throws IOException {
+        FileInputStream fi = new FileInputStream("src/main/resources/source");
+        InputStreamReader isr = new InputStreamReader(fi);
+
+        Assert.assertEquals(97, isr.read());
+        Assert.assertEquals(98, isr.read());
+        Assert.assertEquals(99, isr.read());
+        Assert.assertEquals(100, isr.read());
+    }
+
+    @Test
+    public void cons2() throws IOException {
+        FileInputStream fi = new FileInputStream("src/main/resources/source");
+        InputStreamReader isr = new InputStreamReader(fi, defaultCharset());
+
+        Assert.assertEquals(97, isr.read());
+        Assert.assertEquals(98, isr.read());
+        Assert.assertEquals(99, isr.read());
+        Assert.assertEquals(100, isr.read());
+        Assert.assertEquals(23545, isr.read());
     }
 
     @Test
     public void getEncoding() throws FileNotFoundException {
-        FileInputStream fi = new FileInputStream("resources/source");
-        InputStreamReader isr = new InputStreamReader(fi, Charset.defaultCharset());
+        FileInputStream fi = new FileInputStream("src/main/resources/source");
+        InputStreamReader isr = new InputStreamReader(fi, defaultCharset());
         String encoding = isr.getEncoding();
     }
 
     @Test
-    public void read() throws IOException {
-        FileInputStream fi = new FileInputStream("resources/source");
-        InputStreamReader isr = new InputStreamReader(fi, Charset.defaultCharset());
-        int r1 = isr.read();
-        int r2 = isr.read();
-        int r3 = isr.read();
-    }
-
-    @Test
     public void readBuf() throws IOException {
-        FileInputStream fi = new FileInputStream("resources/source");
-        InputStreamReader isr = new InputStreamReader(fi, Charset.defaultCharset());
-        char[] buf = new char[1024];
-        int r = isr.read(buf, 1, 10);
+        FileInputStream fi = new FileInputStream("src/main/resources/source");
+        InputStreamReader isr = new InputStreamReader(fi, defaultCharset());
+        char[] buf = new char[12];
+        isr.read(buf, 1, 3);
+
+        Assert.assertEquals(97, buf[1]);
+        Assert.assertEquals(98, buf[2]);
+        Assert.assertEquals(99, buf[3]);
     }
 
 }

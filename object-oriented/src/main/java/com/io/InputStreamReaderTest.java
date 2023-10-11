@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
-import java.nio.charset.Charset;
 
 import static java.nio.charset.Charset.defaultCharset;
 
@@ -17,6 +16,7 @@ public class InputStreamReaderTest {
         fileOut.write(98);
         fileOut.write(99);
         fileOut.write(100);
+
         fileOut.write("对唔海珠".getBytes());
     }
 
@@ -36,11 +36,10 @@ public class InputStreamReaderTest {
         FileInputStream fi = new FileInputStream("src/main/resources/source");
         InputStreamReader isr = new InputStreamReader(fi, defaultCharset());
 
-        Assert.assertEquals(97, isr.read());
-        Assert.assertEquals(98, isr.read());
-        Assert.assertEquals(99, isr.read());
-        Assert.assertEquals(100, isr.read());
-        Assert.assertEquals(23545, isr.read());
+        char[] buf = new char[128];
+        isr.read(buf);
+        Assert.assertEquals("abcd对唔海珠", new String(buf).substring(0, 8));
+
     }
 
     @Test
@@ -48,6 +47,7 @@ public class InputStreamReaderTest {
         FileInputStream fi = new FileInputStream("src/main/resources/source");
         InputStreamReader isr = new InputStreamReader(fi, defaultCharset());
         String encoding = isr.getEncoding();
+        Assert.assertEquals("UTF8", encoding);
     }
 
     @Test

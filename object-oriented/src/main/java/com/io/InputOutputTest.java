@@ -1,9 +1,22 @@
 package com.io;
 
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import java.io.*;
 
-public class IOTest {
+public class InputOutputTest {
+    @Before
+    public void initFile() throws IOException {
+        FileOutputStream fileOut = new FileOutputStream("src/main/resources/source");
+        fileOut.write(97);
+        fileOut.write(98);
+        fileOut.write(99);
+        fileOut.write(100);
+
+        fileOut.write("对唔海珠".getBytes());
+    }
+
     /**
      * 文件输入流写 -> 字节数组输出流
      */
@@ -20,8 +33,7 @@ public class IOTest {
                     break;
                 }
             }
-            String str = byteArrayOutputStream.toString();
-            System.out.println(str);
+            Assert.assertEquals("abcd对唔海珠", byteArrayOutputStream.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,21 +56,8 @@ public class IOTest {
                     break;
                 }
             }
-            System.out.println(charArrayWriter.toString());
+            Assert.assertEquals("abcd对唔海珠", charArrayWriter.toString());
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 文件 Writer 输出流
-     */
-    @Test
-    public void fileChar() {
-        try (Writer out = new FileWriter("src/main/resources/output")) {
-            out.write("长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串长字符串");
-            out.flush();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -79,18 +78,6 @@ public class IOTest {
                     break;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 字节数组 -> 文件输出流
-     */
-    @Test
-    public void fileOutputStream() {
-        try (OutputStream out = new FileOutputStream("src/main/resources/output")) {
-            out.write(new byte[]{65, 66});
         } catch (IOException e) {
             e.printStackTrace();
         }

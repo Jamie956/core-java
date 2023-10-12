@@ -6,17 +6,10 @@ public class StringBuilderTest {
 
     @Test
     public void cons() {
-        StringBuilder sb = new StringBuilder();
-    }
+        StringBuilder sb1 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder(8);
+        StringBuilder sb3 = new StringBuilder("abc123");
 
-    @Test
-    public void cons1() {
-        StringBuilder sb = new StringBuilder(8);
-    }
-
-    @Test
-    public void cons2() {
-        StringBuilder sb = new StringBuilder("abc123");
     }
 
     @Test

@@ -1,9 +1,13 @@
 package com.keyword_static;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 public class KeywordStatic {
-    public static void main(String[] args) {
+    @Test
+    public void test() {
         DefinedStaticMethodAndValue o = new DefinedStaticMethodAndValue();
-        System.out.println(DefinedStaticMethodAndValue.s);
+        Assert.assertEquals("str", DefinedStaticMethodAndValue.s);
         DefinedStaticMethodAndValue.foo();
     }
 }

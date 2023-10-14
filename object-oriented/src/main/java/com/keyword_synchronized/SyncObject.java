@@ -1,4 +1,4 @@
-package com.lang;
+package com.keyword_synchronized;
 
 public class SyncObject {
 
@@ -13,10 +13,8 @@ public class SyncObject {
         }
     };
 
-    /**
-     * 对象锁
-     */
     private Runnable runWithSync = () -> {
+        //对象锁
         synchronized (this) {
             try {
                 for (int i = 0; i < 5; i++) {

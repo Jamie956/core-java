@@ -1,5 +1,8 @@
 package com.lang_clone;
 
+
+import org.junit.Assert;
+
 import java.io.*;
 
 /**
@@ -18,9 +21,9 @@ public class DeepClone {
             try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
                  ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
                 DeepCloneObject clone = (DeepCloneObject) objectInputStream.readObject();
-                System.out.println(user == clone);
+                Assert.assertNotSame(user, clone);
                 // 克隆对象的引用类型变量也被克隆
-                System.out.println(user.address == clone.address);
+                Assert.assertNotSame(user.address, clone.address);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }

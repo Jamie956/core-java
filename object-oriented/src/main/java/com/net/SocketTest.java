@@ -66,6 +66,4 @@ public class SocketTest {
         InetAddress a = socket.getInetAddress();
     }
 
-
-
 }

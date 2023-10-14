@@ -1,11 +1,11 @@
-package com.lang;
+package com.keyword_volatile;
 
 import java.util.concurrent.TimeUnit;
 
 public class VolatileTest {
     static class MyThread extends Thread{
-//            private volatile boolean flag = false;
-        private boolean flag = false;
+        private volatile boolean flag = false;
+//        private boolean flag = false;
 
         @Override
         public void run() {

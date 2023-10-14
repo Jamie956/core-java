@@ -1,4 +1,4 @@
-package com.lang;
+package com.keyword_enum;
 
 import org.junit.Assert;
 

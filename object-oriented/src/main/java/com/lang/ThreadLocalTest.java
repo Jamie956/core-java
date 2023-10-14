@@ -1,5 +1,6 @@
 package com.lang;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.function.Supplier;
@@ -27,8 +28,10 @@ public class ThreadLocalTest {
         ThreadLocal<String> tl = new ThreadLocal<>();
         tl.set("999");
         String a = tl.get();
+        Assert.assertEquals("999", a);
         tl.set("998");
         String b = tl.get();
+        Assert.assertEquals("998", b);
     }
 
     @Test
@@ -36,8 +39,10 @@ public class ThreadLocalTest {
         ThreadLocal<String> tl = new ThreadLocal<>();
         tl.set("999");
         String a = tl.get();
+        Assert.assertEquals("999", a);
         tl.remove();
         String b = tl.get();
+        Assert.assertNull(b);
     }
 
 }

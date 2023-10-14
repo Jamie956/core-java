@@ -8,7 +8,7 @@ import java.lang.reflect.Proxy;
 
 /**
  * 实现InvocationHandler接口
- * 重写invoke方法，负载调用代理类
+ * 重写invoke方法，负责调用代理类
  */
 public class DynamicProxy implements InvocationHandler {
     private Object target;

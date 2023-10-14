@@ -1,5 +1,7 @@
 package com.lang_clone;
 
+import org.junit.Assert;
+
 import java.io.Serializable;
 
 // 浅克隆，不克隆引用类型的变量
@@ -9,8 +11,8 @@ public class ShallowClone {
             ShallowCloneObject obj = new ShallowCloneObject();
             ShallowCloneObject clone = (ShallowCloneObject) obj.clone();
 
-            System.out.println(obj == clone);
-            System.out.println(obj.sub == clone.sub);
+            Assert.assertNotSame(obj, clone);
+            Assert.assertSame(obj.sub, clone.sub);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }

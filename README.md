@@ -1,10 +1,14 @@
-| File name                 | Desc                           |
-| ------------------------- | ------------------------------ |
-| DESIGN-PATTERN            | 设计模式                       |
-| ELASTICSEARCH-JAVA-CLIENT | Elasticsearch java client demo |
-| LEETCODE                  | Leetcode 题解                  |
-| OBJECT-ORIENTED           | 面向对象特性                   |
-| TOOLS                     | 常用工具Demo                   |
+Repo Desc:
+- hadoop-mr: hadoop mapreduce example quick start
+- hive-udf: user define function for hive to filter data
+- jvm-lab: a few of jvm investigation test example
+- kafka: kafka java client nothing special...
+- lc: leetcode answer test code
+- mockito: mockito feature tutorial test example
+- mybatis: the entry learning source
+- netty-start: 0. 0
+- object-oriented: OO feature !!!important!!!
+- zk: java zk client tut
 
-
-
+Todo:
+- Document how to setup hadoop test env
